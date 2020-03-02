@@ -34,7 +34,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 -  **Reunión**: representa a una reunión para discutir un libro concreto y sus atributos serán: lugar de celebración, fecha y hora de celebración, aforo, lista de participantes y libro asociado.
 
--  **Noticia**: artículo relacionado con el mundo de la literatura y que constará de: titular, cuerpo, redactor, etiquetas, imágenes.
+-  **Noticia**: artículo relacionado con el mundo de la literatura y que constará de: titular, cuerpo, nombre del redactor, etiquetas, imágenes y el libro en cuestión.
 
 ## Historias de usuario
 
@@ -254,12 +254,22 @@ Las entidades que se verán involucradas en la aplicación web son:
 - **HU-20**: Colección de libros a leer en el perfil  
   
   **Como** usuario  
-  **Quiero** poder añadir un libro a mi colección de libros a leer
+  **Quiero** poder añadir un libro a mi colección de libros a leer  
   **Para** tener una lista de futuras lecturas y libros que me interesan
 
 |Escenario positivo|Escenario negativo|
 |-|-|
 |El usuario selecciona un libro y queda añadido a su lista de libros a leer|El usuario intenta añadir un libro que ya se encuentra en la lista de libros leídos y el mensaje le muestra un mensaje de error|
+
+- **HU-21**: Noticias de libros que he criticado 
+  
+  **Como** usuario  
+  **Quiero** poder ver las noticias de los libros a los que he escrito una review  
+  **Para** tener información de ellos, ya que posiblemente la noticia me resulte de interés
+
+|Escenario positivo|Escenario negativo|
+|-|-|
+|El usuario selecciona ver las noticias de los libros que ha criticado y se le muestran|El usuario selecciona ver las noticias de los libros que ha criticado y como no ha hecho ninguna review, se le indica este hecho|
 
 ## Planificación Sprint 2
 
@@ -267,9 +277,9 @@ En la asignatura se recomienda enfocar la implementación mediante la programaci
   
   Si embargo en nuestro grupo somos impares y creemos que dicha metodología nos resultaría tediosa necesitaríamos emplear más tiempo y además necesitarían reunirse las parejas.
     
-Por tanto, sugerimos realizar un círculo en el que cada miembro del equipo se encargue de revisar el trabajo una vez que lo haya subido a la rama correspondiente del repositorio antes de relizar los *merges*.
+Por tanto, proponemos realizar un círculo en el que cada miembro del equipo se encargue de revisar el trabajo realizado por otros una vez que lo haya subido a la rama correspondiente del repositorio antes de relizar los *merges*.
   
-Para el Sprint 2 debemos implementar el 66% de las historias de usuario (13), sus respectivas pruebas unitarias y las pruebas automatizadas usando Travis.
+Para el Sprint 2 debemos implementar el 66% de las historias de usuario (14), sus respectivas pruebas unitarias y las pruebas automatizadas usando Travis.
   
 Provisionalmente, esperando el visto bueno por parte del profesorado de las historias de usuario, para este sprint planeamos implementar todas excepto las relacionadas con las reuniones y con las noticias.
   

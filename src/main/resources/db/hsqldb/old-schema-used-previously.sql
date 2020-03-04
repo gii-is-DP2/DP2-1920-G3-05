@@ -7,6 +7,7 @@ DROP TABLE types IF EXISTS;
 DROP TABLE owners IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP TABLE authorities IF EXISTS;
+DROP TABLE books IF EXISTS;
 
 CREATE TABLE vets (
   id         INTEGER IDENTITY PRIMARY KEY,
@@ -78,3 +79,18 @@ ALTER TABLE authorities ADD CONSTRAINT fk_authorities_users FOREIGN KEY (usernam
 
 CREATE UNIQUE INDEX ix_auth_username ON authorities (username,authority);
 
+CREATE TABLE books (
+  id         INTEGER IDENTITY PRIMARY KEY,
+  title VARCHAR(30),
+  author  VARCHAR(50),
+  genre    VARCHAR(30),
+  ISBN	INTEGER,
+  pages INTEGER,
+  synopsis VARCHAR(255),
+  editorial VARCHAR(30),
+  publication_date DATE,
+  verified BOOLEAN
+);
+CREATE INDEX books_title ON books (title);
+CREATE INDEX books_author ON books (author);
+CREATE INDEX books_genre ON books (genre);

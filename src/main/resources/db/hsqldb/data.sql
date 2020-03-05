@@ -62,3 +62,6 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO books(id,title,author,genre,ISBN,pages,synopsis,editorial,publication_date,verified) VALUES (1, 'IT', 'Stephen King', 'terror', 123456789,100,'SINOPSIS','editorial1','2010-01-01',TRUE);
+INSERT INTO books(id,title,author,genre,ISBN,pages,synopsis,editorial,publication_date,verified) VALUES (2, 'Harry Potter', 'J.K. Rowling', 'fantasía', 123456790 , 150, 'SINOPSIS', 'editorial1','2013-01-01',TRUE);
+INSERT INTO books(id,title,author,genre,ISBN,pages,synopsis,editorial,publication_date,verified) VALUES (3, 'Harry Potter', 'J.K. Rowling', 'fantasía', 123456791 , 170, 'SINOPSIS_1', 'editorial2','2014-01-01',FALSE);

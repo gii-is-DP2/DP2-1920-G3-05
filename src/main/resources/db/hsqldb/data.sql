@@ -63,6 +63,7 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+
 INSERT INTO genres VALUES (1, 'Fantasy');
 INSERT INTO genres VALUES (2, 'Adventure');
 INSERT INTO genres VALUES (3, 'Romance');
@@ -105,3 +106,5 @@ INSERT INTO meeting_assistants(meeting_id, user_username) VALUES (1, 'admin1');
 
 INSERT INTO news(id, head, fecha, body, redactor, tags, img) VALUES (1,'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
 Insert Into news_books values (1,1);
+
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

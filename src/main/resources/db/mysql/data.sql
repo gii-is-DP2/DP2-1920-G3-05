@@ -79,6 +79,7 @@ INSERT IGNORE INTO genres VALUES (24, 'Humor');
 
 
 
+
 INSERT IGNORE INTO books VALUES (1, 'IT', 'Stephen King', 6,9788466345347,1138,'¿Quien mata a los niños de un pequeño pueblo norteamericano? Esto es lo que se proponen averiguar los protagonistas de esta novela.','Viking Press','1986-09-15',TRUE,'https://imagessl3.casadellibro.com/a/l/t5/93/9788497593793.jpg');
 INSERT IGNORE INTO books VALUES (2, 'Harry Potter y la piedra filosofal', 'J.K. Rowling', 1, 9788498382662 , 223, 'Harry Potter se ha quedado huerfano y vive en casa de sus abominables tios hasta que un buen dia recibe una carta que cambiara su vida para siempre.', 'Bloomsbury','1997-06-26',TRUE,'https://imagessl2.casadellibro.com/a/l/t5/62/9788498382662.jpg');
 INSERT IGNORE INTO books VALUES (3, 'Harry Potter y la camara secreta', 'J.K. Rowling', 1, 9788498382679 , 251, 'Tras derrotar una vez mas a lord Voldemort, su siniestro enemigo en Harry Potter y la piedra filosofal, Harry espera impaciente en casa de sus insoportables tios el inicio del segundo curso del Colegio Hogwarts de Magia.', 'Bloomsbury','1998-07-02',FALSE,'https://imagessl9.casadellibro.com/a/l/t5/79/9788498382679.jpg');
@@ -93,3 +94,5 @@ INSERT IGNORE INTO books VALUES (11, 'El hijo del italiano', 'Rafel Nadal', 4, 9
 
 INSERT INTO meetings(name,place,start,end,capacity,book_id) VALUES ('Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 1);
 INSERT INTO meeting_assistants(meeting_id, user_username) VALUES (1, 'admin1');
+
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

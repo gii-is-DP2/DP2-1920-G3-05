@@ -27,8 +27,8 @@ import org.springframework.samples.petclinic.repository.BookRepository;
 public interface SpringDataBookRepository extends BookRepository, Repository<Book, Integer> {
 
 	@Override
-	@Query("SELECT book FROM Book book WHERE UPPER(book.title) LIKE %:title% OR UPPER(book.author) LIKE %:title% OR UPPER(book.genre) LIKE %:title%")
-	Collection<Book> findBookByTitleAuthorGenre(@Param("title") String title);
+	@Query("SELECT book FROM Book book WHERE UPPER(book.title) LIKE %:title% OR UPPER(book.author) LIKE %:title% OR UPPER(book.genre.name) LIKE %:title% OR UPPER(book.ISBN) LIKE %:title%")
+	Collection<Book> findBookByTitleAuthorGenreISBN(@Param("title") String title);
 
 	@Override
 	@Query("SELECT book FROM Book book WHERE book.id =:id")

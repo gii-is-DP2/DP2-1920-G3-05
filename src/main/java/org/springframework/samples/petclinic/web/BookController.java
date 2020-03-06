@@ -60,7 +60,7 @@ public class BookController {
 		}
 
 		// find books by title
-		Collection<Book> results = this.bookService.findBookByTitleAuthorGenre(book.getTitle().toUpperCase());
+		Collection<Book> results = this.bookService.findBookByTitleAuthorGenreISBN(book.getTitle());
 		if (results.isEmpty()) {
 			// no books found
 			result.rejectValue("title", "notFound", "not found");

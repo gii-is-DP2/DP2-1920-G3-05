@@ -7,12 +7,16 @@
 <petclinic:layout pageName="books">
 
     <h2>Book Information</h2>
-
-
+	
     <table class="table table-striped">
         <tr>
             <th>Title</th>
             <td><b><c:out value="${book.title}"/></b></td>
+            <td rowspan="9">
+            <div class="text-center">
+ 				<img src="${book.image}" width="230" height="350"/>
+			</div>
+			</td>
         </tr>
         <tr>
             <th>Author</th>
@@ -42,6 +46,17 @@
             <th>Publication date</th>
             <td><petclinic:localDate date="${book.publicationDate}" pattern="yyyy-MM-dd"/></td>
         </tr>
+        <tr>
+            <th>Verified</th>
+           <td>  
+           <c:if test="${book.verified}">
+                <c:out value="Yes"/>
+            </c:if>
+			<c:if test="${!book.verified}">
+                <c:out value="No"/>
+            </c:if>
+             </td>
+         </tr>
     </table>
 
 </petclinic:layout>

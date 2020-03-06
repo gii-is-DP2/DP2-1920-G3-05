@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
-@Table(name = "review")
+@Table(name = "reviews")
 public class Review extends NamedEntity {
 
 	@Column(name = "raiting")

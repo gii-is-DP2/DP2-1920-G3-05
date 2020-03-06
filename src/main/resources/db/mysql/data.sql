@@ -56,3 +56,7 @@ INSERT IGNORE INTO visits VALUES (4, 7, '2008-09-04', 'spayed');
 INSERT IGNORE INTO books VALUES (1, 'IT', 'Stephen King', 'terror', 123456789,100,'SINOPSIS','editorial1','2010-01-01',TRUE);
 INSERT IGNORE INTO books VALUES (2, 'Harry Potter', 'J.K. Rowling', 'fantasía', 123456790 , 150, 'SINOPSIS', 'editorial1','2013-01-01',TRUE);
 INSERT IGNORE INTO books VALUES (3, 'Harry Potter', 'J.K. Rowling', 'fantasía', 123456791 , 170, 'SINOPSIS_1', 'editorial2','2014-01-01',FALSE);
+
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
+
+INSERT INTO review(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

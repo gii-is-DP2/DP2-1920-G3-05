@@ -20,15 +20,21 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.core.style.ToStringCreator;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.Data;
 
 @Entity
 @Table(name = "books")
+@Data
 public class Book extends BaseEntity {
 
 	@Column(name = "title")
@@ -43,13 +49,14 @@ public class Book extends BaseEntity {
 	@NotEmpty
 	private String		editorial;
 
-	@Column(name = "genre")
-	@NotEmpty
-	private String		genre;
+	@ManyToOne
+	@JoinColumn(name = "genre_id")
+	private Genre		genre;
 
-	@Column(name = "ISBN")
-	@NotNull
-	private Integer		ISBN;
+	@Column(name = "ISBN", unique = true)
+	@Digits(fraction = 0, integer = 13)
+	@NotEmpty
+	private String		ISBN;
 
 	@Column(name = "pages")
 	@NotNull
@@ -67,84 +74,8 @@ public class Book extends BaseEntity {
 	@NotNull
 	private Boolean		verified;
 
-
-	public String getTitle() {
-		return this.title;
-	}
-
-	public String getAuthor() {
-		return this.author;
-	}
-
-	public void setTitle(final String title) {
-		this.title = title;
-	}
-
-	public void setAuthor(final String author) {
-		this.author = author;
-	}
-
-	public String getGenre() {
-		return this.genre;
-	}
-
-	public void setGenre(final String genre) {
-		this.genre = genre;
-	}
-
-	public Integer getISBN() {
-		return this.ISBN;
-	}
-
-	public void setISBN(final Integer ISBN) {
-		this.ISBN = ISBN;
-	}
-
-	public Integer getPages() {
-		return this.pages;
-	}
-
-	public void setPages(final Integer pages) {
-		this.pages = pages;
-	}
-
-	public LocalDate getPublicationDate() {
-		return this.publicationDate;
-	}
-
-	public void setPublicationDate(final LocalDate publicationDate) {
-		this.publicationDate = publicationDate;
-	}
-
-	public String getSynopsis() {
-		return this.synopsis;
-	}
-
-	public void setSynopsis(final String synopsis) {
-		this.synopsis = synopsis;
-	}
-
-	public String getEditorial() {
-		return this.editorial;
-	}
-
-	public void setEditoria(final String editorial) {
-		this.editorial = editorial;
-	}
-
-	public Boolean getVerified() {
-		return this.verified;
-	}
-
-	public void setVerified(final Boolean verified) {
-		this.verified = verified;
-	}
-
-	@Override
-	public String toString() {
-		return new ToStringCreator(this)
-
-			.append("id", this.getId()).append("new", this.isNew()).append("title", this.title).append("author", this.author).append("genre", this.genre).append("ISBN", this.ISBN).toString();
-	}
+	@Column(name = "image")
+	@URL
+	private String		image;
 
 }

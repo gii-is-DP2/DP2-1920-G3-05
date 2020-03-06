@@ -10,5 +10,5 @@ public interface BookRepository {
 
 	Book findById(int id) throws DataAccessException;
 
-	Collection<Book> findBookByTitleAuthorGenre(String title) throws DataAccessException;
+	Collection<Book> findBookByTitleAuthorGenreISBN(String title) throws DataAccessException;
 }

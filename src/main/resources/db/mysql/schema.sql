@@ -54,18 +54,3 @@ CREATE TABLE IF NOT EXISTS visits (
   FOREIGN KEY (pet_id) REFERENCES pets(id)
 ) engine=InnoDB;
 
-CREATE TABLE IF NOT EXISTS books (
-  id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(30),
-  author VARCHAR(50),
-  genre VARCHAR(30),
-  ISBN	INTEGER,
-  pages INTEGER,
-  synopsis VARCHAR(255),
-  editorial VARCHAR(30),
-  publication_date DATE,
-  verified BOOLEAN,
-  INDEX(title),
-  INDEX(author),
-  INDEX(genre)
-) engine=InnoDB;

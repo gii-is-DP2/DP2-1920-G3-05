@@ -19,7 +19,7 @@
             <div class="control-group" id="title">
                 <label class="col-sm-2 control-label"> </label>
                 <div class="col-sm-10">
-                    <form:input class="form-control" path="title" size="30" maxlength="80" placeholder="Search by title, author or genre"/>
+                    <form:input class="form-control" path="title" size="30" maxlength="80" placeholder="Search by title, author, genre or ISBN"/>
                     <span class="help-inline"><form:errors path="*"/></span>
                 </div>
             </div>

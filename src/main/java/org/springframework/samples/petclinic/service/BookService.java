@@ -37,8 +37,8 @@ public class BookService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Book> findBookByTitleAuthorGenre(final String title) throws DataAccessException {
-		return this.bookRepository.findBookByTitleAuthorGenre(title);
+	public Collection<Book> findBookByTitleAuthorGenreISBN(final String title) throws DataAccessException {
+		return this.bookRepository.findBookByTitleAuthorGenreISBN(title.toUpperCase());
 	}
 
 	@Transactional(readOnly = true)

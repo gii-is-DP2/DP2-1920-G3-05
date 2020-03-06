@@ -16,6 +16,7 @@
             <th style="width: 200px;">Genre</th>
             <th style="width: 150px;">ISBN</th>
             <th style="width: 200px;">Pages</th>
+            <th style="width: 100px;">Verified</th>
             <th style="width: 200px;">Synopsis</th>
         </tr>
         </thead>
@@ -41,8 +42,17 @@
                     <c:out value="${book.pages}"/>
                 </td>
                 <td>
+                <c:if test="${book.verified}">
+                <c:out value="Yes"/>
+                </c:if>
+				<c:if test="${!book.verified}">
+                <c:out value="No"/>
+                </c:if>
+                </td>
+                <td>
                     <c:out value="${book.synopsis}"/>
                 </td>
+                
             </tr>
         </c:forEach>
         </tbody>

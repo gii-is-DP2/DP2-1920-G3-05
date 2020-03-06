@@ -65,3 +65,5 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04',
 INSERT INTO books(id,title,author,genre,ISBN,pages,synopsis,editorial,publication_date,verified) VALUES (1, 'IT', 'Stephen King', 'terror', 123456789,100,'SINOPSIS','editorial1','2010-01-01',TRUE);
 INSERT INTO books(id,title,author,genre,ISBN,pages,synopsis,editorial,publication_date,verified) VALUES (2, 'Harry Potter', 'J.K. Rowling', 'fantasía', 123456790 , 150, 'SINOPSIS', 'editorial1','2013-01-01',TRUE);
 INSERT INTO books(id,title,author,genre,ISBN,pages,synopsis,editorial,publication_date,verified) VALUES (3, 'Harry Potter', 'J.K. Rowling', 'fantasía', 123456791 , 170, 'SINOPSIS_1', 'editorial2','2014-01-01',FALSE);
+
+INSERT INTO review(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

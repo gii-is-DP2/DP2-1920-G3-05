@@ -18,13 +18,14 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.repository.BookRepository;
 
-public interface SpringDataBookRepository extends BookRepository, Repository<Book, Integer> {
+public interface SpringDataBookRepository extends BookRepository, CrudRepository<Book, Integer> {
 
 	@Override
 	@Query("SELECT book FROM Book book WHERE UPPER(book.title) LIKE %:title% OR UPPER(book.author) LIKE %:title% OR UPPER(book.genre.name) LIKE %:title% OR UPPER(book.ISBN) LIKE %:title%")
@@ -33,4 +34,9 @@ public interface SpringDataBookRepository extends BookRepository, Repository<Boo
 	@Override
 	@Query("SELECT book FROM Book book WHERE book.id =:id")
 	Book findById(@Param("id") int id);
+	
+	@Override
+	@Modifying
+	@Query("UPDATE Book SET verified=true WHERE id =:bookId")
+	void verifyBook(@Param("bookId") int bookId);
 }

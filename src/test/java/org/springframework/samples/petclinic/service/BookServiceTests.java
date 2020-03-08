@@ -2,13 +2,20 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.User;
+import org.springframework.security.acls.domain.GrantedAuthoritySid;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -69,6 +76,18 @@ class BookServiceTests {
 		Assertions.assertThat(book.getPublicationDate()).isEqualTo("1986-09-15");
 		Assertions.assertThat(book.getVerified()).isTrue();
 
+	}
+	@Test
+	void shouldVerifyBook() {
+		Collection<GrantedAuthority>l=AuthorityUtils.createAuthorityList("admin");
+		org.springframework.security.core.userdetails.User user=new org.springframework.security.core.userdetails.User("admin","admin",l);
+		this.bookService.verifyBook(6);
+		
+	}
+
+	@Test
+	void shouldNotVerifyBook() {
+		
 	}
 
 }

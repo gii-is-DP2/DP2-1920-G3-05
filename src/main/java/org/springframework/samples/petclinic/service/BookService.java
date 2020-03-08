@@ -45,4 +45,10 @@ public class BookService {
 	public Book findBookById(final int id) throws DataAccessException {
 		return this.bookRepository.findById(id);
 	}
+
+	@Transactional(readOnly = true)
+	public void verifyBook(int bookId) {
+		this.bookRepository.verifyBook(bookId);
+		
+	}
 }

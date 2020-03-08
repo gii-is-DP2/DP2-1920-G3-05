@@ -82,5 +82,11 @@ public class BookController {
 		mav.addObject(this.bookService.findBookById(bookId));
 		return mav;
 	}
+	
+	@GetMapping("/books/{bookId}/verify")
+	public String verifyBook(@PathVariable("bookId") final int bookId) {
+		this.bookService.verifyBook(bookId);
+		return "redirect:/books/"+bookId;
+	}
 
 }

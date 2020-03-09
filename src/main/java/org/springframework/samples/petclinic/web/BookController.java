@@ -39,7 +39,6 @@ public class BookController {
 
 	private final BookService bookService;
 
-
 	@Autowired
 	public BookController(final BookService bookService) {
 		this.bookService = bookService;
@@ -81,6 +80,12 @@ public class BookController {
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(this.bookService.findBookById(bookId));
 		return mav;
+	}
+	
+	@GetMapping("/admin/books/delete/{bookId}")
+	public String deleteBook(@PathVariable("bookId") final int bookId) {
+		this.bookService.deleteById(bookId);
+		return "redirect:/books/find";
 	}
 
 }

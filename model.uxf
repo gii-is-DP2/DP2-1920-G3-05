@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>432</x>
+      <x>423</x>
       <y>36</y>
       <w>315</w>
       <h>162</h>
@@ -27,7 +27,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>117</x>
+      <x>108</x>
       <y>63</y>
       <w>171</w>
       <h>99</h>
@@ -43,7 +43,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>279</x>
+      <x>270</x>
       <y>99</y>
       <w>171</w>
       <h>45</h>
@@ -57,12 +57,25 @@ m2=0..*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>117</x>
+      <x>108</x>
       <y>252</y>
       <w>171</w>
       <h>72</h>
     </coordinates>
     <panel_attributes>MeetingAssistant
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>108</x>
+      <y>414</y>
+      <w>180</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>User
 --
 + username: String
 + password: String
@@ -71,21 +84,9 @@ m2=0..*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>117</x>
-      <y>414</y>
-      <w>180</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>User
---</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>189</x>
+      <x>180</x>
       <y>153</y>
       <w>99</w>
       <h>117</h>
@@ -99,7 +100,7 @@ m2=0..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>189</x>
+      <x>180</x>
       <y>315</y>
       <w>99</w>
       <h>117</h>
@@ -109,5 +110,62 @@ represents v
 m1=1
 m2= 0..*</panel_attributes>
     <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1197</x>
+      <y>54</y>
+      <w>243</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>New
+--
++ head: String{NotBlank}
++ fecha: LocalDate
++ body :String{NotBlank}
++ redactor :String{NotBlank}
++ tags :String{NotBlank}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>873</x>
+      <y>72</y>
+      <w>216</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>BookInNew
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>99</y>
+      <w>135</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+appearsIn</panel_attributes>
+    <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>729</x>
+      <y>99</y>
+      <w>162</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+&lt; represents </panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
   </element>
 </diagram>

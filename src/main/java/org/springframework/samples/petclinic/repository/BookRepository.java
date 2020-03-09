@@ -11,4 +11,9 @@ public interface BookRepository {
 	Book findById(int id) throws DataAccessException;
 
 	Collection<Book> findBookByTitleAuthorGenreISBN(String title) throws DataAccessException;
+	
+	void deleteBookById(int bookId) throws DataAccessException;
+	
+	Boolean existsById(int bookId) throws DataAccessException;
+	
 }

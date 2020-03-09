@@ -7,7 +7,7 @@ import org.springframework.validation.Validator;
 
 public class BookValidator implements Validator {
 
-	private static final String REQUIRED = "required";
+	private static final String REQUIRED = "Required";
 
 
 	@Override
@@ -15,7 +15,7 @@ public class BookValidator implements Validator {
 		Book book = (Book) target;
 		String ISBN = book.getISBN();
 		if (this.validateISBN(ISBN) == false) {
-			errors.rejectValue("ISBN", BookValidator.REQUIRED + " valid ISBN");
+			errors.rejectValue("ISBN", BookValidator.REQUIRED + " valid ISBN", BookValidator.REQUIRED + " valid ISBN");
 
 		}
 	}

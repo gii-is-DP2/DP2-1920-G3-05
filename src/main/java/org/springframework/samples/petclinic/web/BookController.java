@@ -22,11 +22,12 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -112,15 +113,14 @@ public class BookController {
 
 	@PostMapping(value = "/books/save")
 	public String saveBook(@Valid final Book book, final BindingResult result, final ModelMap modelMap) {
-		String view = "books/findBooks";
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		//		User u = new User();
-		//		u = this.userService.findUserByUsername(userDetail.getUsername());
-		//		book.setUser(u);
+		User u = new User();
+		u = this.userService.findUserByUsername(userDetail.getUsername());
+		book.setUser(u);
 		Boolean imAdmin = false;
-		for(GrantedAuthority ga: userDetail.getAuthorities()) {
-			if(ga.getAuthority().equals("admin")) {
+		for (GrantedAuthority ga : userDetail.getAuthorities()) {
+			if (ga.getAuthority().equals("admin")) {
 				imAdmin = true;
 			}
 		}
@@ -130,15 +130,20 @@ public class BookController {
 		} else {
 			book.setVerified(false);
 		}
-		
+
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
 			return "books/bookAdd";
 		} else {
-			this.bookService.save(book);
+			try {
+				this.bookService.save(book);
+			} catch (DuplicatedISBNException ex) {
+				result.rejectValue("ISBN", "duplicate", "already exists");
+				return "books/bookAdd";
+			}
 			modelMap.addAttribute("message", "Book successfully saved!");
 		}
-		
+
 		return "redirect:/books";
 	}
 

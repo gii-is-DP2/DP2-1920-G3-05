@@ -18,4 +18,6 @@ public interface BookRepository {
 
 	void save(Book book) throws DataAccessException;
 
+	Book findByISBN(String ISBN) throws DataAccessException;
+
 }

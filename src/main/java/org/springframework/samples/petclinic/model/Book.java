@@ -53,7 +53,7 @@ public class Book extends BaseEntity {
 	@JoinColumn(name = "genre_id")
 	private Genre		genre;
 
-	@Column(name = "ISBN", unique = true)
+	@Column(name = "ISBN")
 	@Digits(fraction = 0, integer = 13)
 	@NotEmpty
 	private String		ISBN;
@@ -72,15 +72,15 @@ public class Book extends BaseEntity {
 
 	@Column(name = "verified")
 	@NotNull
-	private Boolean		verified = false;
+	private Boolean		verified	= false;
 
 	@Column(name = "image")
 	@URL
 	private String		image;
 
-	//	@ManyToOne(optional = false)
-	//	@JoinColumn(name = "user_username")
-	//	@NotNull
-	//	private User		user;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_username")
+
+	private User		user;
 
 }

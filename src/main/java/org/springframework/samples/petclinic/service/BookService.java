@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.repository.BookRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +53,13 @@ public class BookService {
 		return this.bookRepository.findById(id);
 	}
 
-	@Transactional
-	public void save(final Book book) {
-		this.bookRepository.save(book);
+	@Transactional(rollbackFor = DuplicatedISBNException.class)
+	public void save(final Book book) throws DataAccessException, DuplicatedISBNException {
+		boolean isDuplicated = this.bookRepository.findByISBN(book.getISBN()) != null;
+		if (isDuplicated) {
+			throw new DuplicatedISBNException();
+		} else {
+			this.bookRepository.save(book);
+		}
 	}
 }

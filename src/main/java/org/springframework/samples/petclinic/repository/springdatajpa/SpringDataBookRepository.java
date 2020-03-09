@@ -40,4 +40,9 @@ public interface SpringDataBookRepository extends BookRepository, Repository<Boo
 	@Override
 	@Query("SELECT genre FROM Genre genre ORDER BY genre.name")
 	List<Genre> findGenre() throws DataAccessException;
+
+	@Override
+	@Query("Select b from Book b where b.ISBN = ?1")
+	Book findByISBN(@Param("ISBN") String ISBN);
+
 }

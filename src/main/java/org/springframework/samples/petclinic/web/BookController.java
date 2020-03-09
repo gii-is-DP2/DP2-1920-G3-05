@@ -22,11 +22,13 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -116,22 +118,28 @@ public class BookController {
 		//		User u = new User();
 		//		u = this.userService.findUserByUsername(userDetail.getUsername());
 		//		book.setUser(u);
-		String rol = userDetail.getAuthorities().toString();
+		Boolean imAdmin = false;
+		for(GrantedAuthority ga: userDetail.getAuthorities()) {
+			if(ga.getAuthority().equals("admin")) {
+				imAdmin = true;
+			}
+		}
 
-		if (rol.equals("admin")) {
+		if (imAdmin) {
 			book.setVerified(true);
 		} else {
 			book.setVerified(false);
 		}
+		
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
 			return "books/bookAdd";
 		} else {
 			this.bookService.save(book);
 			modelMap.addAttribute("message", "Book successfully saved!");
-			view = "redirect:/books/{bookId}";
 		}
-		return view;
+		
+		return "redirect:/books";
 	}
 
 }

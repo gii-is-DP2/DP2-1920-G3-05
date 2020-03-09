@@ -72,7 +72,7 @@ public class Book extends BaseEntity {
 
 	@Column(name = "verified")
 	@NotNull
-	private Boolean		verified;
+	private Boolean		verified = false;
 
 	@Column(name = "image")
 	@URL

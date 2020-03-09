@@ -78,4 +78,9 @@ public class Book extends BaseEntity {
 	@URL
 	private String		image;
 
+	//	@ManyToOne(optional = false)
+	//	@JoinColumn(name = "user_username")
+	//	@NotNull
+	//	private User		user;
+
 }

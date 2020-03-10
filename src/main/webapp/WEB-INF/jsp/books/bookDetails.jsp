@@ -56,7 +56,7 @@
 				</c:if> <c:if test="${!book.verified}">
 					<c:out value="No" />
 					<sec:authorize access="hasAuthority('admin')">
-						<spring:url value="{bookId}/verify" var="editUrl">
+						<spring:url value="/admin/books/{bookId}/verify" var="editUrl">
 							<spring:param name="bookId" value="${book.id}" />
 						</spring:url>
 						<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Verify book</a>

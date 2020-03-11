@@ -21,6 +21,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,5 +45,21 @@ public class BookService {
 	@Transactional(readOnly = true)
 	public Book findBookById(final int id) throws DataAccessException {
 		return this.bookRepository.findById(id);
+
 	}
+	@Transactional
+	public void save(final Book book) throws DataAccessException {
+		this.bookRepository.save(book);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Genre> findBookGenres() throws DataAccessException {
+		return this.bookRepository.findBookGenres();
+	}
+	@Transactional(readOnly = true)
+	public Genre findGenreByName(final String name) throws DataAccessException {
+
+		return this.bookRepository.findGenreByName(name);
+	}
+
 }

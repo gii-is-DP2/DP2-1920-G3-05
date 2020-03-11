@@ -17,11 +17,14 @@
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
+import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.repository.BookRepository;
 
 public interface SpringDataBookRepository extends BookRepository, Repository<Book, Integer> {
@@ -33,4 +36,12 @@ public interface SpringDataBookRepository extends BookRepository, Repository<Boo
 	@Override
 	@Query("SELECT book FROM Book book WHERE book.id =:id")
 	Book findById(@Param("id") int id);
+
+	@Override
+	@Query("SELECT bgenre FROM Genre bgenre ORDER BY bgenre.name")
+	List<Genre> findBookGenres() throws DataAccessException;
+
+	@Override
+	@Query("SELECT genre FROM Genre genre WHERE genre.name =:name")
+	Genre findGenreByName(final String name);
 }

@@ -71,11 +71,14 @@ public class Book extends BaseEntity {
 	private LocalDate	publicationDate;
 
 	@Column(name = "verified")
-	@NotNull
 	private Boolean		verified;
 
 	@Column(name = "image")
 	@URL
 	private String		image;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_username")
+	private User		user;
 
 }

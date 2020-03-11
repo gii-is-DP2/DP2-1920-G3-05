@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class BookServiceTests {
@@ -71,4 +74,35 @@ class BookServiceTests {
 
 	}
 
+	@Test
+	@Transactional
+	public void shouldUpdateBookName() throws Exception {
+		Book book3 = this.bookService.findBookById(3);
+		String oldTitle = book3.getTitle();
+
+		String newTitle = oldTitle + "X";
+		book3.setTitle(newTitle);
+		this.bookService.save(book3);
+
+		book3 = this.bookService.findBookById(3);
+		Assertions.assertThat(book3.getTitle()).isEqualTo(newTitle);
+
+	}
+	@Test
+	void shouldFindAllGenres() {
+		Collection<Genre> bookGenre = this.bookService.findBookGenres();
+
+		Genre genre1 = EntityUtils.getById(bookGenre, Genre.class, 1);
+		Assertions.assertThat(genre1.getName()).isEqualTo("Fantasy");
+		Genre genre4 = EntityUtils.getById(bookGenre, Genre.class, 4);
+		Assertions.assertThat(genre4.getName()).isEqualTo("Contemporary");
+	}
+	@Test
+	@Transactional
+	public void shouldFindGenre() throws Exception {
+		Genre genre3 = this.bookService.findGenreByName("Romance");
+
+		Assertions.assertThat("Romance").isEqualTo(genre3.getName());
+
+	}
 }

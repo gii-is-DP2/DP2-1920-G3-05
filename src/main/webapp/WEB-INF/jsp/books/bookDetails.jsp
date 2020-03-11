@@ -57,6 +57,13 @@
             </c:if>
              </td>
          </tr>
+          <c:if test="${propiedad}">  <tr>
+            <th>Edit</th>
+            
+            <td><form action="/books/${book.id}/updateForm">
+    			<input type="submit" value="Edit Book" />
+				</form>	</td>
+        </tr></c:if>
     </table>
 
 </petclinic:layout>

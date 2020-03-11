@@ -99,39 +99,28 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithNewOnlyOneBook() {
+	void shouldDeleteBookAndNew() {
 		int bookId = 11;
-		int newId = 2; //Como solo hay 1 libro se borrara la noticia tb
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsNew = this.newService.existsNewById(newId); 
-		Assertions.assertThat(existsBook).isTrue();
-		Assertions.assertThat(existsNew).isTrue();
+		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
 		
 		this.bookService.deleteById(bookId);
 		
-		existsBook = this.bookService.existsBookById(bookId);
-		existsNew = this.newService.existsNewById(newId); 
+		Boolean existsBook = this.bookService.existsBookById(bookId);
+		Boolean existsNew = this.newService.existsNewById(newId); 
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsNew).isFalse();
 	}
 	
 	@Test
-	void shouldDeleteBookWithNewMoreThanOneBook() {
+	void shouldDeleteBookButNoNew() {
 		int bookId = 2;
-		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tb
-		List<Integer> booksInNewIds = this.bookInNewsService.getBooksInNewFromNew(newId);
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsNew = this.newService.existsNewById(newId); 
-		
-		Assertions.assertThat(existsBook).isTrue();
-		Assertions.assertThat(existsNew).isTrue();
-		Assertions.assertThat(booksInNewIds).hasSize(2).contains(bookId);
+		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
 		
 		this.bookService.deleteById(bookId);
 		
-		existsBook = this.bookService.existsBookById(bookId);
-		existsNew = this.newService.existsNewById(newId); 
-		booksInNewIds = this.bookInNewsService.getBooksInNewFromNew(newId);
+		Boolean existsBook = this.bookService.existsBookById(bookId);
+		Boolean existsNew = this.newService.existsNewById(newId); 
+		List<Integer> booksInNewIds = this.bookInNewsService.getBooksInNewFromNew(newId);
 		
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsNew).isTrue();
@@ -142,15 +131,11 @@ class BookServiceTests {
 	void shouldDeleteBookWithMeeting() {
 		int bookId = 10;
 		int meetingId = 4;
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsMeeting = this.meetingService.existsMeetingById(meetingId);
-		Assertions.assertThat(existsBook).isTrue();
-		Assertions.assertThat(existsMeeting).isTrue();
 		
 		this.bookService.deleteById(bookId);
 		
-		existsBook = this.bookService.existsBookById(bookId);
-		existsMeeting = this.meetingService.existsMeetingById(meetingId);
+		Boolean existsBook = this.bookService.existsBookById(bookId);
+		Boolean existsMeeting = this.meetingService.existsMeetingById(meetingId);
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsMeeting).isFalse();
 	}
@@ -159,15 +144,11 @@ class BookServiceTests {
 	void shouldDeleteBookWithReview() {
 		int bookId = 4;
 		int reviewId = 6;
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsReview = this.reviewService.existsReviewById(reviewId);
-		Assertions.assertThat(existsBook).isTrue();
-		Assertions.assertThat(existsReview).isTrue();
 		
 		this.bookService.deleteById(bookId);
 		
-		existsBook = this.bookService.existsBookById(bookId);
-		existsReview = this.reviewService.existsReviewById(reviewId);
+		Boolean existsBook = this.bookService.existsBookById(bookId);
+		Boolean existsReview = this.reviewService.existsReviewById(reviewId);
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsReview).isFalse();
 	}
@@ -176,15 +157,11 @@ class BookServiceTests {
 	void shouldDeleteBookWithPublication() {
 		int bookId = 8;
 		int publicationId = 5;
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsPublication = this.publicationService.existsPublicationById(publicationId);
-		Assertions.assertThat(existsBook).isTrue();
-		Assertions.assertThat(existsPublication).isTrue();
 
 		this.bookService.deleteById(bookId);
 		
-		existsBook = this.bookService.existsBookById(bookId);
-		existsPublication = this.publicationService.existsPublicationById(publicationId);
+		Boolean existsBook = this.bookService.existsBookById(bookId);
+		Boolean existsPublication = this.publicationService.existsPublicationById(publicationId);
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsPublication).isFalse();
 	}
@@ -200,6 +177,8 @@ class BookServiceTests {
 		int publicationId2 = 2;
 		int meetingId = 2;
 		
+		this.bookService.deleteById(bookId);
+		
 		Boolean existsBook = this.bookService.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId);
 		Boolean existsReview1 = this.reviewService.existsReviewById(reviewId1);
@@ -208,27 +187,6 @@ class BookServiceTests {
 		Boolean existsPublication1 = this.publicationService.existsPublicationById(publicationId1);
 		Boolean existsPublication2 = this.publicationService.existsPublicationById(publicationId2);
 		Boolean existsMeeting = this.meetingService.existsMeetingById(meetingId);
-		
-		Assertions.assertThat(existsBook).isTrue();
-		Assertions.assertThat(existsNew).isTrue();
-		Assertions.assertThat(existsReview1).isTrue();
-		Assertions.assertThat(existsReview2).isTrue();
-		Assertions.assertThat(existsReview3).isTrue();
-		Assertions.assertThat(existsPublication1).isTrue();
-		Assertions.assertThat(existsPublication2).isTrue();
-		Assertions.assertThat(existsMeeting).isTrue();
-
-		this.bookService.deleteById(bookId);
-		
-		existsBook = this.bookService.existsBookById(bookId);
-		existsBook = this.bookService.existsBookById(bookId);
-		existsNew = this.newService.existsNewById(newId);
-		existsReview1 = this.reviewService.existsReviewById(reviewId1);
-		existsReview2 = this.reviewService.existsReviewById(reviewId2);
-		existsReview3 = this.reviewService.existsReviewById(reviewId3);
-		existsPublication1 = this.publicationService.existsPublicationById(publicationId1);
-		existsPublication2 = this.publicationService.existsPublicationById(publicationId2);
-		existsMeeting = this.meetingService.existsMeetingById(meetingId);
 		
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsNew).isFalse();

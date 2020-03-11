@@ -28,27 +28,22 @@ public class NewServiceTest {
 		Assertions.assertThat(newsIds).contains(1);
 
 		
-		bookId = 1;
+		bookId = 7;
 		newsIds = this.sut.getNewsFromBook(bookId);
 		Assertions.assertThat(newsIds).isEmpty();
 	}
 	
 	@Test
-	void shouldDeleteNewWithMoreThanOneBook() { //Como hay mas de un libro deberia borrar el libro de la noticia, pero permanecer la noticia
+	void shouldNotDeleteNewWithMoreThanOneBook() { //Como hay mas de un libro deberia borrar el libro de la noticia, pero permanecer la noticia
 		int newId = 1;
 		int bookId = 2;
-		Boolean existsNew = this.sut.existsNewById(newId);
-		Assertions.assertThat(existsNew).isTrue();
-		List<Integer> bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
-		Assertions.assertThat(bookIds.size()).isEqualTo(2);
-		Assertions.assertThat(bookIds).contains(bookId);
 		
 		this.sut.deleteNew(newId, bookId);
 		
-		existsNew = this.sut.existsNewById(newId);
+		Boolean existsNew = this.sut.existsNewById(newId);
 		Assertions.assertThat(existsNew).isTrue();
 
-		bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
+		List<Integer> bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
 		Assertions.assertThat(bookIds.size()).isEqualTo(1);
 	}
 
@@ -56,17 +51,12 @@ public class NewServiceTest {
 	void shouldDeleteNewWithOneBook() { //Como solo hay un libro deberia borrar el libro de la noticia y la propia noticia
 		int newId = 2;
 		int bookId = 11;
-		Boolean existsNew = this.sut.existsNewById(newId);
-		Assertions.assertThat(existsNew).isTrue();
-		List<Integer> bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
-		Assertions.assertThat(bookIds.size()).isEqualTo(1);
-		Assertions.assertThat(bookIds).contains(bookId);
 		
 		this.sut.deleteNew(newId, bookId);
 		
-		existsNew = this.sut.existsNewById(newId);
+		Boolean existsNew = this.sut.existsNewById(newId);
 		Assertions.assertThat(existsNew).isFalse();
-		bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
+		List<Integer> bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
 		Assertions.assertThat(bookIds).isEmpty();
 	}
 }

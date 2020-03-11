@@ -14,12 +14,7 @@ public class MeetingAssistantService {
 
 	@Autowired
 	private MeetingAssistantRepository meetingAssistantRepository;
-	
-	/*@Transactional
-	public int assistantsCount() {
-		return (int)meetingAssistantRepository.count();
-	}*/
-	
+		
 	@Transactional(readOnly = true)
 	public List<Integer> getAssistantsMeeting(int meetingId) throws DataAccessException {
 		return this.meetingAssistantRepository.getAssistantsMeeting(meetingId);

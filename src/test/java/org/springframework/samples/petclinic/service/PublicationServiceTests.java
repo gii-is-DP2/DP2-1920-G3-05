@@ -36,18 +36,11 @@ public class PublicationServiceTests {
 	@Test
 	void shouldDeletePublicationWithImages() {
 		int publicationId = 1;
-		Boolean exisitsPublication = this.sut.existsPublicationById(publicationId);
-		Assertions.assertThat(exisitsPublication).isTrue();
 		
 		List<Integer> imagesId = this.imageService.getImagesFromPublication(publicationId);
-		for(Integer i: imagesId) {
-			Boolean existsImageInPublication = this.imageService.existsImageById(i);
-			Assertions.assertThat(existsImageInPublication).isTrue();
-
-		}
-		
+				
 		this.sut.deletePublication(publicationId);
-		exisitsPublication = this.sut.existsPublicationById(publicationId);
+		Boolean exisitsPublication = this.sut.existsPublicationById(publicationId);
 		Assertions.assertThat(exisitsPublication).isFalse();
 
 		for(Integer i: imagesId) {
@@ -59,12 +52,10 @@ public class PublicationServiceTests {
 	@Test
 	void shouldDeletePublicationWithoutImages(){
 		int publicationId = 6;
-		Boolean exisitsPublication = this.sut.existsPublicationById(publicationId);
-		Assertions.assertThat(exisitsPublication).isTrue();
 		
 		this.sut.deletePublication(publicationId);
 		
-		exisitsPublication = this.sut.existsPublicationById(publicationId);
+		Boolean exisitsPublication = this.sut.existsPublicationById(publicationId);
 		Assertions.assertThat(exisitsPublication).isFalse();
 	}
 }

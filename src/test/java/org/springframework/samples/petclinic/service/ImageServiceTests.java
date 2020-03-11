@@ -37,12 +37,10 @@ public class ImageServiceTests {
 	@Test
 	void shouldDeleteImage() {
 		int imageId = 1;
-		Boolean existsImage = this.sut.existsImageById(imageId);
-		Assertions.assertThat(existsImage).isTrue();
 		
 		this.sut.deleteImage(imageId);
 		
-		existsImage = this.sut.existsImageById(imageId);
+		Boolean existsImage = this.sut.existsImageById(imageId);
 		Assertions.assertThat(existsImage).isFalse();
 	}
 	

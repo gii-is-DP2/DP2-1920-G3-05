@@ -38,18 +38,12 @@ public class MeetingServiceTest {
 	@Test
 	void shouldDeleteMeetingWithAssistants() {
 		int meetingId = 1;
-		Boolean existsMeeting = this.sut.existsMeetingById(meetingId);
-		Assertions.assertThat(existsMeeting).isTrue();
 		
 		List<Integer> assistantsIds = this.assistantsService.getAssistantsMeeting(meetingId);
-		for(Integer i: assistantsIds) {
-			Boolean existsAssistantToMeeting = this.assistantsService.existsAssistantById(i);
-			Assertions.assertThat(existsAssistantToMeeting).isTrue();
-		}
 		
 		this.sut.deleteMeeting(meetingId);
 		
-		existsMeeting = this.sut.existsMeetingById(meetingId);
+		Boolean existsMeeting = this.sut.existsMeetingById(meetingId);
 		Assertions.assertThat(existsMeeting).isFalse();
 		for(Integer i: assistantsIds) {
 			Boolean existsAssistantToMeeting = this.assistantsService.existsAssistantById(i);
@@ -60,15 +54,10 @@ public class MeetingServiceTest {
 	@Test
 	void shouldDeleteMeetingWithoutAssistants() {
 		int meetingId = 4;
-		Boolean existsMeeting = this.sut.existsMeetingById(meetingId);
-		Assertions.assertThat(existsMeeting).isTrue();
-		
-		List<Integer> assistantsIds = this.assistantsService.getAssistantsMeeting(meetingId);
-		Assertions.assertThat(assistantsIds).isEmpty();
-		
+				
 		this.sut.deleteMeeting(meetingId);
 		
-		existsMeeting = this.sut.existsMeetingById(meetingId);
+		Boolean existsMeeting = this.sut.existsMeetingById(meetingId);
 		Assertions.assertThat(existsMeeting).isFalse();		
 	}
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.samples.petclinic.repository.BookInNewRepository;
 import org.springframework.samples.petclinic.repository.NewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +18,6 @@ public class NewService {
 
 	@Autowired
 	private BookInNewService bookInNewService;
-
-	/*
-	 * @Transactional public int newCount() { return (int) this.newRepo.count(); }
-	 */
 
 	@Transactional(readOnly = true)
 	public List<Integer> getNewsFromBook(int bookId) throws DataAccessException {

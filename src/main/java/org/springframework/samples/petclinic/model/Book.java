@@ -27,6 +27,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -63,6 +64,7 @@ public class Book extends BaseEntity {
 	private Integer		pages;
 
 	@Column(name = "synopsis")
+	@Length(min = 1, max = 600)
 	@NotEmpty
 	private String		synopsis;
 

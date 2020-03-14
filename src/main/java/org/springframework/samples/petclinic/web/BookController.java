@@ -19,13 +19,28 @@ package org.springframework.samples.petclinic.web;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
+import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -37,12 +52,25 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class BookController {
 
-	private final BookService bookService;
+	private final BookService	bookService;
+
+	@Autowired
+	private UserService			userService;
 
 
 	@Autowired
 	public BookController(final BookService bookService) {
 		this.bookService = bookService;
+	}
+
+	@ModelAttribute("genres")
+	public Collection<Genre> populateGenre() {
+		return this.bookService.findGenre();
+	}
+
+	@InitBinder("book")
+	public void initBookBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new BookValidator());
 	}
 
 	@GetMapping(value = "/books/find")
@@ -81,6 +109,49 @@ public class BookController {
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(this.bookService.findBookById(bookId));
 		return mav;
+	}
+
+	@GetMapping(value = "/books/add")
+	public String addBook(final ModelMap modelMap) {
+		String view = "books/bookAdd";
+		modelMap.addAttribute("book", new Book());
+		return view;
+	}
+
+	@PostMapping(value = "/books/save")
+	public String saveBook(@Valid final Book book, final BindingResult result, final ModelMap modelMap) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		User u = new User();
+		u = this.userService.findUserByUsername(userDetail.getUsername());
+		book.setUser(u);
+		Boolean imAdmin = false;
+		for (GrantedAuthority ga : userDetail.getAuthorities()) {
+			if (ga.getAuthority().equals("admin")) {
+				imAdmin = true;
+			}
+		}
+
+		if (imAdmin) {
+			book.setVerified(true);
+		} else {
+			book.setVerified(false);
+		}
+
+		if (result.hasErrors()) {
+			modelMap.addAttribute("book", book);
+			return "books/bookAdd";
+		} else {
+			try {
+				this.bookService.save(book);
+			} catch (DuplicatedISBNException ex) {
+				result.rejectValue("ISBN", "duplicate", "already exists");
+				return "books/bookAdd";
+			}
+			modelMap.addAttribute("message", "Book successfully saved!");
+		}
+
+		return "redirect:/books";
 	}
 
 }

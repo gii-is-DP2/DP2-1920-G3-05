@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 import org.assertj.core.api.Assertions;
@@ -8,14 +9,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class BookServiceTests {
 
 	@Autowired
-	private BookService bookService;
+	private BookService	bookService;
+
+	@Autowired
+	private UserService	userService;
 
 
 	@Test
@@ -69,6 +79,82 @@ class BookServiceTests {
 		Assertions.assertThat(book.getPublicationDate()).isEqualTo("1986-09-15");
 		Assertions.assertThat(book.getVerified()).isTrue();
 
+	}
+
+	@Test
+	@Transactional
+	public void shouldInsertBookIntoDatabaseAndGenerateId() throws DataAccessException, DuplicatedISBNException {
+		Collection<Book> list = this.bookService.findBookByTitleAuthorGenreISBN("prueba");
+		User user = this.userService.findUserByUsername("admin1");
+		int count = list.size();
+
+		Book book = new Book();
+		book.setTitle("prueba");
+		book.setAuthor("antonio");
+		book.setEditorial("SM");
+		book.setISBN("9788425223280");
+		book.setPages(574);
+		book.setPublicationDate(LocalDate.now());
+		Collection<Genre> genres = this.bookService.findGenre();
+		book.setGenre(EntityUtils.getById(genres, Genre.class, 3));
+		book.setSynopsis("Esto es una prueba");
+		book.setVerified(true);
+		book.setUser(user);
+
+		this.bookService.save(book);
+
+		Assertions.assertThat(book.getId()).isNotNull();
+		list = this.bookService.findBookByTitleAuthorGenreISBN("prueba");
+		Assertions.assertThat(list.size()).isEqualTo(count + 1);
+
+	}
+
+	@Test
+	@Transactional
+	public void shouldThrowExceptionInsertingBooksWithTheSameISBN() {
+		User user = this.userService.findUserByUsername("admin1");
+
+		Book book = new Book();
+		book.setTitle("prueba");
+		book.setAuthor("antonio");
+		book.setEditorial("SM");
+		book.setISBN("9788425223280");
+		book.setPages(574);
+		book.setPublicationDate(LocalDate.now());
+		Collection<Genre> genres = this.bookService.findGenre();
+		book.setGenre(EntityUtils.getById(genres, Genre.class, 3));
+		book.setSynopsis("Esto es una prueba");
+		book.setVerified(true);
+		book.setUser(user);
+
+		try {
+			this.bookService.save(book);
+
+		} catch (DuplicatedISBNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Book bookSameISBN = new Book();
+		bookSameISBN.setTitle("prueba1");
+		bookSameISBN.setAuthor("pepe");
+		bookSameISBN.setEditorial("SMa");
+		bookSameISBN.setISBN("9788425223280");
+		bookSameISBN.setPages(578);
+		bookSameISBN.setPublicationDate(LocalDate.now().minusYears(4));
+		bookSameISBN.setGenre(EntityUtils.getById(genres, Genre.class, 4));
+		bookSameISBN.setSynopsis("Esto es una prueba 2");
+		bookSameISBN.setVerified(true);
+		bookSameISBN.setUser(user);
+		try {
+			this.bookService.save(bookSameISBN);
+
+		} catch (DuplicatedISBNException e) {
+			// TODO Auto-generated catch block
+			Assertions.assertThat(e.getCause());
+			//		Assertions.assertThrows(DuplicatedISBNException.class, () -> {
+			//			this.bookService.save(bookSameISBN);
+			//		});
+		}
 	}
 
 }

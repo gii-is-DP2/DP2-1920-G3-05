@@ -27,6 +27,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -53,7 +54,7 @@ public class Book extends BaseEntity {
 	@JoinColumn(name = "genre_id")
 	private Genre		genre;
 
-	@Column(name = "ISBN", unique = true)
+	@Column(name = "ISBN")
 	@Digits(fraction = 0, integer = 13)
 	@NotEmpty
 	private String		ISBN;
@@ -63,6 +64,7 @@ public class Book extends BaseEntity {
 	private Integer		pages;
 
 	@Column(name = "synopsis")
+	@Length(min = 1, max = 600)
 	@NotEmpty
 	private String		synopsis;
 
@@ -72,10 +74,15 @@ public class Book extends BaseEntity {
 
 	@Column(name = "verified")
 	@NotNull
-	private Boolean		verified;
+	private Boolean		verified	= false;
 
 	@Column(name = "image")
 	@URL
 	private String		image;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_username")
+
+	private User		user;
 
 }

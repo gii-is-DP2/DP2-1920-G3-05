@@ -27,10 +27,14 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Find Book</button>
+                
+                
+                
             </div>
         </div>
 
     </form:form>
+    <a class="btn btn-default" href='<spring:url value="/books/add" htmlEscape="true"/>'>Add Book</a>
 
     <br/> 
 	

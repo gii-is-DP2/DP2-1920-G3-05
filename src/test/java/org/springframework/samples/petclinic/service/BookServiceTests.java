@@ -97,47 +97,6 @@ class BookServiceTests {
 		Assertions.assertThat(book.getVerified()).isTrue();
 
 	}
-	
-	@Test
-	void shouldDeleteBookWithNoRelations() {
-		int bookId = 6;
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Assertions.assertThat(existsBook).isTrue();
-		
-		this.bookService.deleteById(bookId);
-		
-		existsBook = this.bookService.existsBookById(bookId);
-		Assertions.assertThat(existsBook).isFalse();		
-	}
-	
-	@Test
-	void shouldDeleteBookAndNew() {
-		int bookId = 11;
-		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
-		
-		this.bookService.deleteById(bookId);
-		
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsNew = this.newService.existsNewById(newId); 
-		Assertions.assertThat(existsBook).isFalse();
-		Assertions.assertThat(existsNew).isFalse();
-	}
-	
-	@Test
-	void shouldDeleteBookButNoNew() {
-		int bookId = 2;
-		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
-		
-		this.bookService.deleteById(bookId);
-		
-		Boolean existsBook = this.bookService.existsBookById(bookId);
-		Boolean existsNew = this.newService.existsNewById(newId); 
-		List<Integer> booksInNewIds = this.bookInNewsService.getBooksInNewFromNew(newId);
-		
-		Assertions.assertThat(existsBook).isFalse();
-		Assertions.assertThat(existsNew).isTrue();
-		Assertions.assertThat(booksInNewIds).hasSize(1).doesNotContain(bookId);
-	}
 
 	@Test
 	@Transactional
@@ -246,6 +205,48 @@ class BookServiceTests {
 		Assertions.assertThat("Romance").isEqualTo(genre3.getName());
 
 	}
+	
+	@Test
+	void shouldDeleteBookWithNoRelations() {
+		int bookId = 6;
+		Boolean existsBook = this.sut.existsBookById(bookId);
+		Assertions.assertThat(existsBook).isTrue();
+		
+		this.sut.deleteById(bookId);
+		
+		existsBook = this.sut.existsBookById(bookId);
+		Assertions.assertThat(existsBook).isFalse();		
+	}
+	
+	@Test
+	void shouldDeleteBookAndNew() {
+		int bookId = 11;
+		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
+		
+		this.sut.deleteById(bookId);
+		
+		Boolean existsBook = this.sut.existsBookById(bookId);
+		Boolean existsNew = this.newService.existsNewById(newId); 
+		Assertions.assertThat(existsBook).isFalse();
+		Assertions.assertThat(existsNew).isFalse();
+	}
+	
+	@Test
+	void shouldDeleteBookButNoNew() {
+		int bookId = 2;
+		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
+		
+		this.sut.deleteById(bookId);
+		
+		Boolean existsBook = this.sut.existsBookById(bookId);
+		Boolean existsNew = this.newService.existsNewById(newId); 
+		List<Integer> booksInNewIds = this.bookInNewsService.getBooksInNewFromNew(newId);
+		
+		Assertions.assertThat(existsBook).isFalse();
+		Assertions.assertThat(existsNew).isTrue();
+		Assertions.assertThat(booksInNewIds).hasSize(1).doesNotContain(bookId);
+	}
+	
 	@Test
 	void shouldDeleteBookWithMeeting() {
 		int bookId = 10;

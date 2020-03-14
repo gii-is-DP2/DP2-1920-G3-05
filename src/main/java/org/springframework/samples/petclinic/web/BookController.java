@@ -59,8 +59,9 @@ public class BookController {
 
 
 	@Autowired
-	public BookController(final BookService bookService) {
+	public BookController(final BookService bookService, final UserService userService) {
 		this.bookService = bookService;
+		this.userService = userService;
 	}
 
 	@ModelAttribute("genres")
@@ -77,6 +78,10 @@ public class BookController {
 	public String initFindForm(final Map<String, Object> model) {
 		model.put("book", new Book());
 		return "books/findBooks";
+	}
+	@ModelAttribute("genres")
+	public Collection<Genre> populatePetTypes() {
+		return this.bookService.findBookGenres();
 	}
 
 	@GetMapping(value = "/books")
@@ -106,9 +111,21 @@ public class BookController {
 
 	@GetMapping("/books/{bookId}")
 	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
+		Boolean propiedad = false;
+		Book book = this.bookService.findBookById(bookId);
+		propiedad = this.libroMioOAdmin(bookId);
 		ModelAndView mav = new ModelAndView("books/bookDetails");
-		mav.addObject(this.bookService.findBookById(bookId));
+		mav.addObject(book);
+		mav.addObject("propiedad", propiedad);
 		return mav;
+	}
+	@GetMapping(path = "/books/{bookId}/updateForm")
+	public String formEvento(final ModelMap modelMap, @PathVariable("bookId") final int bookId) {
+		if (!this.libroMioOAdmin(bookId)) {
+			return "redirect:/oups";
+		}
+		modelMap.addAttribute("book", this.bookService.findBookById(bookId));
+		return "books/UpdateBookForm";
 	}
 
 	@GetMapping(value = "/books/add")
@@ -154,4 +171,56 @@ public class BookController {
 		return "redirect:/books";
 	}
 
+	@PostMapping("/books/update/{book.id}/{book.verified}")
+	public String updateBooks(@Valid final Book updatedBook, final BindingResult result, final ModelMap modelMap, @PathVariable("book.id") final int bookId, @PathVariable("book.verified") final String verified) {
+
+		Book book = this.bookService.findBookById(bookId);
+		if (result.hasErrors()) {
+
+			modelMap.addAttribute("book", updatedBook);
+
+			return "redirect:/books/" + bookId + "/updateForm";
+		}
+		Genre genre = this.bookService.findGenreByName(updatedBook.getGenre().getName());
+		book.setGenre(genre);
+		book.setAuthor(updatedBook.getAuthor());
+		book.setEditorial(updatedBook.getEditorial());
+
+		book.setImage(updatedBook.getImage());
+		book.setISBN(updatedBook.getISBN());
+		book.setPages(updatedBook.getPages());
+		book.setPublicationDate(updatedBook.getPublicationDate());
+		book.setSynopsis(updatedBook.getSynopsis());
+		book.setTitle(updatedBook.getTitle());
+		if (verified.equals("true")) {
+			book.setVerified(true);
+		} else {
+			book.setVerified(false);
+		}
+
+		this.bookService.save(book);
+
+		modelMap.addAttribute("book", updatedBook);
+
+		return "redirect:/books/" + bookId;
+	}
+	private Boolean libroMioOAdmin(final Integer id) {
+		Boolean res = false;
+		Boolean imAdmin = false;
+		Book book = this.bookService.findBookById(id);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		User user = new User();
+		user = this.userService.findUserByUsername(userdetails.getUsername());
+		for (GrantedAuthority ga : userdetails.getAuthorities()) {
+			if (ga.getAuthority().equals("admin")) {
+				imAdmin = true;
+			}
+		}
+		if (user.getUsername().equals(book.getUser().getUsername()) && !book.getVerified() || imAdmin) {
+			res = true;
+		}
+
+		return res;
+	}
 }

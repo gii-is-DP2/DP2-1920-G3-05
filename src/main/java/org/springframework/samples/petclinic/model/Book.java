@@ -82,7 +82,6 @@ public class Book extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_username")
-
 	private User		user;
 
 }

@@ -51,6 +51,7 @@ public class BookService {
 	@Transactional(readOnly = true)
 	public Book findBookById(final int id) throws DataAccessException {
 		return this.bookRepository.findById(id);
+
 	}
 
 	@Transactional(rollbackFor = DuplicatedISBNException.class)

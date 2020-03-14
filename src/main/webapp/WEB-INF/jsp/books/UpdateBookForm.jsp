@@ -13,8 +13,9 @@
               
         <form:form modelAttribute="book"
                    class="form-horizontal"
-                    action="/books/update/${book.id}/${book.verified}">
+                    action="/books/update/${book.id}">
             
+           
            
             <div class="form-group has-feedback">
      
@@ -34,6 +35,8 @@
                  <div class="control-group">
                     <petclinic:selectField name="genre.name" label="genre" names="${genres}" size="5"/>
                 </div>
+                
+                <input type="hidden" name="id" id="id" value="${book.id}"/>
                 
                 <petclinic:inputField label="${ISBN}" name="ISBN"/>
                  <petclinic:inputField label="${pages}" name="pages"/>

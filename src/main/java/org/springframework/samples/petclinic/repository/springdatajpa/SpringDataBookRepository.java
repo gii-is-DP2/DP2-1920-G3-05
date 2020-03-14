@@ -21,13 +21,14 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.repository.BookRepository;
 
-public interface SpringDataBookRepository extends BookRepository, Repository<Book, Integer> {
+public interface SpringDataBookRepository extends BookRepository, CrudRepository<Book, Integer> {
 
 	@Override
 	@Query("SELECT book FROM Book book WHERE UPPER(book.title) LIKE %:title% OR UPPER(book.author) LIKE %:title% OR UPPER(book.genre.name) LIKE %:title% OR UPPER(book.ISBN) LIKE %:title%")
@@ -44,5 +45,9 @@ public interface SpringDataBookRepository extends BookRepository, Repository<Boo
 	@Override
 	@Query("Select b from Book b where b.ISBN = ?1")
 	Book findByISBN(@Param("ISBN") String ISBN);
+	
+	@Override
+	@Query("SELECT genre FROM Genre genre WHERE genre.name =:name")
+	Genre findGenreByName(final String name);
 
 }

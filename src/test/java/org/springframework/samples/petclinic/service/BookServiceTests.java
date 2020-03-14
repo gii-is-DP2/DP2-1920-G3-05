@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 class BookServiceTests {
 
 	@Autowired
-	private BookService	bookService;
+	private BookService	sut;
 
 	@Autowired
 	private UserService	userService;
@@ -30,44 +30,44 @@ class BookServiceTests {
 
 	@Test
 	void shouldFindBooksByTitle() {
-		Collection<Book> books = this.bookService.findBookByTitleAuthorGenreISBN("harry");
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("harry");
 		Assertions.assertThat(books.size()).isEqualTo(2);
 	}
 
 	@Test
 	void shouldFindBooksByAuthor() {
-		Collection<Book> books = this.bookService.findBookByTitleAuthorGenreISBN("Julia");
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("Julia");
 		Assertions.assertThat(books.size()).isEqualTo(2);
 
 	}
 
 	@Test
 	void shouldFindBooksByGenre() {
-		Collection<Book> books = this.bookService.findBookByTitleAuthorGenreISBN("Novel");
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("Novel");
 		Assertions.assertThat(books.size()).isEqualTo(1);
 	}
 
 	@Test
 	void shouldFindBooksByISBN() {
-		Collection<Book> books = this.bookService.findBookByTitleAuthorGenreISBN("9788466345347");
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("9788466345347");
 		Assertions.assertThat(books.size()).isEqualTo(1);
 	}
 
 	@Test
 	void shouldFindBooksByTitleAuthorGenre() {
-		Collection<Book> books = this.bookService.findBookByTitleAuthorGenreISBN("el");
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("el");
 		Assertions.assertThat(books.size()).isEqualTo(3);
 	}
 
 	@Test
 	void shouldNotFindBooksByTitleAuthorGenre() {
-		Collection<Book> books = this.bookService.findBookByTitleAuthorGenreISBN("harrry");
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("harrry");
 		Assertions.assertThat(books.isEmpty()).isTrue();
 	}
 
 	@Test
 	void shouldFindBookById() {
-		Book book = this.bookService.findBookById(1);
+		Book book = this.sut.findBookById(1);
 
 		Assertions.assertThat(book.getTitle()).isEqualTo("IT");
 		Assertions.assertThat(book.getAuthor()).isEqualTo("Stephen King");
@@ -84,7 +84,7 @@ class BookServiceTests {
 	@Test
 	@Transactional
 	public void shouldInsertBookIntoDatabaseAndGenerateId() throws DataAccessException, DuplicatedISBNException {
-		Collection<Book> list = this.bookService.findBookByTitleAuthorGenreISBN("prueba");
+		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		User user = this.userService.findUserByUsername("admin1");
 		int count = list.size();
 
@@ -95,16 +95,16 @@ class BookServiceTests {
 		book.setISBN("9788425223280");
 		book.setPages(574);
 		book.setPublicationDate(LocalDate.now());
-		Collection<Genre> genres = this.bookService.findGenre();
+		Collection<Genre> genres = this.sut.findGenre();
 		book.setGenre(EntityUtils.getById(genres, Genre.class, 3));
 		book.setSynopsis("Esto es una prueba");
 		book.setVerified(true);
 		book.setUser(user);
 
-		this.bookService.save(book);
+		this.sut.save(book);
 
 		Assertions.assertThat(book.getId()).isNotNull();
-		list = this.bookService.findBookByTitleAuthorGenreISBN("prueba");
+		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 
 	}
@@ -121,14 +121,14 @@ class BookServiceTests {
 		book.setISBN("9788425223280");
 		book.setPages(574);
 		book.setPublicationDate(LocalDate.now());
-		Collection<Genre> genres = this.bookService.findGenre();
+		Collection<Genre> genres = this.sut.findGenre();
 		book.setGenre(EntityUtils.getById(genres, Genre.class, 3));
 		book.setSynopsis("Esto es una prueba");
 		book.setVerified(true);
 		book.setUser(user);
 
 		try {
-			this.bookService.save(book);
+			this.sut.save(book);
 
 		} catch (DuplicatedISBNException e) {
 			// TODO Auto-generated catch block
@@ -146,7 +146,7 @@ class BookServiceTests {
 		bookSameISBN.setVerified(true);
 		bookSameISBN.setUser(user);
 		try {
-			this.bookService.save(bookSameISBN);
+			this.sut.save(bookSameISBN);
 
 		} catch (DuplicatedISBNException e) {
 			// TODO Auto-generated catch block
@@ -160,20 +160,20 @@ class BookServiceTests {
 	@Test
 	@Transactional
 	public void shouldUpdateBookName() throws Exception {
-		Book book3 = this.bookService.findBookById(3);
+		Book book3 = this.sut.findBookById(3);
 		String oldTitle = book3.getTitle();
 
 		String newTitle = oldTitle + "X";
 		book3.setTitle(newTitle);
-		this.bookService.save(book3);
+		this.sut.save(book3);
 
-		book3 = this.bookService.findBookById(3);
+		book3 = this.sut.findBookById(3);
 		Assertions.assertThat(book3.getTitle()).isEqualTo(newTitle);
 
 	}
 	@Test
 	void shouldFindAllGenres() {
-		Collection<Genre> bookGenre = this.bookService.findBookGenres();
+		Collection<Genre> bookGenre = this.sut.findGenre();
 
 		Genre genre1 = EntityUtils.getById(bookGenre, Genre.class, 1);
 		Assertions.assertThat(genre1.getName()).isEqualTo("Fantasy");
@@ -183,7 +183,7 @@ class BookServiceTests {
 	@Test
 	@Transactional
 	public void shouldFindGenre() throws Exception {
-		Genre genre3 = this.bookService.findGenreByName("Romance");
+		Genre genre3 = this.sut.findGenreByName("Romance");
 
 		Assertions.assertThat("Romance").isEqualTo(genre3.getName());
 

@@ -42,6 +42,12 @@ public class BookService {
 	public Collection<Genre> findGenre() throws DataAccessException {
 		return this.bookRepository.findGenre();
 	}
+	
+	@Transactional(readOnly = true) 
+	public Genre findGenreByName(final String name) throws DataAccessException { 
+ 
+		return this.bookRepository.findGenreByName(name); 
+	} 
 
 	@Transactional(readOnly = true)
 	public Collection<Book> findBookByTitleAuthorGenreISBN(final String title) throws DataAccessException {
@@ -56,7 +62,8 @@ public class BookService {
 
 	@Transactional(rollbackFor = DuplicatedISBNException.class)
 	public void save(final Book book) throws DataAccessException, DuplicatedISBNException {
-		boolean isDuplicated = this.bookRepository.findByISBN(book.getISBN()) != null;
+		Book bookWithSameIsbn = this.bookRepository.findByISBN(book.getISBN());
+		boolean isDuplicated = bookWithSameIsbn != null && bookWithSameIsbn.getId()!=book.getId(); //Que exista y no sea el de mi libro que lo estoy editando
 		if (isDuplicated) {
 			throw new DuplicatedISBNException();
 		} else {

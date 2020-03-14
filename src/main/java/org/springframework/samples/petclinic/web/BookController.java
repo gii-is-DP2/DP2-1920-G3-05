@@ -239,4 +239,11 @@ public class BookController {
 		this.bookService.deleteById(bookId);
 		return "redirect:/books";
 	}
+    
+	@GetMapping("admin/books/{bookId}/verify")
+	public String verifyBook(@PathVariable("bookId") final int bookId) {
+		this.bookService.verifyBook(bookId);
+		return "redirect:/books/" + bookId;
+	}
+
 }

@@ -27,4 +27,6 @@ public interface BookRepository {
 	
 	Boolean existsById(int bookId) throws DataAccessException;
 	
+
+	void verifyBook(int bookId);
 }

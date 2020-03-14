@@ -56,4 +56,9 @@ public interface SpringDataBookRepository extends BookRepository, CrudRepository
 	@Modifying
 	@Query("DELETE FROM Book WHERE id = ?1")
 	void deleteBookById( int id);
+	
+	@Override
+	@Modifying
+	@Query("UPDATE Book SET verified=true WHERE id =:bookId")
+	void verifyBook(@Param("bookId") int bookId);
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.util.EntityUtils;
+import org.springframework.security.acls.domain.GrantedAuthoritySid;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,7 +102,7 @@ class BookServiceTests {
 		Assertions.assertThat(book.getVerified()).isTrue();
 
 	}
-
+	
 	@Test
 	@Transactional
 	public void shouldInsertBookIntoDatabaseAndGenerateId() throws DataAccessException, DuplicatedISBNException {
@@ -317,4 +322,21 @@ class BookServiceTests {
 		Assertions.assertThat(existsPublication2).isFalse();
 		Assertions.assertThat(existsMeeting).isFalse();
 	}
+    
+    @Test
+	void shouldVerifyBook() {
+//		Collection<GrantedAuthority>l=AuthorityUtils.createAuthorityList("admin");
+//		org.springframework.security.core.userdetails.User user=new org.springframework.security.core.userdetails.User("admin","admin",l);
+//		this.bookService.verifyBook(6);
+		this.bookService.verifyBook(3);
+		Assertions.assertThat(this.bookService.findBookById(3).getVerified()).isTrue();
+		
+	}
+    
+	@Test
+	void shouldNotChangeVerifiedBook() {
+		this.bookService.verifyBook(1);
+		Assertions.assertThat(this.bookService.findBookById(1).getVerified()).isTrue();
+	}
+
 }

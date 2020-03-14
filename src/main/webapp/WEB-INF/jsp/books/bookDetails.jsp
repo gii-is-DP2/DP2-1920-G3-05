@@ -7,16 +7,16 @@
 
 <petclinic:layout pageName="books">
 
-    <h2>Book Information</h2>
-	
-    <table class="table table-striped">
-        <tr>
-            <th>Title</th>
-            <td><b><c:out value="${book.title}"/></b></td>
-            <td rowspan="9">
-            <div class="text-center">
- 				<img src="${book.image}" width="230" height="350"/>
-			</div>
+	<h2>Book Information</h2>
+
+	<table class="table table-striped">
+		<tr>
+			<th>Title</th>
+			<td><b><c:out value="${book.title}" /></b></td>
+			<td rowspan="9">
+				<div class="text-center">
+					<img src="${book.image}" width="230" height="350" />
+				</div>
 			</td>
         </tr>
         <tr>
@@ -48,16 +48,19 @@
             <td><petclinic:localDate date="${book.publicationDate}" pattern="yyyy-MM-dd"/></td>
         </tr>
         <tr>
-            <th>Verified</th>
-           <td>  
-           <c:if test="${book.verified}">
-                <c:out value="Yes"/>
-            </c:if>
-			<c:if test="${!book.verified}">
-                <c:out value="No"/>
-            </c:if>
-             </td>
-         </tr>
+           			<th>Verified</th>
+			<td><c:if test="${book.verified}">
+					<c:out value="Yes" />
+				</c:if> <c:if test="${!book.verified}">
+					<c:out value="No" />
+					<sec:authorize access="hasAuthority('admin')">
+						<spring:url value="/admin/books/{bookId}/verify" var="editUrl">
+							<spring:param name="bookId" value="${book.id}" />
+						</spring:url>
+						<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Verify book</a>
+					</sec:authorize>
+				</c:if></td>
+		</tr>
           <c:if test="${propiedad}">  <tr>
             <th>Edit</th>
             
@@ -71,4 +74,5 @@
      <a class="btn btn-default" href='<spring:url value="/admin/books/delete/${book.id}" htmlEscape="true"/>' onclick="return confirm('Are you sure you want to delete this book?');">Delete Book</a>
 	</sec:authorize>
 	
+
 </petclinic:layout>

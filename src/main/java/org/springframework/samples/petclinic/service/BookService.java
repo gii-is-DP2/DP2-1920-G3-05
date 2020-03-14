@@ -131,4 +131,10 @@ public class BookService {
 		this.bookRepository.deleteBookById(id);
 	}
 
+
+	@Transactional(readOnly = true)
+	public void verifyBook(int bookId) {
+		this.bookRepository.verifyBook(bookId);
+		
+	}
 }

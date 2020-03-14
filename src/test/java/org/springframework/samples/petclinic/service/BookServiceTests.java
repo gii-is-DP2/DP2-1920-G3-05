@@ -328,15 +328,15 @@ class BookServiceTests {
 //		Collection<GrantedAuthority>l=AuthorityUtils.createAuthorityList("admin");
 //		org.springframework.security.core.userdetails.User user=new org.springframework.security.core.userdetails.User("admin","admin",l);
 //		this.bookService.verifyBook(6);
-		this.bookService.verifyBook(3);
-		Assertions.assertThat(this.bookService.findBookById(3).getVerified()).isTrue();
+		this.sut.verifyBook(3);
+		Assertions.assertThat(this.sut.findBookById(3).getVerified()).isTrue();
 		
 	}
     
 	@Test
 	void shouldNotChangeVerifiedBook() {
-		this.bookService.verifyBook(1);
-		Assertions.assertThat(this.bookService.findBookById(1).getVerified()).isTrue();
+		this.sut.verifyBook(1);
+		Assertions.assertThat(this.sut.findBookById(1).getVerified()).isTrue();
 	}
 
 }

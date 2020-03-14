@@ -126,6 +126,12 @@ public class BookController {
 		modelMap.addAttribute("book", new Book());
 		return view;
 	}
+	
+	@GetMapping("/admin/books/delete/{bookId}")
+	public String deleteBook(@PathVariable("bookId") final int bookId) {
+		this.bookService.deleteById(bookId);
+		return "redirect:/books/find";
+	}
 
 	@PostMapping(value = "/books/save")
 	public String saveBook(@Valid final Book book, final BindingResult result, final ModelMap modelMap) {

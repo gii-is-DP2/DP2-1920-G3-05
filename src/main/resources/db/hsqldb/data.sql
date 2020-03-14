@@ -101,10 +101,47 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (10, 'El Principito', 'Antoine de Saint-Exupery', 22, 9788498381498 , 96, 'Un aviador queda incomunicado en el desierto tras sufrir una averia en su avion a mil millas de cualquier region habitada. Alli se encontrara con un pequeño principe de cabellos de oro que afirma vivir en el asteroide B 612.', 'Salamandra','1943-04-01',FALSE,'https://imagessl7.casadellibro.com/a/l/t5/07/9788498386707.jpg','owner1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (11, 'El hijo del italiano', 'Rafel Nadal', 4, 9788408208426 , 480, 'Mateu crece en una familia rota que no siente como suya. Desde pequeño lucha por dejar atrás los gritos y la miseria de la Mina, la casa más pobre de Caldes de Malavella.', 'Planeta','2019-05-14',TRUE,'https://imagessl6.casadellibro.com/a/l/t5/26/9788408208426.jpg','owner1');
 
-INSERT INTO meetings(name,place,start,end,capacity,book_id) VALUES ('Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 1);
-INSERT INTO meeting_assistants(meeting_id, user_username) VALUES (1, 'admin1');
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-10-20 19:30', '2020-10-20 21:00', 20, 10);
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (3, 2, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (4, 2, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (5, 3, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (6, 3, 'owner1');
 
-INSERT INTO news(id, head, fecha, body, redactor, tags, img) VALUES (1,'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
-Insert Into news_books values (1,1);
+
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (2, 'Noticia 2', 'Rafel Nadal publica un nuevo libro', '2015-03-03','Rafel Nadal, que no Rafael Nadal, nos vuelve a impresionar','Jhon Doe','#amazing#new','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (3, 'Noticia 3', 'IT resurge tras su llegada al cine', '2015-03-03','El final un poco defraudante','Jhon Doe','#cinema#fear','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
+INSERT INTO book_in_new (neew_id, book_id) VALUES (1,2);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (1,3);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (2,11);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (3,1);
+
 
 INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (2,'review2',2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',1,'admin1');
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (3,'review3',3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',1,'vet1');
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (4,'review4',5,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',2,'owner1');
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (5,'review5',3,'Libro para pasar el rato','Es un libro corto y curioso',3,'vet1');
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (6,'review6',3,'Libro ameno','Es un libro interesante pero muy tipico',4,'vet1');
+INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (7,'review7',4,'Libro interesante','Es un libro magnifico innovativo que trata una tematica poco comun',5,'owner1');
+
+
+
+INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (1,'publication 1', 'this is tests data', '2020-03-07','admin1',1);
+INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (2,'publication 2', 'this is tests data', '2020-03-07','owner1',1);
+INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (3,'publication 3', 'this is tests data', '2020-03-07','admin1',2);
+INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (4,'publication 4', 'this is tests data', '2020-03-07','owner1',7);
+INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (5,'publication 5', 'this is tests data', '2020-03-07','admin1',8);
+INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (6,'publication 6', 'this is tests data', '2020-03-07','owner1',10);
+INSERT INTO images (publication_id,link) VALUES (1,'https://lh3.googleusercontent.com/proxy/9xJwN4k_Q-pPsRiDF6biPeUar08kxIY9qEKMk9k2oOF_JHMly-x4fA0JuXPpS7WR-bJBCiSlfaRQ97ohxkQvU4X2gQMFOS16W1zdoX4Tg7Bl4APN4ObQtlGjaYwbavENT07Uql5UrHK9VnviQAP_OxNVYh0');
+INSERT INTO images (publication_id,link) VALUES (1,'https://los40es00.epimg.net/los40/imagenes/los40classic/2018/03/foto-test.png');
+INSERT INTO images (publication_id,link) VALUES (2,'https://economipedia.com/wp-content/uploads/test-de-estr%C3%A9s.png');
+INSERT INTO images (publication_id,link) VALUES (2,'https://www.estilosdeaprendizaje.org/wp-content/uploads/2020/02/testestilosdeaprendizaje.png');
+INSERT INTO images (publication_id,link) VALUES (3,'https://m.media-amazon.com/images/I/61yt7HfLRKL._SS500_.jpg');
+INSERT INTO images (publication_id,link) VALUES (4,'https://i.ytimg.com/vi/7UH5cSfDBps/maxresdefault.jpg');
+INSERT INTO images (publication_id,link) VALUES (5,'https://www.frikipandi.com/wp-content/uploads/2015/05/bigstock-Test-word-on-white-keyboard-640x330.jpg');

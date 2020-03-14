@@ -22,4 +22,9 @@ public interface BookRepository {
 	
 	Genre findGenreByName(String name) throws DataAccessException;
 	
+	
+	void deleteBookById(int bookId) throws DataAccessException;
+	
+	Boolean existsById(int bookId) throws DataAccessException;
+	
 }

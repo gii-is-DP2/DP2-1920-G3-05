@@ -186,6 +186,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 |Escenario positivo|Escenario negativo|
 |-|-|
 |Dado el usuario ferromrio y que hay 12 libros en el sistema del autor Brandon Sanderson, cuando ferromrio selecciona buscar por autor e introduce *Brandon Sanderson*, entonces el sistema le mostrará un listado con los 12 libros de dicho autor|Dado el usuario ferromrio y que no hay ningún libro con ISBN 33, cuando ferromrio selecciona buscar por ISBN e introduce 33, entonces el sistema le indicará que no dispone de ningún libro que se adecúe a la búsqueda|
+|Dado el usuario ferromrio y que hay solo un libro en el sistema del autor Pío Baroja, cuando ferromrio selecciona buscar por autor e introduce *Pío Baroja*, entonces el sistema le mostrará directamente los detalles de dicho libro||
 
 - **HU-13**: Añadir libro a leídos  
   

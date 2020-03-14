@@ -39,8 +39,4 @@ public class New extends NamedEntity {
 	@URL
 	private String		img;
 
-	@ManyToMany
-	@JoinTable(name = "news_books", joinColumns = @JoinColumn(name = "new_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
-	private Set<Book>	book;
-
 }

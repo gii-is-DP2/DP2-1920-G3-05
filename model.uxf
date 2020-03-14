@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>9</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>432</x>
-      <y>36</y>
-      <w>315</w>
-      <h>162</h>
+      <x>216</x>
+      <y>72</y>
+      <w>210</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>Book
 --
@@ -27,10 +27,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>117</x>
-      <y>63</y>
-      <w>171</w>
-      <h>99</h>
+      <x>6</x>
+      <y>90</y>
+      <w>114</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>Meeting
 --
@@ -43,10 +43,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>279</x>
-      <y>99</y>
-      <w>171</w>
-      <h>45</h>
+      <x>114</x>
+      <y>114</y>
+      <w>114</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;-x
 isAbout &gt;
@@ -57,12 +57,25 @@ m2=0..*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>117</x>
-      <y>252</y>
-      <w>171</w>
-      <h>72</h>
+      <x>6</x>
+      <y>216</y>
+      <w>114</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>MeetingAssistant
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6</x>
+      <y>324</y>
+      <w>120</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>User
 --
 + username: String
 + password: String
@@ -71,24 +84,12 @@ m2=0..*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>117</x>
-      <y>414</y>
-      <w>180</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>User
---</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>189</x>
-      <y>153</y>
-      <w>99</w>
-      <h>117</h>
+      <x>54</x>
+      <y>150</y>
+      <w>66</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;-x
 assistsTo ^
@@ -99,15 +100,186 @@ m2=0..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>189</x>
-      <y>315</y>
-      <w>99</w>
-      <h>117</h>
+      <x>54</x>
+      <y>258</y>
+      <w>66</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;-x
 represents v
 m1=1
 m2= 0..*</panel_attributes>
     <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>732</x>
+      <y>84</y>
+      <w>162</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>New
+--
++ head: String{NotBlank}
++ fecha: LocalDate
++ body :String{NotBlank}
++ redactor :String{NotBlank}
++ tags :String{NotBlank}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>516</x>
+      <y>96</y>
+      <w>144</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>BookInNew
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>654</x>
+      <y>114</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+appearsIn</panel_attributes>
+    <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>114</y>
+      <w>108</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+&lt; represents </panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>222</x>
+      <y>294</y>
+      <w>138</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Review
+--
++ raiting :Integer{min=0, max=5}
++ title: String{NotBlank}
++ opinion: String{NotBlank}
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>372</x>
+      <y>342</y>
+      <w>126</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>Publication
+--
++ title: String{NotBlank}
++ description: String{NotBlank}
++ publicationDate: LocalDate</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>276</x>
+      <y>174</y>
+      <w>60</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+critiques ^</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>324</y>
+      <w>114</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+writes &gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>360</y>
+      <w>264</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+publishes &gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;420.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>174</y>
+      <w>54</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-x
+m1=1
+m2=0..*
+isAbout ^</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>582</x>
+      <y>348</y>
+      <w>102</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Image
+--
++ link: String{URL}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>366</y>
+      <w>102</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=0..*
+contains &gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
   </element>
 </diagram>

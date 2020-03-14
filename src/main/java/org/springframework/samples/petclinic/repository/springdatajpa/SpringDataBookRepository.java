@@ -20,20 +20,21 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.repository.BookRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface SpringDataBookRepository extends BookRepository, CrudRepository<Book, Integer> {
 
 	@Override
 	@Query("SELECT book FROM Book book WHERE UPPER(book.title) LIKE %:title% OR UPPER(book.author) LIKE %:title% OR UPPER(book.genre.name) LIKE %:title% OR UPPER(book.ISBN) LIKE %:title%")
 	Collection<Book> findBookByTitleAuthorGenreISBN(@Param("title") String title);
-
+	
 	@Override
 	@Query("SELECT book FROM Book book WHERE book.id =:id")
 	Book findById(@Param("id") int id);
@@ -50,4 +51,9 @@ public interface SpringDataBookRepository extends BookRepository, CrudRepository
 	@Query("SELECT genre FROM Genre genre WHERE genre.name =:name")
 	Genre findGenreByName(final String name);
 
+    @Override
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM Book WHERE id = ?1")
+	void deleteBookById( int id);
 }

@@ -48,5 +48,26 @@ public class ReviewService {
 	public void save(Review review) throws DataAccessException{
 		this.reviewRepo.save(review);
 	}
+	
+	@Transactional
+	public Boolean alreadyReviewedBook(int bookId, String username) throws DataAccessException{
+		Review review = this.reviewRepo.getReviewByBookIdAndUsername(bookId, username);
+		if(review == null) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
+	@Transactional
+	public Boolean reviewIsMine(int reviewId, String username) throws DataAccessException{
+		Review review = this.reviewRepo.findById(reviewId);
+		if(review.getUser().getUsername().equals(username)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 
 }

@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,5 +29,9 @@ public interface SpringDataReviewRepository extends CrudRepository<Review, Integ
 	@Modifying 
 	void deleteReviewById(int reviewId); 
 
+	@Override
+	@Transactional
+	@Query("SELECT review FROM Review review WHERE review.book.id = ?1 AND review.user.username = ?2")
+	Review getReviewByBookIdAndUsername(int bookId, String username) throws DataAccessException;
 
 }

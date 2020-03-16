@@ -13,6 +13,7 @@ import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.samples.petclinic.service.BookService;
+import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
@@ -41,6 +42,9 @@ public class ReviewController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private ReadBookService readBookService;
+	
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("book");
@@ -53,10 +57,22 @@ public class ReviewController {
 		Review review = new Review();
 		Book book = this.bookService.findBookById(bookId);
 		review.setBook(book);
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		User me = this.userService.findUserByUsername(userDetail.getUsername());
 		review.setUser(me);
+
+		Boolean isReadBook = this.readBookService.esReadBook(bookId, me.getUsername());
+		if(!isReadBook) {
+			return "redirect:/oups";
+		}
+		
+		Boolean alreadyReviewed = this.reviewService.alreadyReviewedBook(bookId, me.getUsername());
+		if(alreadyReviewed) {
+			return "redirect:/oups";
+		}
+		
 		model.put("review", review);
 		return "reviews/reviewAddForm";
 	}
@@ -69,6 +85,17 @@ public class ReviewController {
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		User me = this.userService.findUserByUsername(userDetail.getUsername());
 		review.setUser(me);
+		
+		Boolean isReadBook = this.readBookService.esReadBook(bookId, me.getUsername());
+		if(!isReadBook) {
+			return "redirect:/oups";
+		}
+		
+		Boolean alreadyReviewed = this.reviewService.alreadyReviewedBook(bookId, me.getUsername());
+		if(alreadyReviewed) {
+			return "redirect:/oups";
+		}
+		
 		if (result.hasErrors()) {
 			return "reviews/reviewAddForm";
 		}
@@ -100,13 +127,26 @@ public class ReviewController {
 	@GetMapping("/reviews/{reviewId}")
 	public ModelAndView showReview(@PathVariable("reviewId") final int reviewId) {
 		Review review = this.reviewService.findReviewById(reviewId);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Boolean isMine = this.reviewService.reviewIsMine(reviewId, userDetail.getUsername());
+		
 		ModelAndView mav = new ModelAndView("reviews/reviewDetails");
 		mav.addObject("review", review);
+		mav.addObject("isMine", isMine);
 		return mav;
 	}
 	
 	@GetMapping("/books/{bookId}/reviews/{reviewId}/edit")
 	public String formEdit(final ModelMap modelMap, @PathVariable("reviewId") final int reviewId, @PathVariable("bookId") final int bookId) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Boolean isMine = this.reviewService.reviewIsMine(reviewId, userDetail.getUsername());
+		if(!isMine) {
+			return "redirect:/oups";
+		}
+		
 		Review review = this.reviewService.findReviewById(reviewId);
 		modelMap.addAttribute("review", review);
 		modelMap.addAttribute("bookId", bookId);
@@ -115,6 +155,12 @@ public class ReviewController {
 	
 	@PostMapping("/books/{bookId}/reviews/{reviewId}/edit")
 	public String updateReview(@Valid final Review updatedReview, final BindingResult result, final ModelMap modelMap, @PathVariable("reviewId") final int reviewId, @PathVariable("bookId") final int bookId) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Boolean isMine = this.reviewService.reviewIsMine(reviewId, userDetail.getUsername());
+		if(!isMine) {
+			return "redirect:/oups";
+		}
 		if(result.hasErrors()) {
 			return "reviews/reviewUpdateForm";
 		}else {
@@ -129,6 +175,12 @@ public class ReviewController {
 	
 	@GetMapping("/books/{bookId}/reviews/{reviewId}/delete")
 	public String deleteBook(@PathVariable("bookId") final int bookId, @PathVariable("reviewId") final int reviewId) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Boolean isMine = this.reviewService.reviewIsMine(reviewId, userDetail.getUsername());
+		if(!isMine) {
+			return "redirect:/oups";
+		}
 		this.reviewService.deleteReviewById(reviewId);
 		return "redirect:/books/" + bookId;
 	}

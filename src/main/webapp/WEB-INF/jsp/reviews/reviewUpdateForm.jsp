@@ -10,8 +10,10 @@
     <h2>
         <c:if test="${review['new']}">New </c:if> Review for <c:out value="${review.book.title}"/>
     </h2>
-    <form:form modelAttribute="review" class="form-horizontal" id="add-review-form" action="/books/${bookId}/reviews/${review.id}/edit" >
+    <form:form modelAttribute="review" class="form-horizontal" id="add-review-form" action="/books/${bookId}/reviews/${reviewId}/edit" >
         <div class="form-group has-feedback">
+        
+        		<input type="hidden" name="reviewId" value="${review.id}"/>
         
         		<input type="hidden" name="bookId" value="${bookId}"/>
               		    

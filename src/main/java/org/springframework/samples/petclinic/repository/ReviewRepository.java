@@ -29,5 +29,8 @@ public interface ReviewRepository {
 	@Transactional
 	@Modifying
 	Review save(Review review) throws DataAccessException;
+	
+	@Transactional
+	Review getReviewByBookIdAndUsername(int bookId, String username) throws DataAccessException;
 
 }

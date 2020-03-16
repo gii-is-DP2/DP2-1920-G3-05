@@ -153,17 +153,27 @@ public class BookController {
 		Boolean propiedad = false;
 		Boolean noEsReadBook = false;
 		Boolean hasAnyReview = false;
+		Boolean alreadyReviewed = false;
 		if(!this.reviewService.getReviewsFromBook(bookId).isEmpty()) {
 			hasAnyReview = true;
 		}
 		Book book = this.bookService.findBookById(bookId);
-		noEsReadBook = !this.esReadBook(bookId);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+		
+		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
+		
 		propiedad = this.libroMioOAdmin(bookId);
+		
+		alreadyReviewed = this.reviewService.alreadyReviewedBook(bookId, userDetails.getUsername());
+		
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(book);
 		mav.addObject("propiedad", propiedad);
 		mav.addObject("noEsReadBook", noEsReadBook);
 		mav.addObject("hasAnyReview", hasAnyReview);
+		mav.addObject("alreadyReviewed", alreadyReviewed);
 		return mav;
 	}
 
@@ -291,7 +301,8 @@ public class BookController {
 		this.bookService.verifyBook(bookId);
 		return "redirect:/books/" + bookId;
 	}
-	private Boolean esReadBook(final Integer id) {
+	
+	/*private Boolean esReadBook(final Integer id) {
 		Boolean res = false;
 		Book book = this.bookService.findBookById(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -303,6 +314,6 @@ public class BookController {
 			}
 		}
 		return res;
-	}
+	}*/
 
 }

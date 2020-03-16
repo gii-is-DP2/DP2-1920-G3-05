@@ -137,7 +137,7 @@ public class BookService {
 		this.readBookService.deleteReadBookByBookId(id);
 		
 		//Borramos si hay libros deseados
-		this.wishedBookService.deleteWishedBook(id);
+		this.wishedBookService.deleteByBookId(id);
 		
 		
 		//Borramos el libro

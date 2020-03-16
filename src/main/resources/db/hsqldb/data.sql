@@ -121,10 +121,10 @@ INSERT INTO book_in_new (neew_id, book_id) VALUES (1,3);
 INSERT INTO book_in_new (neew_id, book_id) VALUES (2,11);
 INSERT INTO book_in_new (neew_id, book_id) VALUES (3,1);
 
-INSERT INTO read_book (book_id, user_username) VALUES(3, 'vet1');
-INSERT INTO read_book (book_id, user_username) VALUES(2, 'vet1');
-INSERT INTO read_book (book_id, user_username) VALUES(6, 'vet1');
-INSERT INTO read_book (book_id, user_username) VALUES(1, 'owner1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(1,3, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(2,2, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(3,6, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(4,1, 'owner1');
 
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (2,2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',1,'admin1');

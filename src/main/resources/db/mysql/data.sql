@@ -101,6 +101,11 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image) VALUES (10, 'El Principito', 'Antoine de Saint-Exupery', 22, 9788498381498 , 96, 'Un aviador queda incomunicado en el desierto tras sufrir una averia en su avion a mil millas de cualquier region habitada. Alli se encontrara con un pequeño principe de cabellos de oro que afirma vivir en el asteroide B 612.', 'Salamandra','1943-04-01',FALSE,'https://imagessl7.casadellibro.com/a/l/t5/07/9788498386707.jpg');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image) VALUES (11, 'El hijo del italiano', 'Rafel Nadal', 4, 9788408208426 , 480, 'Mateu crece en una familia rota que no siente como suya. Desde pequeño lucha por dejar atrás los gritos y la miseria de la Mina, la casa más pobre de Caldes de Malavella.', 'Planeta','2019-05-14',TRUE,'https://imagessl6.casadellibro.com/a/l/t5/26/9788408208426.jpg');
 
+INSERT INTO read_book (id,book_id, user_username) VALUES(1,3, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(2,2, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(3,6, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(4,1, 'owner1');
+
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);

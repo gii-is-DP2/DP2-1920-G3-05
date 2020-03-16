@@ -45,4 +45,9 @@ public class ReadBookService {
 		this.readBookRepository.deleteByBookId(readBookId);
 	}
 
+	@Transactional
+	public Boolean existsReadBook(int readBookId) throws DataAccessException {
+		return this.readBookRepository.existsById(readBookId);
+	}
+
 }

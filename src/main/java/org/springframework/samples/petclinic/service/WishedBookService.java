@@ -33,10 +33,5 @@ public class WishedBookService {
 		this.wishedBookRepository.deleteByBookId(id);
 
 	}
-	
-	@Transactional
-	@Modifying
-	public void deleteWishedBook(int id) throws DataAccessException{
-		this.wishedBookRepository.deleteByBookId(id);
-	}
+
 }

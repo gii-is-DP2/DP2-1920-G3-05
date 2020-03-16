@@ -21,4 +21,7 @@ public interface ReadBookRepository {
 	@Transactional
 	@Modifying
 	void deleteByBookId(int bookId) throws DataAccessException;
+
+	@Transactional
+	Boolean existsById(int readBookId) throws DataAccessException;
 }

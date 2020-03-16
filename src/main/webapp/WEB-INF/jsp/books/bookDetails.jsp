@@ -82,5 +82,15 @@
                <button class="btn btn-default" type="submit"><fmt:message key="addReadBook"/></button>
 	</form:form>
 	</c:if>
+	
+	<c:if test="${hasAnyReview}">
+	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/reviews" htmlEscape="true"/>'>Go to the reviews</a>
+	</c:if>
+	
+		<a class="btn btn-default" href='<spring:url value="/books/${book.id}/reviews/new" htmlEscape="true"/>'>Write review</a>
+	
+	
+	
+	
 
 </petclinic:layout>

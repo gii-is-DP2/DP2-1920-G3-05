@@ -15,12 +15,18 @@ public interface SpringDataReviewRepository extends CrudRepository<Review, Integ
 	@Override
 	@Query("SELECT review.id FROM Review review WHERE review.book.id = ?1")
 	@Transactional(readOnly = true)
-	public List<Integer> getReviewsFromBook(int bookId);
+	public List<Integer> getReviewsIdFromBook(int bookId);
 	
 	@Override
-	@Query("DELETE FROM Review WHERE id=?1")
-	@Transactional
-	@Modifying
-	void deleteReviewById(int reviewId);
+	@Query("SELECT review FROM Review review WHERE review.book.id = ?1")
+	@Transactional(readOnly = true)
+	public List<Review> getReviewsFromBook(int bookId);
 	
+	@Override 
+	@Query("DELETE FROM Review WHERE id=?1") 
+	@Transactional 
+	@Modifying 
+	void deleteReviewById(int reviewId); 
+
+
 }

@@ -29,6 +29,7 @@ import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
+import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
@@ -60,6 +61,9 @@ public class BookController {
 
 	private UserService			userService;
 	private ReadBookService		readBookService;
+	
+	@Autowired
+	private ReviewService		reviewService;
 
 
 	@Autowired
@@ -85,6 +89,7 @@ public class BookController {
 		model.put("book", new Book());
 		return "books/findBooks";
 	}
+	
 	@ModelAttribute("genres")
 	public Collection<Genre> populatePetTypes() {
 		return this.bookService.findGenre();
@@ -147,6 +152,10 @@ public class BookController {
 	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
 		Boolean propiedad = false;
 		Boolean noEsReadBook = false;
+		Boolean hasAnyReview = false;
+		if(!this.reviewService.getReviewsFromBook(bookId).isEmpty()) {
+			hasAnyReview = true;
+		}
 		Book book = this.bookService.findBookById(bookId);
 		noEsReadBook = !this.esReadBook(bookId);
 		propiedad = this.libroMioOAdmin(bookId);
@@ -154,6 +163,7 @@ public class BookController {
 		mav.addObject(book);
 		mav.addObject("propiedad", propiedad);
 		mav.addObject("noEsReadBook", noEsReadBook);
+		mav.addObject("hasAnyReview", hasAnyReview);
 		return mav;
 	}
 

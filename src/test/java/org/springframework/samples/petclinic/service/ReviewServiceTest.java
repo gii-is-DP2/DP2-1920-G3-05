@@ -21,17 +21,17 @@ public class ReviewServiceTest {
 	@Test
 	void shouldFindReviewsIdByBookId() {
 		int bookId = 1;
-		List<Integer> reviewsId = this.sut.getReviewsFromBook(bookId);
+		List<Integer> reviewsId = this.sut.getReviewsIdFromBook(bookId);
 		Assertions.assertThat(reviewsId.size()).isEqualTo(3);
 		Assertions.assertThat(reviewsId).contains(1,2,3);
 		
 		bookId = 2;
-		reviewsId = this.sut.getReviewsFromBook(bookId);
+		reviewsId = this.sut.getReviewsIdFromBook(bookId);
 		Assertions.assertThat(reviewsId.size()).isEqualTo(1);
 		Assertions.assertThat(reviewsId).contains(4);
 
 		bookId = 7;
-		reviewsId = this.sut.getReviewsFromBook(bookId);
+		reviewsId = this.sut.getReviewsIdFromBook(bookId);
 		Assertions.assertThat(reviewsId).isEmpty();;
 	}
 

@@ -16,11 +16,11 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "reviews")
-public class Review extends NamedEntity {
+public class Review extends BaseEntity {
 
 	@Column(name = "raiting")
 	@Range(min = 0, max = 5)
-	@NotEmpty
+	@NotNull
 	private Integer	raiting;
 
 	@Column(name = "title")

@@ -57,4 +57,6 @@
         </c:forEach>
         </tbody>
     </table>
+    
+    
 </petclinic:layout>

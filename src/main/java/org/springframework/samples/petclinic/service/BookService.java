@@ -95,7 +95,7 @@ public class BookService {
 	@Modifying
 	public void deleteById(final int id) throws DataAccessException {
 		// Vemos si el libro tiene asociadas reviews que haya que borrar previamente
-		List<Integer> reviewsId = this.reviewService.getReviewsFromBook(id);
+		List<Integer> reviewsId = this.reviewService.getReviewsIdFromBook(id);
 		if (reviewsId != null && !reviewsId.isEmpty()) {
 			for (Integer i : reviewsId) {
 				System.out.println(i);

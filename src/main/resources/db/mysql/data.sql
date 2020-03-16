@@ -122,13 +122,13 @@ INSERT INTO book_in_new (neew_id, book_id) VALUES (2,11);
 INSERT INTO book_in_new (neew_id, book_id) VALUES (3,1);
 
 
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (2,'review2',2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',1,'admin1');
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (3,'review3',3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',1,'vet1');
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (4,'review4',5,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',2,'owner1');
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (5,'review5',3,'Libro para pasar el rato','Es un libro corto y curioso',3,'vet1');
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (6,'review6',3,'Libro ameno','Es un libro interesante pero muy tipico',4,'vet1');
-INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (7,'review7',4,'Libro interesante','Es un libro magnifico innovativo que trata una tematica poco comun',5,'owner1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (2,2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',1,'admin1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (3,3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',1,'vet1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (4,5,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',2,'owner1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (5,3,'Libro para pasar el rato','Es un libro corto y curioso',3,'vet1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (6,3,'Libro ameno','Es un libro interesante pero muy tipico',4,'vet1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (7,4,'Libro interesante','Es un libro magnifico innovativo que trata una tematica poco comun',5,'owner1');
 
 
 

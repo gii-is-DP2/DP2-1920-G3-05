@@ -18,7 +18,12 @@ public class ReviewService {
 	private ReviewRepository reviewRepo;
 
 	@Transactional
-	public List<Integer> getReviewsFromBook(int bookId) throws DataAccessException {
+	public List<Integer> getReviewsIdFromBook(int bookId) throws DataAccessException {
+		return this.reviewRepo.getReviewsIdFromBook(bookId);
+	}
+	
+	@Transactional
+	public List<Review> getReviewsFromBook(int bookId) throws DataAccessException {
 		return this.reviewRepo.getReviewsFromBook(bookId);
 	}
 	
@@ -33,8 +38,15 @@ public class ReviewService {
 		return this.reviewRepo.findById(reviewId);
 	}
 	
-	@Transactional Boolean existsReviewById(int reviewId) throws DataAccessException{
+	@Transactional 
+	public Boolean existsReviewById(int reviewId) throws DataAccessException{
 		return this.reviewRepo.existsById(reviewId);
+	}
+	
+	@Transactional
+	@Modifying
+	public void save(Review review) throws DataAccessException{
+		this.reviewRepo.save(review);
 	}
 
 }

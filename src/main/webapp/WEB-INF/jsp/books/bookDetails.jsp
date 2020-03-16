@@ -82,5 +82,13 @@
                <button class="btn btn-default" type="submit"><fmt:message key="addReadBook"/></button>
 	</form:form>
 	</c:if>
+	
+	<c:if test="${noEsReadBook and notWishedBook}"> 
+	<form:form modelAttribute="book"
+               class="form-horizontal"
+               action="/books/wishList/${book.id}">
+               <button class="btn btn-default" type="submit"><fmt:message key="addWishedBook"/></button>
+	</form:form>
+	</c:if>
 
 </petclinic:layout>

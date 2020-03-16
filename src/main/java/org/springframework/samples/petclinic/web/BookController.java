@@ -28,10 +28,12 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.model.WishedBook;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.WishedBookService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -64,13 +66,15 @@ public class BookController {
 	
 	@Autowired
 	private ReviewService		reviewService;
+	private WishedBookService		wishedBookService;
 
 
 	@Autowired
-	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService) {
+	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService) {
 		this.bookService = bookService;
 		this.userService = userService;
 		this.readBookService = readBookService;
+		this.wishedBookService = wishedBookService;
 
 	}
 
@@ -145,6 +149,7 @@ public class BookController {
 		readBook.setBook(book);
 		readBook.setUser(user);
 		this.readBookService.save(readBook);
+		this.wishedBookService.deleteByBookId(bookId);
 
 		return "redirect:/books";
 	}
@@ -152,12 +157,15 @@ public class BookController {
 	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
 		Boolean propiedad = false;
 		Boolean noEsReadBook = false;
+		Boolean notWishedBook = false;
 		Boolean hasAnyReview = false;
 		Boolean alreadyReviewed = false;
 		if(!this.reviewService.getReviewsFromBook(bookId).isEmpty()) {
 			hasAnyReview = true;
 		}
 		Book book = this.bookService.findBookById(bookId);
+		noEsReadBook = !this.esReadBook(bookId);
+		notWishedBook = !this.esWishedBook(bookId);
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -172,6 +180,7 @@ public class BookController {
 		mav.addObject(book);
 		mav.addObject("propiedad", propiedad);
 		mav.addObject("noEsReadBook", noEsReadBook);
+		mav.addObject("notWishedBook", notWishedBook);
 		mav.addObject("hasAnyReview", hasAnyReview);
 		mav.addObject("alreadyReviewed", alreadyReviewed);
 		return mav;
@@ -316,4 +325,50 @@ public class BookController {
 		return res;
 	}*/
 
+	@GetMapping("/books/wishList")
+	public String listadoDeLibrosDeseados(final ModelMap modelMap) {
+		List<Book> selections = new ArrayList<>();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+
+		List<Integer> ids = this.wishedBookService.findBooksIdByUser(userdetails.getUsername());
+		for (Integer i : ids) {
+			selections.add(this.bookService.findBookById(i));
+
+		}
+		modelMap.put("selections", selections);
+
+		return "books/booksList";
+	}
+	@PostMapping("/books/wishList/{bookId}")
+	public String anadirLibroListaDeseados(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
+
+		if (this.esWishedBook(bookId) || this.esReadBook(bookId)) {
+			return "redirect:/oups";
+		}
+		Book book = this.bookService.findBookById(bookId);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		User user = this.userService.findUserByUsername(userdetails.getUsername());
+		WishedBook wishedBook = new WishedBook();
+		wishedBook.setBook(book);
+		wishedBook.setUser(user);
+		this.wishedBookService.save(wishedBook);
+
+		return "redirect:/books";
+	}
+	
+	private Boolean esWishedBook(final Integer id) {
+		Boolean res = false;
+		Book book = this.bookService.findBookById(id);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		List<Integer> ids = this.wishedBookService.findBooksIdByUser(userdetails.getUsername());
+		for (Integer i : ids) {
+			if (this.bookService.findBookById(i).getId().equals(book.getId())) {
+				res = true;
+			}
+		}
+		return res;
+	}
 }

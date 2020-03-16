@@ -113,13 +113,24 @@ INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (5, 3, 'admi
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (6, 3, 'owner1');
 
 
-INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
-INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (2, 'Noticia 2', 'Rafel Nadal publica un nuevo libro', '2015-03-03','Rafel Nadal, que no Rafael Nadal, nos vuelve a impresionar','Jhon Doe','#amazing#new','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
-INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (3, 'Noticia 3', 'IT resurge tras su llegada al cine', '2015-03-03','El final un poco defraudante','Jhon Doe','#cinema#fear','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://images-na.ssl-images-amazon.com/images/I/51jqJQf7B7L._SY445_QL70_ML2_.jpg' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (2, 'Noticia 2', 'Rafel Nadal publica un nuevo libro', '2015-03-03','Rafel Nadal, que no Rafael Nadal, nos vuelve a impresionar','Jhon Doe','#amazing#new','https://images-eu.ssl-images-amazon.com/images/I/51QsPyrJdYL.jpg' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (3, 'Noticia 3', 'IT resurge tras su llegada al cine', '2015-03-03','El final un poco defraudante','Jhon Doe','#cinema#fear','https://www.popularlibros.com/imagenes_grandes/9788497/978849759379.JPG' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (4, 'Noticia 4', 'La nueva novela de Julia Navarro, «Tú no matarás», saldrá a la venta en octubre', '2018-09-05','La nueva novela de Julia Navarro, «Tú no matarás» (Plaza & Janés y en catalán, en Rosa dels Vents), se publicará el próximo 25 de octubre.','Jhon Doe','#impresionant','https://static4.abc.es/media/cultura/2018/09/05/Portada-Tu-no-mataras-Julia-navarro-kjVH-U301327176608Z9B-220x330@abc.jpg' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (5, 'Noticia 5', 'El fin y otros inicios, la autora de Divergente regresa con algo que recuerda a Black Mirror', '2020-02-17','La escritora estadounidense Veronica Roth, conocida por su trilogía Divergente, ha publicado algo totalmente diferente a lo que hasta ahora habíamos visto en sus novelas.','Cristina BR','#amazing #new','https://infoliteraria.com/wp-content/uploads/2020/02/El-fin-y-otros-inicios.jpg' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (6, 'Noticia 6', 'La editorial Salamandra trae una nueva obra de J.K.Rowling', '2018-03-09','La editorial traerá próximamente la traducción del brillante discurso de la famosa escritora de la saga de Harry Potter, J.K. Rowling, que pronunció delante de los graduados del 2008 en la Universidad de Harvard.','Cristina DPL','#new','https://infoliteraria.com/wp-content/uploads/2018/03/vivir_j.k.rowling-768x768.jpg' );
+
+
 INSERT INTO book_in_new (neew_id, book_id) VALUES (1,2);
 INSERT INTO book_in_new (neew_id, book_id) VALUES (1,3);
 INSERT INTO book_in_new (neew_id, book_id) VALUES (2,11);
 INSERT INTO book_in_new (neew_id, book_id) VALUES (3,1);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (4,4);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (4,5);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (5,6);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (5,5);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (6,3);
+INSERT INTO book_in_new (neew_id, book_id) VALUES (6,4);
 
 
 INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

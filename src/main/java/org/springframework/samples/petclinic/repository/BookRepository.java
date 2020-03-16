@@ -19,14 +19,14 @@ public interface BookRepository {
 	void save(Book book) throws DataAccessException;
 
 	Book findByISBN(String ISBN) throws DataAccessException;
-	
+
 	Genre findGenreByName(String name) throws DataAccessException;
-	
-	
+
 	void deleteBookById(int bookId) throws DataAccessException;
-	
+
 	Boolean existsById(int bookId) throws DataAccessException;
-	
+
+	Collection<Book> findAll() throws DataAccessException;
 
 	void verifyBook(int bookId);
 }

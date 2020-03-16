@@ -126,6 +126,9 @@ INSERT INTO read_book (book_id, user_username) VALUES(2, 'vet1');
 INSERT INTO read_book (book_id, user_username) VALUES(6, 'vet1');
 INSERT INTO read_book (book_id, user_username) VALUES(1, 'owner1');
 
+INSERT INTO wished_book (book_id, user_username) VALUES(1, 'admin1');
+INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
+
 INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (1,'review1',4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
 INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (2,'review2',2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',1,'admin1');
 INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES (3,'review3',3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',1,'vet1');

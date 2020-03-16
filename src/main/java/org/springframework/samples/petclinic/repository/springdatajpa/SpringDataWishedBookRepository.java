@@ -21,4 +21,5 @@ public interface SpringDataWishedBookRepository extends WishedBookRepository, Cr
 	@Query("DELETE FROM WishedBook WHERE book.id=?1")
 	@Modifying
 	void deleteByBookId(int id);
+
 }

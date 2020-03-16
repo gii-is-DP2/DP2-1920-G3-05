@@ -160,15 +160,18 @@ public class BookController {
 		Boolean notWishedBook = false;
 		Boolean hasAnyReview = false;
 		Boolean alreadyReviewed = false;
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+		
 		if(!this.reviewService.getReviewsFromBook(bookId).isEmpty()) {
 			hasAnyReview = true;
 		}
 		Book book = this.bookService.findBookById(bookId);
-		noEsReadBook = !this.esReadBook(bookId);
+		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
 		notWishedBook = !this.esWishedBook(bookId);
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+	
 		
 		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
 		
@@ -342,13 +345,14 @@ public class BookController {
 	}
 	@PostMapping("/books/wishList/{bookId}")
 	public String anadirLibroListaDeseados(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
-
-		if (this.esWishedBook(bookId) || this.esReadBook(bookId)) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		
+		if (this.esWishedBook(bookId) || this.readBookService.esReadBook(bookId, userdetails.getUsername())) {
 			return "redirect:/oups";
 		}
 		Book book = this.bookService.findBookById(bookId);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+	
 		User user = this.userService.findUserByUsername(userdetails.getUsername());
 		WishedBook wishedBook = new WishedBook();
 		wishedBook.setBook(book);

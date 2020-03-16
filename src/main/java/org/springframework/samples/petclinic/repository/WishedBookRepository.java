@@ -14,4 +14,5 @@ public interface WishedBookRepository {
 	void save(WishedBook wishedBook) throws DataAccessException;
 	
 	void deleteByBookId(int id) throws DataAccessException;
+	
 }

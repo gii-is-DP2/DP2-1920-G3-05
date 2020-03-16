@@ -17,4 +17,8 @@ public interface ReadBookRepository {
 	
 	@Transactional
 	ReadBook getReadBookByBookIdAndUsername(int bookId, String username) throws DataAccessException;
+		
+	@Transactional
+	@Modifying
+	void deleteByBookId(int bookId) throws DataAccessException;
 }

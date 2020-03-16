@@ -22,5 +22,10 @@ public interface SpringDataReadBookRepository extends ReadBookRepository, CrudRe
 	@Transactional
 	@Query("SELECT rb FROM ReadBook rb where rb.book.id = ?1 AND rb.user.username = ?2")
 	ReadBook getReadBookByBookIdAndUsername(int bookId, String username) throws DataAccessException;
-
+	
+	@Override
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM ReadBook WHERE book.id=?1")
+	void deleteByBookId(int bookId) throws DataAccessException;
 }

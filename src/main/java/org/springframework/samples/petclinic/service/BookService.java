@@ -46,7 +46,13 @@ public class BookService {
 	private PublicationService publicationService;
 
 	@Autowired
-	NewService newService;
+	private NewService newService;
+	
+	@Autowired
+	private ReadBookService readBookService;
+	
+	@Autowired
+	private WishedBookService	wishedBookService;
 
 	@Autowired
 	public BookService(final BookRepository bookRepository) {
@@ -126,6 +132,13 @@ public class BookService {
 				this.newService.deleteNew(i, id);
 			}
 		}
+		
+		//Borramos si hay libros leidos 
+		this.readBookService.deleteReadBookByBookId(id);
+		
+		//Borramos si hay libros deseados
+		this.wishedBookService.deleteWishedBook(id);
+		
 		
 		//Borramos el libro
 		this.bookRepository.deleteBookById(id);

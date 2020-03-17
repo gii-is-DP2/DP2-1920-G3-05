@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.ReadBook;
@@ -34,6 +35,7 @@ import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.WishedBookService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -331,7 +333,12 @@ public class BookController {
 		WishedBook wishedBook = new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
-		this.wishedBookService.save(wishedBook);
+		try {
+			this.wishedBookService.save(wishedBook);
+		}catch (ReadOrWishedBookException e) {
+			// TODO Auto-generated catch block
+			return "redirect:/oups";
+		}
 
 		return "redirect:/books";
 	}

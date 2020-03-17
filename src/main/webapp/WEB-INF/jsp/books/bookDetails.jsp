@@ -75,6 +75,8 @@
     <a class="btn btn-default" href='<spring:url value="/admin/books/delete/${book.id}" htmlEscape="true"/>' onclick="return confirm('Are you sure you want to delete this book?');">Delete Book</a>
 	
 	</sec:authorize>
+	
+	
 	<c:if test="${noEsReadBook}"> 
 	<form:form modelAttribute="book"
                class="form-horizontal"
@@ -82,5 +84,9 @@
                <button class="btn btn-default" type="submit"><fmt:message key="addReadBook"/></button>
 	</form:form>
 	</c:if>
+	<h1> Fan Zone</h1>
+	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications" htmlEscape="true"/>'>Fans Publications</a>
+	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications/publicationAdd" htmlEscape="true"/>'>New Fan Publications</a>
+	
 
 </petclinic:layout>

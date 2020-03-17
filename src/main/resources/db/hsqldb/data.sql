@@ -136,16 +136,9 @@ INSERT INTO reviews(id,name,raiting,title,opinion,book_id,user_username) VALUES 
 
 
 
-INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (1,'publication 1', 'this is tests data', '2020-03-07','admin1',1);
-INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (2,'publication 2', 'this is tests data', '2020-03-07','owner1',1);
-INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (3,'publication 3', 'this is tests data', '2020-03-07','admin1',2);
-INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (4,'publication 4', 'this is tests data', '2020-03-07','owner1',7);
-INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (5,'publication 5', 'this is tests data', '2020-03-07','admin1',8);
-INSERT INTO publications (id,title,description,publication_date,user_id,book_id) VALUES (6,'publication 6', 'this is tests data', '2020-03-07','owner1',10);
-INSERT INTO images (publication_id,link) VALUES (1,'https://lh3.googleusercontent.com/proxy/9xJwN4k_Q-pPsRiDF6biPeUar08kxIY9qEKMk9k2oOF_JHMly-x4fA0JuXPpS7WR-bJBCiSlfaRQ97ohxkQvU4X2gQMFOS16W1zdoX4Tg7Bl4APN4ObQtlGjaYwbavENT07Uql5UrHK9VnviQAP_OxNVYh0');
-INSERT INTO images (publication_id,link) VALUES (1,'https://los40es00.epimg.net/los40/imagenes/los40classic/2018/03/foto-test.png');
-INSERT INTO images (publication_id,link) VALUES (2,'https://economipedia.com/wp-content/uploads/test-de-estr%C3%A9s.png');
-INSERT INTO images (publication_id,link) VALUES (2,'https://www.estilosdeaprendizaje.org/wp-content/uploads/2020/02/testestilosdeaprendizaje.png');
-INSERT INTO images (publication_id,link) VALUES (3,'https://m.media-amazon.com/images/I/61yt7HfLRKL._SS500_.jpg');
-INSERT INTO images (publication_id,link) VALUES (4,'https://i.ytimg.com/vi/7UH5cSfDBps/maxresdefault.jpg');
-INSERT INTO images (publication_id,link) VALUES (5,'https://www.frikipandi.com/wp-content/uploads/2015/05/bigstock-Test-word-on-white-keyboard-640x330.jpg');
+INSERT INTO publications (id,title,description,publication_date,image,user_id,book_id) VALUES (1,'publication 1', 'this is tests data', '2020-03-07','https://lh3.googleusercontent.com/proxy/9xJwN4k_Q-pPsRiDF6biPeUar08kxIY9qEKMk9k2oOF_JHMly-x4fA0JuXPpS7WR-bJBCiSlfaRQ97ohxkQvU4X2gQMFOS16W1zdoX4Tg7Bl4APN4ObQtlGjaYwbavENT07Uql5UrHK9VnviQAP_OxNVYh0','admin1',1);
+INSERT INTO publications (id,title,description,publication_date,image,user_id,book_id) VALUES (2,'publication 2', 'this is tests data', '2020-03-07','https://los40es00.epimg.net/los40/imagenes/los40classic/2018/03/foto-test.png','owner1',1);
+INSERT INTO publications (id,title,description,publication_date,image,user_id,book_id) VALUES (3,'publication 3', 'this is tests data', '2020-03-07','https://economipedia.com/wp-content/uploads/test-de-estr%C3%A9s.png','admin1',2);
+INSERT INTO publications (id,title,description,publication_date,image,user_id,book_id) VALUES (4,'publication 4', 'this is tests data', '2020-03-07','https://www.estilosdeaprendizaje.org/wp-content/uploads/2020/02/testestilosdeaprendizaje.png','owner1',7);
+INSERT INTO publications (id,title,description,publication_date,image,user_id,book_id) VALUES (5,'publication 5', 'this is tests data', '2020-03-07','https://i.ytimg.com/vi/7UH5cSfDBps/maxresdefault.jpg','admin1',8);
+INSERT INTO publications (id,title,description,publication_date,image,user_id,book_id) VALUES (6,'publication 6', 'this is tests data', '2020-03-07','https://www.frikipandi.com/wp-content/uploads/2015/05/bigstock-Test-word-on-white-keyboard-640x330.jpg','owner1',10);

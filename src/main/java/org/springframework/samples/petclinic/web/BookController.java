@@ -157,7 +157,7 @@ public class BookController {
 		Boolean notWishedBook = false;
 		Book book = this.bookService.findBookById(bookId);
 		noEsReadBook = !this.esReadBook(bookId);
-		notWishedBook = !this.esWishedBook(bookId);
+		notWishedBook = !this.wishedBookService.esWishedBook(bookId);
 		propiedad = this.libroMioOAdmin(bookId);
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(book);
@@ -323,7 +323,7 @@ public class BookController {
 	@PostMapping("/books/wishList/{bookId}")
 	public String anadirLibroListaDeseados(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 
-		if (this.esWishedBook(bookId) || this.esReadBook(bookId)) {
+		if (this.wishedBookService.esWishedBook(bookId) || this.esReadBook(bookId)) {
 			return "redirect:/oups";
 		}
 		Book book = this.bookService.findBookById(bookId);
@@ -343,17 +343,4 @@ public class BookController {
 		return "redirect:/books";
 	}
 	
-	private Boolean esWishedBook(final Integer id) {
-		Boolean res = false;
-		Book book = this.bookService.findBookById(id);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		List<Integer> ids = this.wishedBookService.findBooksIdByUser(userdetails.getUsername());
-		for (Integer i : ids) {
-			if (this.bookService.findBookById(i).getId().equals(book.getId())) {
-				res = true;
-			}
-		}
-		return res;
-	}
 }

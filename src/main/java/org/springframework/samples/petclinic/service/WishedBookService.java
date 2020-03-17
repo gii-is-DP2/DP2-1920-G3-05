@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.WishedBook;
+import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.repository.ReadBookRepository;
 import org.springframework.samples.petclinic.repository.WishedBookRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,9 @@ public class WishedBookService {
 	
 	@Autowired
 	private ReadBookRepository readBookRepository;
+	
+	@Autowired
+	private BookRepository bookRepository;
 
 
 	@Transactional
@@ -44,5 +50,20 @@ public class WishedBookService {
 	public void deleteByBookId(final int id) {
 		this.wishedBookRepository.deleteByBookId(id);
 
+	}
+	
+	@Transactional
+	public Boolean esWishedBook(final Integer id) {
+		Boolean res = false;
+		Book book = this.bookRepository.findById(id);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		List<Integer> ids = this.findBooksIdByUser(userdetails.getUsername());
+		for (Integer i : ids) {
+			if (this.bookRepository.findById(i).getId().equals(book.getId())) {
+				res = true;
+			}
+		}
+		return res;
 	}
 }

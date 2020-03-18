@@ -83,10 +83,13 @@
                action="/books/readBooks/${book.id}">
                <button class="btn btn-default" type="submit"><fmt:message key="addReadBook"/></button>
 	</form:form>
+	
 	</c:if>
-	<h1> Fan Zone</h1>
-	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications" htmlEscape="true"/>'>Fans Publications</a>
+	<h1>Fan Zone</h1>
+	<c:if test="${esReadBook}"> 
 	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications/publicationAdd" htmlEscape="true"/>'>New Fan Publications</a>
+	</c:if>
+	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications" htmlEscape="true"/>'>Fans Publications</a>
 	
 
 </petclinic:layout>

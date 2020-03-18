@@ -147,13 +147,16 @@ public class BookController {
 	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
 		Boolean propiedad = false;
 		Boolean noEsReadBook = false;
+		Boolean esReadBook = false;
 		Book book = this.bookService.findBookById(bookId);
 		noEsReadBook = !this.esReadBook(bookId);
+		esReadBook = this.esReadBook(bookId);
 		propiedad = this.libroMioOAdmin(bookId);
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(book);
 		mav.addObject("propiedad", propiedad);
 		mav.addObject("noEsReadBook", noEsReadBook);
+		mav.addObject("esReadBook", esReadBook);
 		return mav;
 	}
 

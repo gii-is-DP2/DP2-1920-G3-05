@@ -83,14 +83,16 @@ public class PublicationController {
 	@GetMapping(value = "/books/{bookId}/publications/publicationAdd")
 	public String addPublication(final ModelMap modelMap,@PathVariable("bookId") final int bookId) {
 		String view = "publications/publicationAdd";
-		if(esReadBook(bookId)==false) {
-			return "redirect:/oups";
-		}
+//		Boolean esLibroLeido = this.esReadBook(bookId);
+//		if(esLibroLeido == true) {
+//			return "redirect:/oups";
+//		}
 		Publication publication = new Publication();
 		Book book = this.bookService.findBookById(bookId);
 		publication.setBook(book);
 		modelMap.put("publication", publication);
 		return view;
+
 	}
 	
 	@PostMapping(value = "/books/{bookId}/publications/save")

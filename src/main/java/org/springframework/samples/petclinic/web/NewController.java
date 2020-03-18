@@ -27,6 +27,7 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.NewService;
+import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -188,8 +189,11 @@ public class NewController {
 
 	@GetMapping("/admin/news/books/delete/{newId}/{bookId}")
 	public String deleteBooksFromNew(@PathVariable("newId") final int newId, @PathVariable("bookId") final int bookId, final Map<String, Object> model) {
-		Collection<Book> booksIncludes = this.newService.getBooksFromNews(newId);
-		if (booksIncludes.size() == 1) {
+		try {
+			this.newService.deleteBookInNew(newId, bookId);
+			return "redirect:/admin/news/books/" + newId;
+		} catch (CantDeleteBookInNewException e) {
+			Collection<Book> booksIncludes = this.newService.getBooksFromNews(newId);
 			model.put("booksNotEmpty", true);
 			model.put("booksIncludes", booksIncludes);
 			Collection<Book> booksNotIncludes = this.bookService.findAll();
@@ -197,18 +201,13 @@ public class NewController {
 			model.put("booksNotIncludes", booksNotIncludes);
 			model.put("newId", newId);
 			return "news/bookList";
-		} else {
-			this.newService.deleteNew(newId, bookId);
-			return "redirect:/admin/news/books/" + newId;
 		}
 
 	}
 
 	@GetMapping("/admin/news/books/add/{newId}/{bookId}")
 	public String addBooksFromNew(@PathVariable("newId") final int newId, @PathVariable("bookId") final int bookId, final Map<String, Object> model) {
-		if (!this.newService.getNewsFromBook(bookId).contains(newId)) {
-			this.newService.saveBookInNew(this.newService.getNewById(newId), this.bookService.findBookById(bookId));
-		}
+		this.newService.saveBookInNew(newId, bookId);
 		return "redirect:/admin/news/books/" + newId;
 	}
 

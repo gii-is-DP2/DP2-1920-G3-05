@@ -26,4 +26,7 @@ public interface BookInNewRepository {
 	@Modifying
 	void save(BookInNew bn) throws DataAccessException;
 
+	@Transactional(readOnly = true)
+	BookInNew getByNewIdBookId(int newId, int bookId) throws DataAccessException;
+
 }

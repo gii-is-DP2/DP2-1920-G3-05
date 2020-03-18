@@ -30,4 +30,9 @@ public interface SpringDataBookInNewRepository extends BookInNewRepository, Crud
 	@Query("SELECT bookInNew.book FROM BookInNew bookInNew WHERE bookInNew.neew.id = ?1")
 	Collection<Book> getBooksInNew(int newId);
 
+	@Override
+	@Transactional
+	@Query("SELECT bookInNew FROM BookInNew bookInNew WHERE bookInNew.neew.id = ?1 AND bookInNew.book.id = ?2")
+	BookInNew getByNewIdBookId(int newId, int bookId);
+
 }

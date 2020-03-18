@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.repository.NewRepository;
+import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,19 +18,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class NewService {
 
 	@Autowired
-	private NewRepository newRepo;
+	private NewRepository		newRepo;
 
 	@Autowired
-	private BookInNewService bookInNewService;
+	private BookInNewService	bookInNewService;
+
+	@Autowired
+	private BookService			bookService;
+
 
 	@Transactional(readOnly = true)
-	public List<Integer> getNewsFromBook(int bookId) throws DataAccessException {
+	public List<Integer> getNewsFromBook(final int bookId) throws DataAccessException {
 		return this.newRepo.getNewsFromBook(bookId);
 	}
 
 	@Transactional
 	@Modifying
-	public void deleteNew(int newId, int bookId) throws DataAccessException {
+	public void deleteNew(final int newId, final int bookId) throws DataAccessException {
 		// Casuistica: (1)Si al borrar el libro no quedan más libros en la noticia se
 		// borra el bookInNew y la New
 		// (2) Si hay mas de un libro en la New solo se borra el bookInNew
@@ -87,8 +92,21 @@ public class NewService {
 
 	@Transactional
 	@Modifying
-	public void saveBookInNew(final New neew, final Book book) {
-		this.bookInNewService.save(neew, book);
+	public void saveBookInNew(final int neewId, final int bookId) {
+		if (this.bookInNewService.getByNewIdBookId(neewId, bookId) == null) {
+			this.bookInNewService.save(this.getNewById(neewId), this.bookService.findBookById(bookId));
+		}
 
+	}
+
+	@Transactional
+	@Modifying
+	public void deleteBookInNew(final int newId, final int bookId) throws DataAccessException, CantDeleteBookInNewException {
+		Collection<Book> booksIncludes = this.getBooksFromNews(newId);
+		if (booksIncludes.size() > 1) {
+			this.bookInNewService.deleteBookInNew(newId, bookId);
+		} else {
+			throw new CantDeleteBookInNewException();
+		}
 	}
 }

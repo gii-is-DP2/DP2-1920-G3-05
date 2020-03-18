@@ -44,4 +44,8 @@ public class BookInNewService {
 
 	}
 
+	public BookInNew getByNewIdBookId(final int newId, final int bookId) {
+		return this.bookInNewRepository.getByNewIdBookId(newId, bookId);
+	}
+
 }

@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
+import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -86,4 +87,30 @@ public class NewServiceTest {
 		Assertions.assertThat(this.sut.getNewById(1)).isNull();
 	}
 
+	@Test
+	void shouldNotAddDuplicatedBookInNew() {
+		int newId = 1;
+		int bookId1 = 4;
+		int bookId2 = 5;
+		this.sut.saveBookInNew(newId, bookId1);
+		this.sut.saveBookInNew(newId, bookId1);
+		this.sut.saveBookInNew(newId, bookId2);
+		this.sut.saveBookInNew(newId, bookId2);
+		Integer books = this.sut.getBooksFromNews(newId).size();
+		Assertions.assertThat(books == 4);
+
+	}
+
+	@Test
+	void shouldNotDeleteBookInNew() {
+		int newId = 2;
+		int bookId = 11;
+
+		try {
+			this.sut.deleteBookInNew(newId, bookId);
+
+		} catch (CantDeleteBookInNewException e) {
+			Assertions.assertThat(e.getCause());
+		}
+	}
 }

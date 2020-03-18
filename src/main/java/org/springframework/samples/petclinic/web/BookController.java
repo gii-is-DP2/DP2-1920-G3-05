@@ -159,7 +159,7 @@ public class BookController {
 		Boolean noEsReadBook = false;
 		Boolean notWishedBook = false;
 		Boolean hasAnyReview = false;
-		Boolean alreadyReviewed = false;
+		Boolean canWriteReview;
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -172,12 +172,12 @@ public class BookController {
 		notWishedBook = !this.esWishedBook(bookId);
 		
 	
+		canWriteReview = this.reviewService.canWriteReview(bookId, userDetails.getUsername());
 		
 		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
 		
 		propiedad = this.libroMioOAdmin(bookId);
 		
-		alreadyReviewed = this.reviewService.alreadyReviewedBook(bookId, userDetails.getUsername());
 		
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(book);
@@ -185,7 +185,7 @@ public class BookController {
 		mav.addObject("noEsReadBook", noEsReadBook);
 		mav.addObject("notWishedBook", notWishedBook);
 		mav.addObject("hasAnyReview", hasAnyReview);
-		mav.addObject("alreadyReviewed", alreadyReviewed);
+		mav.addObject("canWriteReview", canWriteReview);
 		return mav;
 	}
 
@@ -304,7 +304,9 @@ public class BookController {
 
 	@GetMapping("/admin/books/delete/{bookId}")
 	public String deleteBook(@PathVariable("bookId") final int bookId) {
-		this.bookService.deleteById(bookId);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		this.bookService.deleteById(bookId, userdetails.getUsername());
 		return "redirect:/books";
 	}
 

@@ -33,16 +33,16 @@
 		</tr>
 	</table>
 
-	<c:choose>
-		<c:when test="${isMine}">
+		<c:if test="${isMine}">
 			<a class="btn btn-default"
 				href='<spring:url value="/books/${review.book.id}/reviews/${review.id}/edit" htmlEscape="true"/>'>Edit
 				review</a>
+		</c:if>
+		<c:if test="${canDeleteReview}">
 			<a class="btn btn-default"
 				href='<spring:url value="/books/${review.book.id}/reviews/${review.id}/delete" htmlEscape="true"/>'>Delete
 				review</a>
-		</c:when>
-	</c:choose>
+		</c:if>
 
 
 	<a class="btn btn-default"

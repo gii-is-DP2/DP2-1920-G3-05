@@ -105,6 +105,9 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(1,3, 'vet1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(2,2, 'vet1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(3,6, 'vet1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(4,1, 'owner1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(5,1, 'admin1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(6,4, 'owner1');
+
 
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);

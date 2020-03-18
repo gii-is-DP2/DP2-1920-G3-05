@@ -94,7 +94,7 @@
 	</c:if>
 
 	<c:choose>
-		<c:when test="${!noEsReadBook && !alreadyReviewed}">
+		<c:when test="${canWriteReview}">
 			<a class="btn btn-default"
 			href='<spring:url value="/books/${book.id}/reviews/new" htmlEscape="true"/>'>Write
 			review</a>

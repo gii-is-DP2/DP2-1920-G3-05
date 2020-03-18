@@ -24,7 +24,7 @@ public class ReadBookServiceTest {
 	
 	@Test
 	void shoulNotReadBook() {
-		int bookId = 1; 
+		int bookId = 2; 
 		String username = "admin1";
 		Boolean adminReadBook = this.sut.esReadBook(bookId, username);
 		Assertions.assertThat(adminReadBook).isFalse();

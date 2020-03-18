@@ -212,23 +212,25 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithNoRelations() {
+	void adminCanDeleteBookWithNoRelations() {
 		int bookId = 6;
+		String username = "admin1";
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Assertions.assertThat(existsBook).isTrue();
 		
-		this.sut.deleteById(bookId);
+		this.sut.deleteById(bookId, username);
 		
 		existsBook = this.sut.existsBookById(bookId);
 		Assertions.assertThat(existsBook).isFalse();		
 	}
 	
 	@Test
-	void shouldDeleteBookAndNew() {
+	void adminCanDeleteBookAndNew() {
 		int bookId = 11;
 		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId); 
@@ -237,11 +239,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookButNoNew() {
+	void adminCanDeleteBookButNoNew() {
 		int bookId = 2;
 		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId); 
@@ -253,11 +256,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithMeeting() {
+	void adminCanDeleteBookWithMeeting() {
 		int bookId = 10;
 		int meetingId = 4;
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsMeeting = this.meetingService.existsMeetingById(meetingId);
@@ -266,11 +270,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithReview() {
+	void adminCanDeleteBookWithReview() {
 		int bookId = 4;
 		int reviewId = 6;
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsReview = this.reviewService.existsReviewById(reviewId);
@@ -279,11 +284,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithPublication() {
+	void adminCanDeleteBookWithPublication() {
 		int bookId = 8;
 		int publicationId = 5;
+		String username = "admin1";
 
-		this.sut.deleteById(bookId);
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsPublication = this.publicationService.existsPublicationById(publicationId);
@@ -292,7 +298,7 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithEverything() {
+	void adminCanDeleteBookWithEverything() {
 		int bookId = 1;
 		int newId = 3; //Solo un libro --> se borra noticia
 		int reviewId1 = 1;
@@ -301,8 +307,9 @@ class BookServiceTests {
 		int publicationId1 = 1;
 		int publicationId2 = 2;
 		int meetingId = 2;
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId);

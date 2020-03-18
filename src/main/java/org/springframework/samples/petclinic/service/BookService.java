@@ -26,7 +26,11 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.repository.BookRepository;
+import org.springframework.samples.petclinic.service.exceptions.CantDeleteReviewException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.samples.petclinic.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,13 +103,17 @@ public class BookService {
 
 	@Transactional
 	@Modifying
-	public void deleteById(final int id) throws DataAccessException {
+	public void deleteById(final int id, String username) throws DataAccessException {
+
 		// Vemos si el libro tiene asociadas reviews que haya que borrar previamente
 		List<Integer> reviewsId = this.reviewService.getReviewsIdFromBook(id);
 		if (reviewsId != null && !reviewsId.isEmpty()) {
 			for (Integer i : reviewsId) {
-				System.out.println(i);
-				this.reviewService.deleteReviewById(i);
+				try {
+					this.reviewService.deleteReviewById(i, username);
+				}catch (CantDeleteReviewException e) {
+					
+				}
 			}
 		}
 

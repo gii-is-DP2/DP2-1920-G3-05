@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,6 @@ import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.util.EntityUtils;
-import org.springframework.security.acls.domain.GrantedAuthoritySid;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,22 +82,6 @@ class BookServiceTests {
 		Assertions.assertThat(books.isEmpty()).isTrue();
 	}
 
-	@Test
-	void shouldFindBookById() {
-		Book book = this.sut.findBookById(1);
-
-		Assertions.assertThat(book.getTitle()).isEqualTo("IT");
-		Assertions.assertThat(book.getAuthor()).isEqualTo("Stephen King");
-		Assertions.assertThat(book.getGenre().getName()).isEqualTo("Horror");
-		Assertions.assertThat(book.getISBN()).isEqualTo("9788466345347");
-		Assertions.assertThat(book.getPages()).isEqualTo(1138);
-		Assertions.assertThat(book.getSynopsis()).startsWith("¿Quien");
-		Assertions.assertThat(book.getEditorial()).isEqualTo("Viking Press");
-		Assertions.assertThat(book.getPublicationDate()).isEqualTo("1986-09-15");
-		Assertions.assertThat(book.getVerified()).isTrue();
-
-	}
-	
 	@Test
 	@Transactional
 	public void shouldInsertBookIntoDatabaseAndGenerateId() throws DataAccessException, DuplicatedISBNException {
@@ -212,23 +191,25 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithNoRelations() {
+	void adminCanDeleteBookWithNoRelations() {
 		int bookId = 6;
+		String username = "admin1";
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Assertions.assertThat(existsBook).isTrue();
 		
-		this.sut.deleteById(bookId);
+		this.sut.deleteById(bookId, username);
 		
 		existsBook = this.sut.existsBookById(bookId);
 		Assertions.assertThat(existsBook).isFalse();		
 	}
 	
 	@Test
-	void shouldDeleteBookAndNew() {
+	void adminCanDeleteBookAndNew() {
 		int bookId = 11;
 		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId); 
@@ -237,11 +218,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookButNoNew() {
+	void adminCanDeleteBookButNoNew() {
 		int bookId = 2;
 		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId); 
@@ -253,11 +235,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithMeeting() {
+	void adminCanDeleteBookWithMeeting() {
 		int bookId = 10;
 		int meetingId = 4;
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsMeeting = this.meetingService.existsMeetingById(meetingId);
@@ -266,11 +249,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithReview() {
+	void adminCanDeleteBookWithReview() {
 		int bookId = 4;
 		int reviewId = 6;
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsReview = this.reviewService.existsReviewById(reviewId);
@@ -279,11 +263,12 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithPublication() {
+	void adminCanDeleteBookWithPublication() {
 		int bookId = 8;
 		int publicationId = 5;
+		String username = "admin1";
 
-		this.sut.deleteById(bookId);
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsPublication = this.publicationService.existsPublicationById(publicationId);
@@ -292,7 +277,7 @@ class BookServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteBookWithEverything() {
+	void adminCanDeleteBookWithEverything() {
 		int bookId = 1;
 		int newId = 3; //Solo un libro --> se borra noticia
 		int reviewId1 = 1;
@@ -301,8 +286,9 @@ class BookServiceTests {
 		int publicationId1 = 1;
 		int publicationId2 = 2;
 		int meetingId = 2;
-		
-		this.sut.deleteById(bookId);
+		String username = "admin1";
+
+		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId);
@@ -337,6 +323,38 @@ class BookServiceTests {
 	void shouldNotChangeVerifiedBook() {
 		this.sut.verifyBook(1);
 		Assertions.assertThat(this.sut.findBookById(1).getVerified()).isTrue();
+	}
+
+	@Test
+	void canEditCauseIsMineAndNotVerified(){
+		String username = "owner1";
+		int bookId = 3;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isTrue();
+	}
+
+	@Test
+	void cantEditMyBookCauseIsVerified(){
+		String username = "owner1";
+		int bookId = 1;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isFalse();
+	}
+
+	@Test
+	void adminCanEditOthersUnverifiedBook(){
+		String username = "admin1";
+		int bookId = 3;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isTrue();
+	}
+
+	@Test
+	void adminCanEditOthersVerifiedBook(){
+		String username = "admin1";
+		int bookId = 1;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isTrue();
 	}
 
 }

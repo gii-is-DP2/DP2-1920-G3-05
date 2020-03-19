@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class ImageServiceTests {
 
-	@Autowired
+	/*@Autowired
 	private ImageService sut;
 	
 	@Test
@@ -42,6 +42,6 @@ public class ImageServiceTests {
 		
 		Boolean existsImage = this.sut.existsImageById(imageId);
 		Assertions.assertThat(existsImage).isFalse();
-	}
+	}*/
 	
 }

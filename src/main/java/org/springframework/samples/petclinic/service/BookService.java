@@ -22,11 +22,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.repository.BookRepository;
+import org.springframework.samples.petclinic.service.exceptions.CantDeleteReviewException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.samples.petclinic.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +51,16 @@ public class BookService {
 	private PublicationService publicationService;
 
 	@Autowired
-	NewService newService;
+	private NewService newService;
+	
+	@Autowired
+	private ReadBookService readBookService;
+	
+	@Autowired
+	private WishedBookService	wishedBookService;
+
+	@Autowired
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
 	public BookService(final BookRepository bookRepository) {
@@ -93,13 +107,17 @@ public class BookService {
 
 	@Transactional
 	@Modifying
-	public void deleteById(final int id) throws DataAccessException {
+	public void deleteById(final int id, String username) throws DataAccessException {
+
 		// Vemos si el libro tiene asociadas reviews que haya que borrar previamente
-		List<Integer> reviewsId = this.reviewService.getReviewsFromBook(id);
+		List<Integer> reviewsId = this.reviewService.getReviewsIdFromBook(id);
 		if (reviewsId != null && !reviewsId.isEmpty()) {
 			for (Integer i : reviewsId) {
-				System.out.println(i);
-				this.reviewService.deleteReviewById(i);
+				try {
+					this.reviewService.deleteReviewById(i, username);
+				}catch (CantDeleteReviewException e) {
+					
+				}
 			}
 		}
 
@@ -127,14 +145,44 @@ public class BookService {
 			}
 		}
 		
+		//Borramos si hay libros leidos 
+		this.readBookService.deleteReadBookByBookId(id);
+		
+		//Borramos si hay libros deseados
+		this.wishedBookService.deleteByBookId(id);
+		
+		
 		//Borramos el libro
 		this.bookRepository.deleteBookById(id);
 	}
 
+	@Transactional(readOnly = true)
+	public void verifyBook(final int bookId) {
+		this.bookRepository.verifyBook(bookId);
+
+	}
 
 	@Transactional(readOnly = true)
-	public void verifyBook(int bookId) {
-		this.bookRepository.verifyBook(bookId);
-		
+	public Collection<Book> findAll() {
+		return this.bookRepository.findAll();
 	}
+
+	
+	public Boolean canEditBook(int bookId, String username) {
+		Boolean res = false;
+		Boolean imAdmin = false;
+		Book book = this.findBookById(bookId);
+		List<Authorities> authorities = this.authoritiesService.getAuthoritiesByUsername(username);
+		for (Authorities a: authorities) {
+			if (a.getAuthority().equals("admin")) {
+				imAdmin = true;
+			}
+		}
+		if (username.equals(book.getUser().getUsername()) && !book.getVerified() || imAdmin) {
+			res = true;
+		}
+
+		return res;
+	}
+
 }

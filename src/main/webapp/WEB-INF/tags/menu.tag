@@ -34,16 +34,16 @@
 					<span>Find books</span>
 				</petclinic:menuItem>
 				
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners</span>
-				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
-					title="veterinarians">
+				<petclinic:menuItem active="${name eq 'readBooks'}" url="/books/readBooks"
+					title="Read books">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
+					<span>Read books</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'wishList'}" url="/books/wishList"
+					title="To read list">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>To read list</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"

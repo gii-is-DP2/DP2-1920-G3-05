@@ -11,7 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ReviewRepository {
 
 	@Transactional(readOnly = true)
-	List<Integer> getReviewsFromBook(int bookId) throws DataAccessException;
+	List<Integer> getReviewsIdFromBook(int bookId) throws DataAccessException;
+	
+	@Transactional(readOnly = true)
+	List<Review> getReviewsFromBook(int bookId) throws DataAccessException;
 	
 	@Transactional
 	@Modifying
@@ -22,5 +25,12 @@ public interface ReviewRepository {
 	
 	@Transactional(readOnly = true)
 	Boolean existsById(int reviewId) throws DataAccessException;
+	
+	@Transactional
+	@Modifying
+	Review save(Review review) throws DataAccessException;
+	
+	@Transactional
+	Review getReviewByBookIdAndUsername(int bookId, String username) throws DataAccessException;
 
 }

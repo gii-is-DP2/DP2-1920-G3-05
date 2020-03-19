@@ -15,4 +15,5 @@ public interface WishedBookRepository {
 	
 	void deleteByBookId(int id) throws DataAccessException;
 	
+	Boolean existsById(int id) throws DataAccessException;
 }

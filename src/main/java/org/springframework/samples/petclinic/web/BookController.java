@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.ReadBook;
@@ -35,6 +36,7 @@ import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.WishedBookService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -169,13 +171,8 @@ public class BookController {
 		}
 		Book book = this.bookService.findBookById(bookId);
 		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
-		notWishedBook = !this.esWishedBook(bookId);
-		
-	
+		notWishedBook = !this.wishedBookService.esWishedBook(bookId);
 		canWriteReview = this.reviewService.canWriteReview(bookId, userDetails.getUsername());
-		
-		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
-		
 		propiedad = this.libroMioOAdmin(bookId);
 		
 		
@@ -347,10 +344,7 @@ public class BookController {
 	}
 	@PostMapping("/books/wishList/{bookId}")
 	public String anadirLibroListaDeseados(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		
-		if (this.esWishedBook(bookId) || this.readBookService.esReadBook(bookId, userdetails.getUsername())) {
+		if (this.wishedBookService.esWishedBook(bookId) || this.esReadBook(bookId)) {
 			return "redirect:/oups";
 		}
 		Book book = this.bookService.findBookById(bookId);
@@ -359,22 +353,14 @@ public class BookController {
 		WishedBook wishedBook = new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
-		this.wishedBookService.save(wishedBook);
+		try {
+			this.wishedBookService.save(wishedBook);
+		}catch (ReadOrWishedBookException e) {
+			// TODO Auto-generated catch block
+			return "redirect:/oups";
+		}
 
 		return "redirect:/books";
 	}
 	
-	private Boolean esWishedBook(final Integer id) {
-		Boolean res = false;
-		Book book = this.bookService.findBookById(id);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		List<Integer> ids = this.wishedBookService.findBooksIdByUser(userdetails.getUsername());
-		for (Integer i : ids) {
-			if (this.bookService.findBookById(i).getId().equals(book.getId())) {
-				res = true;
-			}
-		}
-		return res;
-	}
 }

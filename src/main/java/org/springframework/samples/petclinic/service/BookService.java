@@ -156,11 +156,15 @@ public class BookService {
 		this.bookRepository.deleteBookById(id);
 	}
 
+	@Transactional(readOnly = true)
+	public void verifyBook(final int bookId) {
+		this.bookRepository.verifyBook(bookId);
+
+	}
 
 	@Transactional(readOnly = true)
-	public void verifyBook(int bookId) {
-		this.bookRepository.verifyBook(bookId);
-		
+	public Collection<Book> findAll() {
+		return this.bookRepository.findAll();
 	}
 
 	

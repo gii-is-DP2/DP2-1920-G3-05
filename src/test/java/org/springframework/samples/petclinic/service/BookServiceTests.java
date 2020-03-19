@@ -83,22 +83,6 @@ class BookServiceTests {
 	}
 
 	@Test
-	void shouldFindBookById() {
-		Book book = this.sut.findBookById(1);
-
-		Assertions.assertThat(book.getTitle()).isEqualTo("IT");
-		Assertions.assertThat(book.getAuthor()).isEqualTo("Stephen King");
-		Assertions.assertThat(book.getGenre().getName()).isEqualTo("Horror");
-		Assertions.assertThat(book.getISBN()).isEqualTo("9788466345347");
-		Assertions.assertThat(book.getPages()).isEqualTo(1138);
-		Assertions.assertThat(book.getSynopsis()).startsWith("¿Quien");
-		Assertions.assertThat(book.getEditorial()).isEqualTo("Viking Press");
-		Assertions.assertThat(book.getPublicationDate()).isEqualTo("1986-09-15");
-		Assertions.assertThat(book.getVerified()).isTrue();
-
-	}
-	
-	@Test
 	@Transactional
 	public void shouldInsertBookIntoDatabaseAndGenerateId() throws DataAccessException, DuplicatedISBNException {
 		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");

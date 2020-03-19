@@ -183,6 +183,7 @@ public class BookController {
 		mav.addObject("notWishedBook", notWishedBook);
 		mav.addObject("hasAnyReview", hasAnyReview);
 		mav.addObject("canWriteReview", canWriteReview);
+		mav.addObject("esReadBook", !noEsReadBook);
 		return mav;
 	}
 

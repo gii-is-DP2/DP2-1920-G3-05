@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
@@ -37,9 +38,14 @@ public class Publication extends BaseEntity {
 	@NotEmpty
 	private String description;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication")
-	private Set<Image> images;
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication")
+//	private Set<Image> images;
 
+	@Column(name = "image")
+	@URL
+	private String image;
+	
+	
 	@Column(name = "publication_date")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate publicationDate;

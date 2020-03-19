@@ -11,11 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
-import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
-import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,8 +116,32 @@ public class PublicationServiceTests {
 
 		publication = this.sut.findById(1);
 		Assertions.assertThat(publication.getTitle()).isEqualTo(newTitle);
-
 	}
+
+	@Test
+	void publicationShouldBeMine(){
+		String username = "owner1";
+		int publicationId = 2;
+		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
+		Assertions.assertThat(isMine).isTrue();
+	}
+
+	@Test
+	void publicationShouldBeMineImAdmin(){
+		String username = "admin1";
+		int publicationId = 2;
+		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
+		Assertions.assertThat(isMine).isTrue();
+	}
+
+	@Test
+	void publicationShouldNotBeMine(){
+		String username = "vet1";
+		int publicationId = 2;
+		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
+		Assertions.assertThat(isMine).isFalse();
+	}
+
 	
 	
 }

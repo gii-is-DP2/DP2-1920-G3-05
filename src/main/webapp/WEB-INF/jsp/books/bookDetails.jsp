@@ -119,10 +119,10 @@
                action="/books/wishList/${book.id}">
                <button class="btn btn-default" type="submit"><fmt:message key="addWishedBook"/></button>
 	</form:form>
-	
 	</c:if>
+	<br>
 	<h1>Fan Zone</h1>
-	<c:if test="${esReadBook}"> 
+	<c:if test="${!noEsReadBook}"> 
 	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications/publicationAdd" htmlEscape="true"/>'>New Fan Publications</a>
 	</c:if>
 	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications" htmlEscape="true"/>'>Fans Publications</a>

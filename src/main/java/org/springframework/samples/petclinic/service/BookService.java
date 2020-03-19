@@ -22,6 +22,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.Review;
@@ -57,6 +58,9 @@ public class BookService {
 	
 	@Autowired
 	private WishedBookService	wishedBookService;
+
+	@Autowired
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
 	public BookService(final BookRepository bookRepository) {
@@ -157,6 +161,24 @@ public class BookService {
 	public void verifyBook(int bookId) {
 		this.bookRepository.verifyBook(bookId);
 		
+	}
+
+	
+	public Boolean canEditBook(int bookId, String username) {
+		Boolean res = false;
+		Boolean imAdmin = false;
+		Book book = this.findBookById(bookId);
+		List<Authorities> authorities = this.authoritiesService.getAuthoritiesByUsername(username);
+		for (Authorities a: authorities) {
+			if (a.getAuthority().equals("admin")) {
+				imAdmin = true;
+			}
+		}
+		if (username.equals(book.getUser().getUsername()) && !book.getVerified() || imAdmin) {
+			res = true;
+		}
+
+		return res;
 	}
 
 }

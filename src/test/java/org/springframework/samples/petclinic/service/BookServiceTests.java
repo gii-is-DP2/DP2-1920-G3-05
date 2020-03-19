@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,6 @@ import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.util.EntityUtils;
-import org.springframework.security.acls.domain.GrantedAuthoritySid;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -344,6 +339,38 @@ class BookServiceTests {
 	void shouldNotChangeVerifiedBook() {
 		this.sut.verifyBook(1);
 		Assertions.assertThat(this.sut.findBookById(1).getVerified()).isTrue();
+	}
+
+	@Test
+	void canEditCauseIsMineAndNotVerified(){
+		String username = "owner1";
+		int bookId = 3;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isTrue();
+	}
+
+	@Test
+	void cantEditMyBookCauseIsVerified(){
+		String username = "owner1";
+		int bookId = 1;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isFalse();
+	}
+
+	@Test
+	void adminCanEditOthersUnverifiedBook(){
+		String username = "admin1";
+		int bookId = 3;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isTrue();
+	}
+
+	@Test
+	void adminCanEditOthersVerifiedBook(){
+		String username = "admin1";
+		int bookId = 1;
+		Boolean canEdit = this.sut.canEditBook(bookId, username);
+		Assertions.assertThat(canEdit).isTrue();
 	}
 
 }

@@ -173,7 +173,7 @@ public class BookController {
 		noEsReadBook = !this.readBookService.esReadBook(bookId, userDetails.getUsername());
 		notWishedBook = !this.wishedBookService.esWishedBook(bookId);
 		canWriteReview = this.reviewService.canWriteReview(bookId, userDetails.getUsername());
-		propiedad = this.libroMioOAdmin(bookId);
+		propiedad = this.bookService.canEditBook(bookId, userDetails.getUsername());
 		
 		
 		ModelAndView mav = new ModelAndView("books/bookDetails");
@@ -183,7 +183,6 @@ public class BookController {
 		mav.addObject("notWishedBook", notWishedBook);
 		mav.addObject("hasAnyReview", hasAnyReview);
 		mav.addObject("canWriteReview", canWriteReview);
-		mav.addObject("esReadBook", !noEsReadBook);
 		return mav;
 	}
 
@@ -232,7 +231,9 @@ public class BookController {
 
 	@GetMapping(path = "/books/{bookId}/updateForm")
 	public String formEvento(final ModelMap modelMap, @PathVariable("bookId") final int bookId) {
-		if (!this.libroMioOAdmin(bookId)) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		if (!this.bookService.canEditBook(bookId, userdetails.getUsername())) {
 			return "redirect:/oups";
 		}
 		modelMap.addAttribute("book", this.bookService.findBookById(bookId));
@@ -280,26 +281,6 @@ public class BookController {
 		return "redirect:/books/" + bookId;
 	}
 
-	private Boolean libroMioOAdmin(final Integer id) {
-		Boolean res = false;
-		Boolean imAdmin = false;
-		Book book = this.bookService.findBookById(id);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		User user = new User();
-		user = this.userService.findUserByUsername(userdetails.getUsername());
-		for (GrantedAuthority ga : userdetails.getAuthorities()) {
-			if (ga.getAuthority().equals("admin")) {
-				imAdmin = true;
-			}
-		}
-		if (user.getUsername().equals(book.getUser().getUsername()) && !book.getVerified() || imAdmin) {
-			res = true;
-		}
-
-		return res;
-	}
-
 	@GetMapping("/admin/books/delete/{bookId}")
 	public String deleteBook(@PathVariable("bookId") final int bookId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -345,7 +326,9 @@ public class BookController {
 	}
 	@PostMapping("/books/wishList/{bookId}")
 	public String anadirLibroListaDeseados(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
-		if (this.wishedBookService.esWishedBook(bookId) || this.esReadBook(bookId)) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		if (this.wishedBookService.esWishedBook(bookId) || this.readBookService.esReadBook(bookId, userdetails.getUsername())) {
 			return "redirect:/oups";
 		}
 		Book book = this.bookService.findBookById(bookId);
@@ -357,7 +340,6 @@ public class BookController {
 		try {
 			this.wishedBookService.save(wishedBook);
 		}catch (ReadOrWishedBookException e) {
-			// TODO Auto-generated catch block
 			return "redirect:/oups";
 		}
 

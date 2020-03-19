@@ -18,18 +18,18 @@ public class PublicationValidator implements Validator{
 	@Override
 	public void validate(Object target, Errors errors) {
 		Publication publication = (Publication) target;
-		if (publication.getTitle().isEmpty() == true) {
+		if (publication.getTitle().isEmpty()) {
 			errors.rejectValue("title", "Must not be empty", "Must not be empty");
 		}
 
-		if (publication.getDescription().isEmpty()==true) {
+		if (publication.getDescription().isEmpty()) {
 			errors.rejectValue("description", "Must not be empty", "Must not be empty");
 		}
-		if (publication.getImage().isEmpty() == true) {
+		if (publication.getImage().isEmpty()) {
 			errors.rejectValue("image", "Must not be empty", "Must not be empty");
 
 		}
-		if (this.isValid(publication.getImage()) == false) {
+		if (!this.isValid(publication.getImage())) {
 			errors.rejectValue("image", "Enter a valid URL", "Enter a valid URL");
 		}
 		

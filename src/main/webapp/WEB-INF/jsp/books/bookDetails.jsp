@@ -82,6 +82,10 @@
 			href='<spring:url value="/admin/books/delete/${book.id}" htmlEscape="true"/>'
 			onclick="return confirm('Are you sure you want to delete this book?');">Delete
 			Book</a>
+
+		<a class="btn btn-default"
+			href='<spring:url value="/admin/books/${book.id}/meetings/new" htmlEscape="true"/>'>
+			Create meeting</a>
 	</sec:authorize>
 	
 	<c:if test="${noEsReadBook}">

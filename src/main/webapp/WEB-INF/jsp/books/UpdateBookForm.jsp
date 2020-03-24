@@ -6,7 +6,11 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="books">
-
+<jsp:attribute name="customScript">
+        <script>
+			$(function() {$("#publicationDate").datepicker({dateFormat : 'yy/mm/dd'});});
+		</script>
+    </jsp:attribute>
     <jsp:body>
 
                     

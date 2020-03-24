@@ -18,22 +18,22 @@ import lombok.Data;
 @Table(name = "news")
 public class New extends NamedEntity {
 
-	@NotEmpty
+	@NotEmpty(message = "Must not be empty")
 	private String		head;
 
-	@NotNull
+	@NotNull(message = "Must not be empty")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate	fecha;
 
-	@NotEmpty
+	@NotEmpty(message = "Must not be empty")
 	private String		body;
 
-	@NotEmpty
+	@NotEmpty(message = "Must not be empty")
 	private String		redactor;
 
 	private String		tags;
 
-	@URL
+	@URL(message = "Enter a valid URL")
 	private String		img;
 
 }

@@ -63,13 +63,16 @@ public class ReviewControllerTests {
     
     @BeforeEach
     void setup() throws CantEditReviewException, CantDeleteReviewException{
-        when(bookService.findBookById(TEST_BOOK_ID)).thenReturn(new Book());
+        Book book1 = new Book();
+        book1.setId(TEST_BOOK_ID);
+        when(bookService.findBookById(TEST_BOOK_ID)).thenReturn(book1);
         Book book2 = new Book();
         book2.setId(TEST_BOOK_ID_2);
         when(bookService.findBookById(TEST_BOOK_ID_2)).thenReturn(book2);
         when(userService.findUserByUsername("spring")).thenReturn(new User());
 
         when(reviewService.canWriteReview(TEST_BOOK_ID, "spring")).thenReturn(true);
+
         Review review = new Review();
         review.setId(TEST_REVIEW_ID);
         review.setBook(new Book());
@@ -77,6 +80,7 @@ public class ReviewControllerTests {
         review.setRaiting(2);
         review.setTitle("Test title");
         review.setUser(new User());
+        when(reviewService.findReviewById(TEST_REVIEW_ID)).thenReturn(review);
 
         Review review2 = new Review();
         review2.setId(TEST_REVIEW_ID_2);
@@ -85,18 +89,19 @@ public class ReviewControllerTests {
         review2.setRaiting(2);
         review2.setTitle("Test title");
         review2.setUser(new User());
+        when(reviewService.findReviewById(TEST_REVIEW_ID_2)).thenReturn(review2);
 
         List<Review> reviewsOneReview = new ArrayList<Review>();
         reviewsOneReview.add(review);
-
         when(reviewService.getReviewsFromBook(TEST_BOOK_ID)).thenReturn(reviewsOneReview);
+
         when(reviewService.getReviewsFromBook(TEST_BOOK_ID_2)).thenReturn(new ArrayList<Review>());
+
         List<Review> reviewsSeveralReview = new ArrayList<Review>();
         reviewsSeveralReview.add(new Review());
         reviewsSeveralReview.add(new Review());
         when(reviewService.getReviewsFromBook(TEST_BOOK_ID_3)).thenReturn(reviewsSeveralReview);
-        when(reviewService.findReviewById(TEST_REVIEW_ID)).thenReturn(review);
-        when(reviewService.findReviewById(TEST_REVIEW_ID_2)).thenReturn(review2);
+
         when(reviewService.reviewIsMine(TEST_REVIEW_ID, "spring")).thenReturn(true);
         when(reviewService.reviewIsMine(TEST_REVIEW_ID_2, "spring")).thenReturn(false);
 

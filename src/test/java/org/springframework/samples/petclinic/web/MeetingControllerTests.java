@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,7 +85,8 @@ public class MeetingControllerTests {
         when(meetingService.findAllMeetings()).thenReturn(new ArrayList<Meeting>());
         mockMvc.perform(get("/meetings"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("meetings/meetingsList"));
+                .andExpect(view().name("meetings/meetingsList"))
+                .andExpect(model().attributeDoesNotExist("meetings"));
     }
 
     @WithMockUser(value = "spring")

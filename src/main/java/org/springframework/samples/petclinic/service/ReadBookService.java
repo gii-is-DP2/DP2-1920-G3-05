@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.repository.ReadBookRepository;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,11 @@ public class ReadBookService {
 	public Boolean existsReadBook(int readBookId) throws DataAccessException {
 		return this.readBookRepository.existsById(readBookId);
 	}
+	
+	@Transactional
+	public List<Integer> topReadBooks() {
+		return this.readBookRepository.getTopReadBooks();
+	}
+	
 
 }

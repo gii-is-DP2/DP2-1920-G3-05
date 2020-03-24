@@ -289,10 +289,26 @@ public class BookController {
 		return "redirect:/books";
 	}
 
-	@GetMapping("admin/books/{bookId}/verify")
+	@GetMapping("/admin/books/{bookId}/verify")
 	public String verifyBook(@PathVariable("bookId") final int bookId) {
-		this.bookService.verifyBook(bookId);
-		return "redirect:/books/" + bookId;
+		boolean isAdmin=false;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		Collection<? extends GrantedAuthority> authorities=userdetails.getAuthorities();
+		for (GrantedAuthority grantedAuthority : authorities){
+	         if (grantedAuthority.getAuthority().equals("admin")) {
+	            isAdmin = true;
+	            break;
+	        }
+	    }
+	 
+	    if (isAdmin) {
+	    	this.bookService.verifyBook(bookId);
+			return "redirect:/books/" + bookId;
+	    } else {
+	    	return "redirect:/oups";
+	    }
+		
 	}
 	
 	/*private Boolean esReadBook(final Integer id) {
@@ -344,6 +360,19 @@ public class BookController {
 		}
 
 		return "redirect:/books";
+	}
+	
+	@GetMapping("/books/topRead")
+	public String topLibrosLeidos(final ModelMap modelMap) {
+		List<Book> selections = new ArrayList<>();
+		List<Integer> ids=this.readBookService.topReadBooks();
+		for (Integer i : ids) {
+			selections.add(this.bookService.findBookById(i));
+
+		}
+		modelMap.put("selections", selections);
+
+		return "books/booksList";
 	}
 	
 }

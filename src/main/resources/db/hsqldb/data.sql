@@ -138,8 +138,17 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(3,6, 'vet1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(4,1, 'owner1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(5,1, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(6,4, 'owner1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(7,5, 'owner1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(8,2, 'owner1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(9,6, 'owner1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(10,7, 'admin1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(11,1, 'vet1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(12,8, 'admin1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(13,9, 'admin1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(14,10, 'admin1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(15,11, 'admin1');
 
-INSERT INTO wished_book (book_id, user_username) VALUES(1, 'admin1');
+INSERT INTO wished_book (book_id, user_username) VALUES(2, 'admin1');
 INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
 
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

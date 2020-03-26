@@ -97,12 +97,8 @@ public class BookController {
 		return "books/findBooks";
 	}
 
-	@ModelAttribute("genres")
-	public Collection<Genre> populatePetTypes() {
-		return this.bookService.findGenre();
-	}
-	@ModelAttribute("recomendations")
-	public Collection<Book> populateRecomendations() {
+	@GetMapping("/books/recomendations")
+	public String listadoDeRecomendaciones(final ModelMap modelMap) {
 		List<Book> selections = new ArrayList<>();
 		List<String> genres = new ArrayList<>();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -110,9 +106,10 @@ public class BookController {
 		List<Integer> ids = this.readBookService.findBooksIdByUser(userdetails.getUsername());
 
 		if (ids.isEmpty()) {
-			return this.bookService.findAll();
+			modelMap.put("emptyy", true);
+			return "books/recomendationList";
 		}
-
+		modelMap.put("notEmpty", true);
 		for (Integer i : ids) {
 			Book book = this.bookService.findBookById(i);
 			selections.add(book);
@@ -122,7 +119,9 @@ public class BookController {
 		String genreName = BookController.maxGenre(genres);
 		List<Book> recomendations = (List<Book>) this.bookService.findBookByTitleAuthorGenreISBN(genreName);
 		recomendations.removeAll(selections);
-		return recomendations;
+		modelMap.put("selections", recomendations);
+
+		return "books/recomendationList";
 	}
 
 	@GetMapping(value = "/books")

@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -161,14 +162,34 @@ class BookControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowReadBooksListHtml() throws Exception {
+		List<Integer> ids = new ArrayList<>();
+		ids.add(BookControllerTests.TEST_BOOK_ID);
+		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(ids);
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/readBooks")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("recomendations")).andExpect(MockMvcResultMatchers.view().name("books/booksList"));
+			.andExpect(MockMvcResultMatchers.view().name("books/booksList"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testAddReadBook() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/readBooks/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 			.andExpect(MockMvcResultMatchers.redirectedUrl("/books"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowRecomendationsListWithReadBooksHtml() throws Exception {
+		List<Integer> ids = new ArrayList<>();
+		ids.add(BookControllerTests.TEST_BOOK_ID);
+		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(ids);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections"))
+			.andExpect(MockMvcResultMatchers.model().attribute("notEmpty", Matchers.is(true))).andExpect(MockMvcResultMatchers.view().name("books/recomendationList"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowRecomendationsListWithoutReadBooksHtml() throws Exception {
+
+		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(new ArrayList<>());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attribute("emptyy", Matchers.is(true)))
+			.andExpect(MockMvcResultMatchers.view().name("books/recomendationList"));
 	}
 
 }

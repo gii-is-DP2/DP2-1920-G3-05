@@ -45,6 +45,11 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>To read list</span>
 				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'recomendations'}" url="/books/recomendations"
+					title="Recomendations">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Recomendations</span>
+				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings"
 					title="Meetings">
@@ -52,11 +57,7 @@
 					<span>Meetings</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
-					title="trigger a RuntimeException to see how it is handled">
-					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
-				</petclinic:menuItem>
+		
 
 			</ul>
 

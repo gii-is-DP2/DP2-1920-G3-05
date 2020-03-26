@@ -47,11 +47,6 @@ public class ReaderService {
 		this.readerRepository = readerRepository;
 	}
 
-	@Transactional(readOnly = true)
-	public Reader findReaderById(final int id) throws DataAccessException {
-		return this.readerRepository.findById(id);
-	}
-
 	@Transactional
 	public Reader findReaderByUsername(final String username) {
 		return this.readerRepository.findReaderByUsername(username);

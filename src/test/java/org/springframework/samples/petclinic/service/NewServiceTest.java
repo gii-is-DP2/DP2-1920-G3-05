@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -8,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
+import org.springframework.samples.petclinic.model.BookInNew;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.stereotype.Service;
@@ -82,8 +85,6 @@ public class NewServiceTest {
 	@Test
 	void shouldDeteteNewById() {
 		this.sut.deleteById(1);
-		int books = this.sut.getBooksFromNews(1).size();
-		Assertions.assertThat(books == 0);
 		Assertions.assertThat(this.sut.getNewById(1)).isNull();
 	}
 
@@ -96,8 +97,17 @@ public class NewServiceTest {
 		this.sut.saveBookInNew(newId, bookId1);
 		this.sut.saveBookInNew(newId, bookId2);
 		this.sut.saveBookInNew(newId, bookId2);
-		Integer books = this.sut.getBooksFromNews(newId).size();
-		Assertions.assertThat(books == 4);
+		BookInNew book = this.bookInNewService.getByNewIdBookId(newId, bookId1);
+		Assertions.assertThat(book).isNotNull();
+
+	}
+
+	@Test
+	void shouldDeleteBookInNew() throws DataAccessException, CantDeleteBookInNewException {
+		int newId = 6;
+		int bookId = 3;
+
+		this.sut.deleteBookInNew(newId, bookId);
 
 	}
 
@@ -112,5 +122,21 @@ public class NewServiceTest {
 		} catch (CantDeleteBookInNewException e) {
 			Assertions.assertThat(e.getCause());
 		}
+	}
+
+	@Test
+	public void shouldSaveNew() {
+		New neew = new New();
+		neew.setBody("body");
+		LocalDate fecha = LocalDate.of(2019, 12, 02);
+		neew.setFecha(fecha);
+		neew.setHead("head");
+		neew.setName("name");
+		neew.setRedactor("redactor");
+		this.sut.save(neew);
+		New neew2 = this.sut.getNewById(neew.getId());
+		Assertions.assertThat(neew2).isNotNull();
+		Assertions.assertThat(neew2.getName()).isEqualTo("name");
+
 	}
 }

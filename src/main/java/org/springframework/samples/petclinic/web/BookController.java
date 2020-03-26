@@ -291,23 +291,8 @@ public class BookController {
 
 	@GetMapping("/admin/books/{bookId}/verify")
 	public String verifyBook(@PathVariable("bookId") final int bookId) {
-		boolean isAdmin=false;
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		Collection<? extends GrantedAuthority> authorities=userdetails.getAuthorities();
-		for (GrantedAuthority grantedAuthority : authorities){
-	         if (grantedAuthority.getAuthority().equals("admin")) {
-	            isAdmin = true;
-	            break;
-	        }
-	    }
-	 
-	    if (isAdmin) {
 	    	this.bookService.verifyBook(bookId);
 			return "redirect:/books/" + bookId;
-	    } else {
-	    	return "redirect:/oups";
-	    }
 		
 	}
 	

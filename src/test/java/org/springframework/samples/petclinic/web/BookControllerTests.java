@@ -108,16 +108,8 @@ public class BookControllerTests {
 		mockMvc.perform(get("/books/topRead")).andExpect(status().isOk()).andExpect(model().attribute("selections", IsEmptyCollection.empty()))
 				.andExpect(view().name("books/booksList"));
 	}
-	@WithMockUser(value = "owner",authorities= {"owner"})
-	@Test
-	void testVerifyBookNonAdmin() throws Exception {
-		
-		mockMvc.perform(get("/admin/books/{bookId}/verify",TEST_BOOK_ID)
-				)
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/oups"));
-	}
-	@WithMockUser(value = "admin",authorities= {"admin"})
+
+	@WithMockUser(value = "spring",authorities= {"admin"})
 	@Test
 	void testVerifyBookAdmin() throws Exception {
 		mockMvc.perform(get("/admin/books/{bookId}/verify",TEST_BOOK_ID)

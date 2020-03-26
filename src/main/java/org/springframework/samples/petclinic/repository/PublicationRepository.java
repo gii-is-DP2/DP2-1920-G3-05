@@ -29,5 +29,5 @@ public interface PublicationRepository{
 	Publication findById(int id) throws DataAccessException;
 	
 	
-	void save(Publication publication) throws DataAccessException;
+	Publication save(Publication publication) throws DataAccessException;
 }

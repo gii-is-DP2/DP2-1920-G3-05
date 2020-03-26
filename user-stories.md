@@ -144,6 +144,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 |-|-|
 |Dado el usuario administrador, cuando crea una reunión con datos correctos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 01/05/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces se crea la reunión para la fecha especificada sobre *El nombre del viento*|Dado el usuario administrador, cuando crea una reunión con datos correctos (reunión del libro *Luces de Bohemia* que no está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 01/05/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que para hacer una reunión sobre un libro debe estar verificado|
 ||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 30/02/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida|
+||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 25/02/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida ya que debe haber como mínimo un plazo de 3 días para que se apunten usuarios|
 
 - **HU-09**: Inscribirse a reunión  
   

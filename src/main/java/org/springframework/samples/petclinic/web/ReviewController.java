@@ -31,14 +31,18 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ReviewController {
 
-	@Autowired
 	private ReviewService reviewService;
 
-	@Autowired
 	private BookService bookService;
 
-	@Autowired
 	private UserService userService;
+
+	@Autowired
+	public ReviewController(ReviewService reviewService, BookService bookService, UserService userService) {
+		this.reviewService = reviewService;
+		this.bookService = bookService;
+		this.userService = userService;
+	}
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -62,8 +66,6 @@ public class ReviewController {
 		if(!canWriteReview) {
 			return "redirect:/oups";
 		}
-
-
 		model.put("review", review);
 		return "reviews/reviewAddForm";
 	}
@@ -102,7 +104,7 @@ public class ReviewController {
 			review = reviews.get(0);
 			return "redirect:/reviews/" + review.getId();
 		} else {
-			// multiple books found
+			// multiple reviews found
 			model.put("reviews", reviews);
 			return "/reviews/reviewList";
 		}

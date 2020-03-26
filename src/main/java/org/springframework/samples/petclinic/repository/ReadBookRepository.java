@@ -13,7 +13,7 @@ public interface ReadBookRepository {
 	@Transactional(readOnly = true)
 	List<Integer> getBooksIdByUsername(String username);
 
-	void save(ReadBook readBook) throws DataAccessException;
+	ReadBook save(ReadBook readBook) throws DataAccessException;
 	
 	@Transactional
 	ReadBook getReadBookByBookIdAndUsername(int bookId, String username) throws DataAccessException;

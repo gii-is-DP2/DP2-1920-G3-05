@@ -18,14 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReviewService {
 
-	@Autowired
 	private ReviewRepository reviewRepo;
 
-	@Autowired
 	private ReadBookService readBookService;
 
-	@Autowired
 	private AuthoritiesService authoritiesService;
+	
+	@Autowired
+	public ReviewService(ReviewRepository reviewRepo, ReadBookService readBookService, AuthoritiesService authoritiesService){
+		this.reviewRepo = reviewRepo;
+		this.readBookService = readBookService;
+		this.authoritiesService = authoritiesService;
+	}
 
 	@Transactional
 	public List<Integer> getReviewsIdFromBook(int bookId) throws DataAccessException {

@@ -63,7 +63,24 @@
                     </div>
             </spring:bind>
 
-            <petclinic:inputField label="Capacity" name="capacity" />
+            <spring:bind path="capacity">
+                <c:set var="cssGroup" value="form-group ${status.error ? 'has-error' : '' }"/>
+                <c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
+                <div class="${cssGroup}">
+                    <label class="col-sm-2 control-label">Capacity</label>
+            
+                    <div class="col-sm-10">
+                        <form:input class="form-control" path="capacity" type="number"/>
+                        <c:if test="${valid}">
+                            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                        </c:if>
+                        <c:if test="${status.error}">
+                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <span class="help-inline">${status.errorMessage}</span>
+                        </c:if>
+                    </div>
+                </div>
+            </spring:bind>
         </div>
          <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">

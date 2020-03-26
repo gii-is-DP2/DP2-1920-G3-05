@@ -57,6 +57,29 @@
         </c:forEach>
         </tbody>
     </table>
-    
+        <table id="booksTable" style="width: 20%;" class="table table-striped">
+        <thead>
+        <tr>
+            <th style="width: 100%;">Recomendations</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var = "i" begin ="0" end="2">
+        <c:if test="${recomendations[i]!=null}">
+            <tr>
+                <td>
+                    <spring:url value="/books/{bookId}" var="bookUrl">
+                        <spring:param name="bookId" value="${recomendations[i].id}"/>
+                    </spring:url>
+                    <a href="${fn:escapeXml(bookUrl)}"><c:out value="${recomendations[i].title}"/></a>
+                </td>
+             
+                
+            </tr>
+            </c:if>
+        </c:forEach>
+        </tbody>
+    </table>
     
 </petclinic:layout>

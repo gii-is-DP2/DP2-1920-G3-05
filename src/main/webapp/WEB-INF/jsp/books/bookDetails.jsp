@@ -82,10 +82,15 @@
 			href='<spring:url value="/admin/books/delete/${book.id}" htmlEscape="true"/>'
 			onclick="return confirm('Are you sure you want to delete this book?');">Delete
 			Book</a>
-
+		<c:if test="${book.verified}">
 		<a class="btn btn-default"
 			href='<spring:url value="/admin/books/${book.id}/meetings/new" htmlEscape="true"/>'>
 			Create meeting</a>
+		</c:if>
+		<c:if test="${!book.verified}">
+			<a class="btn btn-default"
+			onclick="alert('In order to create a meeting the book must be verified')">Create meeting</a>
+		</c:if>
 	</sec:authorize>
 	
 	<c:if test="${noEsReadBook}">

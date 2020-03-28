@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.web;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -19,13 +20,13 @@ public class MeetingValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		Meeting meeting = (Meeting) target;
 		
-		if(meeting.getName().isEmpty()) {
+		if(Strings.isBlank(meeting.getName())) {
 			errors.rejectValue("name", "Must not be empty", "Must not be empty");
 		}else if(meeting.getName().length()<3) {
 			errors.rejectValue("name", "Must have at least 3 characters", "Must have at least 3 characters");
 		}
 
-		if(meeting.getPlace().isEmpty()) {
+		if(Strings.isBlank(meeting.getPlace())) {
 			errors.rejectValue("place", "Must not be empty", "Must not be empty");
 		}
 		

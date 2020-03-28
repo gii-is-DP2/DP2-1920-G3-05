@@ -29,4 +29,7 @@ public interface NewRepository {
 
 	New save(New neew) throws DataAccessException;
 
+	@Transactional
+	Collection<New> getNewsBookReview(String userId) throws DataAccessException;
+
 }

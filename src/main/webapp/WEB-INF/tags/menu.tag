@@ -92,9 +92,9 @@
 							<li> 
 								<div class="navbar-login navbar-login-session">
 									<div class="row">
-										<div class="col-lg-12">
-											<p>
-												<a href="<c:url value="/login" />">Login</a>
+										<div class="col-lg-8">
+											<p class="text-left">
+												<a href="<c:url value="/login" />" class="btn btn-primary btn-block btn-sm">Login</a>
 											</p>
 										</div>
 									</div>
@@ -104,9 +104,9 @@
 							<li> 
 								<div class="navbar-login navbar-login-session">
 									<div class="row">
-										<div class="col-lg-12">
-											<p>
-												<a href="<c:url value="/users/new" />">Register</a>
+										<div class="col-lg-8">
+											<p class="text-left">
+												<a href="<c:url value="/users/new" />" class="btn btn-primary btn-block btn-sm">Register</a>
 											</p>
 										</div>
 									</div>

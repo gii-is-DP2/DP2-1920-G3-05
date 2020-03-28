@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.samples.petclinic.model.Review;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -16,7 +17,7 @@ public class ReviewValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		Review review = (Review) target;
 		
-		if(review.getTitle().isEmpty()) {
+		if(Strings.isBlank(review.getTitle())) {
 			errors.rejectValue("title", "Must not be empty", "Must not be empty");
 		}
 		
@@ -26,7 +27,7 @@ public class ReviewValidator implements Validator{
 			errors.rejectValue("raiting", "Must be an integer from 0 to 5", "Must be an integer from 0 to 5");
 		}
 		
-		if(review.getOpinion().isEmpty()) {
+		if(Strings.isBlank(review.getOpinion())) {
 			errors.rejectValue("opinion", "Must not be empty", "Must not be empty");
 		}
 	}

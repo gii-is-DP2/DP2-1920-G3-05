@@ -3,14 +3,17 @@ package org.springframework.samples.petclinic.web;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.PublicationService;
 import org.springframework.samples.petclinic.service.ReadBookService;
@@ -45,6 +48,9 @@ public class PublicationController {
 	private ReadBookService		readBookService;
 	
 	@Autowired
+	private AuthoritiesService	authoritiesService;
+	
+	@Autowired
 	public PublicationController(final PublicationService publicationService, final UserService userService) {
 		this.publicationService = publicationService;
 		this.userService = userService;
@@ -57,13 +63,7 @@ public class PublicationController {
 	
 	@GetMapping(value = "/books/{bookId}/publications")
 	public String listadoDePublications(final ModelMap modelMap,@PathVariable("bookId") final int bookId) {
-		List<Publication> selections = new ArrayList<>();
-
-		List<Integer> ids = this.publicationService.getPublicationsFromBook(bookId);
-		for (Integer i : ids) {
-			selections.add(this.publicationService.findById(i));
-
-		}
+		Collection<Publication> selections = this.publicationService.findAllPublicationFromBook(bookId);
 		modelMap.put("selections", selections);
 
 		return "publications/publicationList";
@@ -71,13 +71,16 @@ public class PublicationController {
 	@GetMapping("/publications/{publicationId}")
 	public ModelAndView showPublication(@PathVariable("publicationId") final int publicationId) {
 			Boolean propiedad = false;
+			Boolean propiedad2 = false; 
 			Publication publication = this.publicationService.findById(publicationId);
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();	
 			propiedad = this.publicationService.publicationMioOAdmin(publicationId, userDetail.getUsername());
+			propiedad2 = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
 			ModelAndView mav = new ModelAndView("publications/publicationDetails");
 			mav.addObject(publication);
 			mav.addObject("propiedad", propiedad);
+			mav.addObject("propiedad2", propiedad2);
 			return mav;
 		}
 	
@@ -103,6 +106,10 @@ public class PublicationController {
 	public String savePublication(@Valid final Publication publication, final BindingResult result, final ModelMap modelMap,@PathVariable("bookId") final int bookId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Boolean esLibroLeido = this.readBookService.esReadBook(bookId, userDetail.getUsername());
+		if(!esLibroLeido) {
+			return "redirect:/oups";
+		}
 		User u = new User();
 		u = this.userService.findUserByUsername(userDetail.getUsername());
 		publication.setBook(this.bookService.findBookById(bookId));
@@ -125,21 +132,23 @@ public class PublicationController {
 	public String formEvento(final ModelMap modelMap, @PathVariable("publicationId") final int publicationId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		if (!this.publicationService.findById(publicationId).getUser().getUsername().equals(userDetail.getUsername())) {
+		Boolean esMio = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
+		if (!esMio) {
 			return "redirect:/oups";
 		}
-		modelMap.addAttribute("publication", this.publicationService.findById(publicationId));
+		Publication publication = this.publicationService.findById(publicationId);
+		modelMap.addAttribute("publication", publication);
 		return "publications/UpdatePublicationForm";
 	}
 
 	@PostMapping("/publications/update/{publicationId}")
 	public String updatePublication(@Valid final Publication updatedPublication, final BindingResult result, final ModelMap modelMap, @PathVariable("publicationId") final int publicationId) {
 		Publication publication = this.publicationService.findById(publicationId);
-		Integer bookId =publication.getBook().getId();
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		if (!publication.getUser().getUsername().equals(userDetail.getUsername())) {
+		Boolean esMio = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
+		if (!esMio) {
 			return "redirect:/oups";
 		}
 
@@ -156,13 +165,18 @@ public class PublicationController {
 		
 		modelMap.addAttribute("message", "Publication successfully updated!");
 
-		return "redirect:/books/" + bookId;
+		return "redirect:/publications/" + publicationId;
 	}
 	
 	@GetMapping("/books/{bookId}/delete/{publicationId}")
 	public String deleteBook(@PathVariable("publicationId") final int publicationId,@PathVariable("bookId") final int bookId ) {
-		
-		this.publicationService.deletePublication(publicationId);;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Boolean esMioOAdmin = this.publicationService.publicationMioOAdmin(publicationId, userDetail.getUsername()); ;
+		if (!esMioOAdmin) {
+			return "redirect:/oups";
+		}
+		this.publicationService.deletePublication(publicationId);
 		return "redirect:/books/" + bookId;
 	}
 

@@ -30,7 +30,24 @@
                     <petclinic:selectField name="genre" label="Genre "
 						names="${genres}" size="5" /> 
             </div>
-            <petclinic:inputField label="Pages" name="pages" />
+            <spring:bind path="pages">
+                <c:set var="cssGroup" value="form-group ${status.error ? 'has-error' : '' }"/>
+                <c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
+                <div class="${cssGroup}">
+                    <label class="col-sm-2 control-label">Pages</label>
+            
+                    <div class="col-sm-10">
+                        <form:input class="form-control" path="pages" type="number"/>
+                        <c:if test="${valid}">
+                            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                        </c:if>
+                        <c:if test="${status.error}">
+                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <span class="help-inline">${status.errorMessage}</span>
+                        </c:if>
+                    </div>
+                </div>
+            </spring:bind>
             <petclinic:inputField label="Synopsis" name="synopsis" />
             <petclinic:inputField label="ISBN" name="ISBN" />
             <petclinic:inputField label="Publication Date"

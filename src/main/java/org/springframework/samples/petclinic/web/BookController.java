@@ -222,19 +222,7 @@ public class BookController {
 		User u = new User();
 		u = this.userService.findUserByUsername(userDetail.getUsername());
 		book.setUser(u);
-		Boolean imAdmin = false;
-		for (GrantedAuthority ga : userDetail.getAuthorities()) {
-			if (ga.getAuthority().equals("admin")) {
-				imAdmin = true;
-			}
-		}
-
-		if (imAdmin) {
-			book.setVerified(true);
-		} else {
-			book.setVerified(false);
-		}
-
+		
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
 			return "books/bookAdd";

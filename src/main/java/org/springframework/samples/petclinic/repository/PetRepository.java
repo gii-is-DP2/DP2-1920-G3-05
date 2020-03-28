@@ -54,6 +54,6 @@ public interface PetRepository {
 	 * @param pet the <code>Pet</code> to save
 	 * @see BaseEntity#isNew
 	 */
-	void save(Pet pet) throws DataAccessException;
+	Pet save(Pet pet) throws DataAccessException;
 
 }

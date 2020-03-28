@@ -141,6 +141,22 @@ public class PublicationServiceTests {
 		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
 		Assertions.assertThat(isMine).isFalse();
 	}
+	
+	@Test
+	void publicationShouldBeMine2() {
+		String username = "owner1";
+		int publicationId = 2;
+		Boolean esMio = this.sut.publicationMio(publicationId, username);
+		Assertions.assertThat(esMio).isTrue();
+	}
+	
+	@Test
+	void publicationShouldNotBeMine2() {
+		String username = "vet1";
+		int publicationId = 2;
+		Boolean esMio = this.sut.publicationMio(publicationId, username);
+		Assertions.assertThat(esMio).isFalse();
+	}
 
 	
 	

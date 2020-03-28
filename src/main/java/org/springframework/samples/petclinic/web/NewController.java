@@ -27,9 +27,11 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.NewService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -37,12 +39,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
 public class NewController {
 
@@ -64,9 +60,9 @@ public class NewController {
 			return "redirect:/news";
 		} else {
 			//TODO newsRecommended
-			//			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			//			Collection<New> results = this.newService.getNewsRecommended(userDetail.getUsername());
-			Collection<New> results = this.newService.getAllNews();
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			Collection<New> results = this.newService.getNewsBookReview(userDetail.getUsername());
+			//Collection<New> results = this.newService.getAllNews();
 			if (results.isEmpty()) {
 				return "redirect:/news";
 			}
@@ -83,10 +79,23 @@ public class NewController {
 		String authorities = auth.getAuthorities().toString();
 		if (!authorities.contains("ROLE_ANONYMOUS")) {
 			model.put("NewsRec", true);
+
 		}
 		Collection<New> results = this.newService.getAllNews();
 		model.put("news", results);
 		return "news/newList";
+	}
+	
+	@GetMapping(value = "/news/newsbookreview")
+	public String newBookReview(final Map<String, Object> model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		Collection<New> results = this.newService.getNewsBookReview(userdetails.getUsername());
+		model.put("AllNews", true);
+		model.put("news", results);
+		return "news/newList";
+		
+		
 	}
 
 	@GetMapping("/admin/news/{newId}")

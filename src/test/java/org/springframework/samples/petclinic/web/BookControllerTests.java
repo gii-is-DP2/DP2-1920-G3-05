@@ -22,6 +22,7 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BookInNewService;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.MeetingAssistantService;
@@ -84,6 +85,9 @@ class BookControllerTests {
 	@MockBean
 	private ReadBookService			readBookService;
 
+    @MockBean
+	private AuthoritiesService	authoritiesService;
+
 	@MockBean
 	private WishedBookService		wishedBookService;
 	private Book					book;
@@ -100,7 +104,7 @@ class BookControllerTests {
 		this.user.setEnabled(true);
 		this.user.setUsername("Owner2");
 		this.user.setPassword("0wn3r");
-
+    	genre.setId(3);
 		this.genre.setName("Novela");
 		this.book.setId(BookControllerTests.TEST_BOOK_ID);
 		this.book.setAuthor("Patrick Rothfuss");
@@ -115,6 +119,8 @@ class BookControllerTests {
 		this.book.setTitle("The name of the Wind");
 		this.book.setUser(this.user);
 		this.book.setVerified(false);
+        when(this.bookService.findGenre()).thenReturn(Lists.newArrayList(genre));
+		BDDMockito.given(this.userservice.findUserByUsername(user.getUsername())).willReturn(this.user);
 		BDDMockito.given(this.bookService.findBookById(BookControllerTests.TEST_BOOK_ID)).willReturn(this.book);
 		BDDMockito.given(this.bookService.canEditBook(BookControllerTests.TEST_BOOK_ID, "spring")).willReturn(true);
 		Mockito.when(this.reviewService.getReviewsIdFromBook(BookControllerTests.TEST_BOOK_ID)).thenReturn(new ArrayList<Integer>());

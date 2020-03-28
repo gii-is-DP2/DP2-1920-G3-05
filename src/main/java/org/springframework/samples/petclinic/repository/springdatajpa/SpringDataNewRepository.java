@@ -27,5 +27,8 @@ public interface SpringDataNewRepository extends NewRepository, CrudRepository<N
 	@Override
 	@Query("SELECT n FROM New n ORDER BY n.fecha DESC")
 	Collection<New> getAllNews();
-
+	
+	@Override
+	@Query("SELECT DISTINCT n from New n WHERE n.id in (SELECT bookInNew.neew.id FROM BookInNew bookInNew WHERE bookInNew.book.id in (SELECT r.book.id FROM Review r where r.user.username = ?1))")
+	Collection<New> getNewsBookReview(String userId);
 }

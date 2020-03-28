@@ -13,7 +13,7 @@
     </h2>
     <form:form modelAttribute="publication" class="form-horizontal" action="/books/${publication.book.id}/publications/save"> 
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Tittle" name="title"/>
+            <petclinic:inputField label="Title" name="title"/>
             <petclinic:inputField label="Description" name="description"/>
             <petclinic:inputField label="Image" name="image"/>
             

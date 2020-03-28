@@ -29,7 +29,6 @@
                 <fmt:message var = "author" key="author"/>
                  <fmt:message var="book.genre.name" key="book.genre.name"/>
                 <fmt:message var="ISBN" key="ISBN"/>
-                <fmt:message var = "pages" key="pages"/>
                   <fmt:message var="synopsis" key="synopsis"/>
                 <fmt:message var="editorial" key="editorial"/>
                 <fmt:message var = "publicationDate" key="publicationDate"/>
@@ -43,8 +42,24 @@
                 <input type="hidden" name="id" id="id" value="${book.id}"/>
                 
                 <petclinic:inputField label="${ISBN}" name="ISBN"/>
-                 <petclinic:inputField label="${pages}" name="pages"/>
-                 <petclinic:inputField label="${synopsis}" name="synopsis"/>
+                <spring:bind path="pages">
+                    <c:set var="cssGroup" value="form-group ${status.error ? 'has-error' : '' }"/>
+                    <c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
+                    <div class="${cssGroup}">
+                        <label class="col-sm-2 control-label">Pages</label>
+                
+                        <div class="col-sm-10">
+                            <form:input class="form-control" path="pages" type="number"/>
+                            <c:if test="${valid}">
+                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                            </c:if>
+                            <c:if test="${status.error}">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                <span class="help-inline">${status.errorMessage}</span>
+                            </c:if>
+                        </div>
+                    </div>
+                </spring:bind>                 <petclinic:inputField label="${synopsis}" name="synopsis"/>
                 <petclinic:inputField label="${editorial}" name="editorial"/>
                  <petclinic:inputField label="${publicationDate}" name="publicationDate"/>
                 

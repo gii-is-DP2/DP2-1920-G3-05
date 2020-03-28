@@ -11,7 +11,7 @@ public interface WishedBookRepository {
 	@Transactional(readOnly = true)
 	List<Integer> getBooksIdByUsername(String username);
 
-	void save(WishedBook wishedBook) throws DataAccessException;
+	WishedBook save(WishedBook wishedBook) throws DataAccessException;
 	
 	void deleteByBookId(int id) throws DataAccessException;
 	

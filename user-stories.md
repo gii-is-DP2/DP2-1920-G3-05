@@ -144,6 +144,8 @@ Las entidades que se verán involucradas en la aplicación web son:
 |-|-|
 |Dado el usuario administrador, cuando crea una reunión con datos correctos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 01/05/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces se crea la reunión para la fecha especificada sobre *El nombre del viento*|Dado el usuario administrador, cuando crea una reunión con datos correctos (reunión del libro *Luces de Bohemia* que no está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 01/05/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que para hacer una reunión sobre un libro debe estar verificado|
 ||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 30/02/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida|
+||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 25/02/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida ya que debe haber como mínimo un plazo de 3 días para que se apunten usuarios|
+||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 25/02/2020 a las 19:00, duración de media horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida ya que debe durar como mínimo una hora|
 
 - **HU-09**: Inscribirse a reunión  
   
@@ -230,6 +232,7 @@ Dado el usuario estgantri y el libro *Las reliquias de la muerte* que no tiene m
 |Escenario positivo|Escenario negativo|
 |-|-|
 |Dado que el usuario javgarcer tiene en su colección de libros leídos como género más repetido fantasía, cuando pide que se le recomienden libros que no ha leído, entonces el sistema le recomienda libros de fantasía que no ha leído, como: *Elantris*, *El camino de los reyes*, etc. |Dado que el usuario juaferfer que no tiene ningún libro como leído en su perfil, cuando pide que se le recomienden libros, entonces el sistema le indica que para ello necesita tener algún libro como leído para ver sus gustos|
+||Dado que el usuario fraperbar que tiene como género más leído fantasía pero no hay ñibros de fantasía que no haya leído en el sistema, cuando pide que se le recomienden libros, entonces el sistema le indicará que no hay más libros de su género favorito|
 
 - **HU-17**: Top libros más leídos por los usuarios 
   

@@ -122,7 +122,7 @@ public class BookService {
 		}
 
 		// Vemos si hay reuniones asociadas que borrar previamente
-		List<Integer> meetingsId = this.meetingService.getMeetingsFromBook(id);
+		List<Integer> meetingsId = this.meetingService.getMeetingsIdFromBook(id);
 		if (meetingsId != null && !meetingsId.isEmpty()) {
 			for (Integer i : meetingsId) {
 				this.meetingService.deleteMeeting(i);

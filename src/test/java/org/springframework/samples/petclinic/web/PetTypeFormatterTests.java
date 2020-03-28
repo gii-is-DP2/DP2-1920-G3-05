@@ -35,7 +35,7 @@ class PetTypeFormatterTests {
 	@BeforeEach
 	void setup() {
 		petTypeFormatter = new PetTypeFormatter(clinicService);
-	}
+	}	
 
 	@Test
 	void testPrint() {

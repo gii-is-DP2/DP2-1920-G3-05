@@ -8,32 +8,28 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Review;
-import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.ReviewRepository;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteReviewException;
 import org.springframework.samples.petclinic.service.exceptions.CantEditReviewException;
 import org.springframework.samples.petclinic.service.exceptions.CantWriteReviewException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReviewService {
 
-	@Autowired
 	private ReviewRepository reviewRepo;
 
-	@Autowired
 	private ReadBookService readBookService;
 
-	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private AuthoritiesService authoritiesService;
+	
+	@Autowired
+	public ReviewService(ReviewRepository reviewRepo, ReadBookService readBookService, AuthoritiesService authoritiesService){
+		this.reviewRepo = reviewRepo;
+		this.readBookService = readBookService;
+		this.authoritiesService = authoritiesService;
+	}
 
 	@Transactional
 	public List<Integer> getReviewsIdFromBook(int bookId) throws DataAccessException {

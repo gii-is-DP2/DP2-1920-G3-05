@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.ReadBook;
@@ -64,19 +63,20 @@ public class BookController {
 	private final BookService	bookService;
 
 	private UserService			userService;
+
 	private ReadBookService		readBookService;
 	
-	@Autowired
 	private ReviewService		reviewService;
+
 	private WishedBookService		wishedBookService;
 
-
 	@Autowired
-	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService) {
+	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, ReviewService reviewService) {
 		this.bookService = bookService;
 		this.userService = userService;
 		this.readBookService = readBookService;
 		this.wishedBookService = wishedBookService;
+		this.reviewService = reviewService;
 
 	}
 

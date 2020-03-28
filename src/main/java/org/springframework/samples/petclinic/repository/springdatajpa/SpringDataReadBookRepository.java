@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.repository.ReadBookRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,4 +29,9 @@ public interface SpringDataReadBookRepository extends ReadBookRepository, CrudRe
 	@Modifying
 	@Query("DELETE FROM ReadBook WHERE book.id=?1")
 	void deleteByBookId(int bookId) throws DataAccessException;
+	
+	@Override
+	@Transactional
+	@Query(value="SELECT book_id,COUNT(book_id) FROM read_book GROUP BY book_id ORDER BY COUNT(book_id) DESC Limit 0,10", nativeQuery=true)
+	List<Integer> getTopReadBooks();
 }

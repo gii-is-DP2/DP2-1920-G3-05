@@ -254,4 +254,55 @@ class BookControllerTests {
 			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("ISBN", Matchers.is("9788497593793")))).andExpect(MockMvcResultMatchers.view().name("books/bookDetails"));
 	}
 
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessFindTopReadBooks() throws Exception {
+		mockMvc.perform(get("/books/topRead")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
+				.andExpect(view().name("books/booksList"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessListWishedBooks() throws Exception {
+		mockMvc.perform(get("/books/wishList")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
+				.andExpect(view().name("books/booksList"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessAddWishedBooks() throws Exception {
+		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
+				.with(csrf())).andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/books"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessNotAddWishedBook() throws Exception {
+		given(this.wishedBookService.esWishedBook(TEST_BOOK_ID)).willReturn(true);
+		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
+				.with(csrf())).andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/oups"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessNotAddReadBook() throws Exception {
+		given(this.readBookService.esReadBook(TEST_BOOK_ID, "spring")).willReturn(true);
+		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
+				.with(csrf())).andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/oups"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessFindEmptyTopReadBooks() throws Exception {
+		given(this.readBookService.topReadBooks()).willReturn(Lists.newArrayList());
+		mockMvc.perform(get("/books/topRead")).andExpect(status().isOk()).andExpect(model().attribute("selections", IsEmptyCollection.empty()))
+				.andExpect(view().name("books/booksList"));
+	}
+
+	@WithMockUser(value = "spring",authorities= {"admin"})
+	@Test
+	void testVerifyBookAdmin() throws Exception {
+		mockMvc.perform(get("/admin/books/{bookId}/verify",TEST_BOOK_ID)
+				)
+	.andExpect(status().is3xxRedirection())
+	.andExpect(view().name("redirect:/books/3"));
+	}
 }

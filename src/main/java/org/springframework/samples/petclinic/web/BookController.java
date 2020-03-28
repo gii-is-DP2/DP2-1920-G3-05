@@ -311,10 +311,11 @@ public class BookController {
 		return "redirect:/books";
 	}
 
-	@GetMapping("admin/books/{bookId}/verify")
+	@GetMapping("/admin/books/{bookId}/verify")
 	public String verifyBook(@PathVariable("bookId") final int bookId) {
-		this.bookService.verifyBook(bookId);
-		return "redirect:/books/" + bookId;
+	    	this.bookService.verifyBook(bookId);
+			return "redirect:/books/" + bookId;
+		
 	}
 
 	/*
@@ -387,4 +388,18 @@ public class BookController {
 		}
 		return genre;
 	}
+	
+	@GetMapping("/books/topRead")
+	public String topLibrosLeidos(final ModelMap modelMap) {
+		List<Book> selections = new ArrayList<>();
+		List<Integer> ids=this.readBookService.topReadBooks();
+		for (Integer i : ids) {
+			selections.add(this.bookService.findBookById(i));
+
+		}
+		modelMap.put("selections", selections);
+
+		return "books/booksList";
+	}
+	
 }

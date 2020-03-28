@@ -55,6 +55,10 @@
 			<th>Verified</th>
 			<td><c:if test="${book.verified}">
 					<c:out value="Yes" />
+					<sec:authorize access="hasAuthority('admin')">
+						<a class="btn btn-default"
+							onclick="alert('This book is already verified')">Verify book</a>
+					</sec:authorize>
 				</c:if> <c:if test="${!book.verified}">
 					<c:out value="No" />
 					<sec:authorize access="hasAuthority('admin')">
@@ -92,7 +96,7 @@
 			onclick="alert('In order to create a meeting the book must be verified')">Create meeting</a>
 		</c:if>
 	</sec:authorize>
-	
+
 	<c:if test="${noEsReadBook}">
 		<form:form modelAttribute="book" class="form-horizontal"
 			action="/books/readBooks/${book.id}">
@@ -105,39 +109,51 @@
 	<c:choose>
 		<c:when test="${canWriteReview}">
 			<a class="btn btn-default"
-			href='<spring:url value="/books/${book.id}/reviews/new" htmlEscape="true"/>'>Write
-			review</a>
+				href='<spring:url value="/books/${book.id}/reviews/new" htmlEscape="true"/>'>Write
+				review</a>
 		</c:when>
 		<c:otherwise>
 			<a class="btn btn-default"
-			onclick="alert('In order to wirte a review you must have read the book and you can only review the same book once')">Write
-			review</a>
+				onclick="alert('In order to write a review you must have read the book and you can only review the same book once')">Write
+				review</a>
 		</c:otherwise>
 	</c:choose>
-	
-		
+
+
 	<c:if test="${hasAnyReview}">
 		<a class="btn btn-default"
 			href='<spring:url value="/books/${book.id}/reviews" htmlEscape="true"/>'>Go
 			to the reviews</a>
 	</c:if>
-	
-	<c:if test="${noEsReadBook and notWishedBook}"> 
-	<form:form modelAttribute="book"
-               class="form-horizontal"
-               action="/books/wishList/${book.id}">
-               <button class="btn btn-default" type="submit"><fmt:message key="addWishedBook"/></button>
-	</form:form>
-	</c:if>
+
+	<c:choose>
+		<c:when test="${notWishedBook and notReadBook}">
+			<form:form modelAttribute="book" class="form-horizontal"
+				action="/books/wishList/${book.id}">
+				<button class="btn btn-default" type="submit">
+					<fmt:message key="addWishedBook" />
+				</button>
+			</form:form>
+		</c:when>
+		<c:otherwise>
+			<a class="btn btn-default"
+				onclick="alert('You have already read this book!')">Add to wish
+				list</a>
+		</c:otherwise>
+	</c:choose>
 	<br>
 	<h1>Fan Zone</h1>
-	<c:if test="${!noEsReadBook}"> 
-	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications/publicationAdd" htmlEscape="true"/>'>New Fan Publications</a>
+	<c:if test="${!noEsReadBook}">
+		<a class="btn btn-default"
+			href='<spring:url value="/books/${book.id}/publications/publicationAdd" htmlEscape="true"/>'>New
+			Fan Publications</a>
 	</c:if>
-	<a class="btn btn-default" href='<spring:url value="/books/${book.id}/publications" htmlEscape="true"/>'>Fans Publications</a>
-	
+	<a class="btn btn-default"
+		href='<spring:url value="/books/${book.id}/publications" htmlEscape="true"/>'>Fans
+		Publications</a>
 
-	
+
+
 
 
 

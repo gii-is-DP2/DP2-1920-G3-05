@@ -49,4 +49,51 @@ public class ReadBookServiceTests {
 		Assertions.assertThat(this.rbs.findBooksIdByUser("vet1")).contains(1);
 
 	}
+	
+	@Test
+	void shouldGetTopReadBooks() {
+		List<Integer> ids = new ArrayList<Integer>();
+		List<Integer> booksIds = this.rbs.topReadBooks();
+		ids.add(1);
+		ids.add(2);
+		ids.add(6);
+		Assertions.assertThat(booksIds).containsAll(ids);
+	}
+	
+	@Test
+	void shoulReadBook() {
+		int bookId = 1; 
+		String username = "owner1";
+		Boolean ownerReadBook = this.rbs.esReadBook(bookId, username);
+		Assertions.assertThat(ownerReadBook).isTrue();
+	}
+	
+	@Test
+	void shouldChangeTopReadBooks() {
+		List<Integer> booksIds = this.rbs.topReadBooks();
+		Book book = this.bs.findBookById(4);
+		User user = this.us.findUserByUsername("vet1");
+		ReadBook readBook = new ReadBook();
+		readBook.setBook(book);
+		readBook.setUser(user);
+		this.rbs.save(readBook);
+		Assertions.assertThat(booksIds).contains(4);
+	}
+	
+	@Test
+	void shoulNotReadBook() {
+		int bookId = 2; 
+		String username = "admin1";
+		Boolean adminReadBook = this.rbs.esReadBook(bookId, username);
+		Assertions.assertThat(adminReadBook).isFalse();
+	}
+	
+	@Test
+	void shouldDeleteReadBooksByBookId() {
+		int bookId = 1;
+		int readBookId = 4;
+		this.rbs.deleteReadBookByBookId(bookId);
+		Boolean exitsReadBook = this.rbs.existsReadBook(readBookId);
+		Assertions.assertThat(exitsReadBook).isFalse();
+	}
 }

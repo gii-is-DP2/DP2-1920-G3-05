@@ -50,6 +50,12 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Recomendations</span>
 				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'topReadBooks'}" url="/books/topRead"
+					title="Top read books">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Top read books</span>
+				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings"
 					title="Meetings">

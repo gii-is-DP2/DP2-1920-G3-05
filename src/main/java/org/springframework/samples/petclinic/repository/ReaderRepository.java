@@ -34,7 +34,7 @@ public interface ReaderRepository {
 
 	Reader findById(int id) throws DataAccessException;
 
-	void save(Reader reader) throws DataAccessException;
+	Reader save(Reader reader) throws DataAccessException;
 
 	Reader findReaderByUsername(String username) throws DataAccessException;
 

@@ -8,6 +8,10 @@ INSERT INTO authorities VALUES ('owner1','owner');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities VALUES ('vet1','veterinarian');
 
+INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023',TRUE, 'admin1');
+INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749',FALSE, 'owner1');
+INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763',TRUE, 'vet1');
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
@@ -139,7 +143,7 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(4,1, 'owner1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(5,1, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(6,4, 'owner1');
 
-INSERT INTO wished_book (book_id, user_username) VALUES(1, 'admin1');
+INSERT INTO wished_book (book_id, user_username) VALUES(3, 'admin1');
 INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
 
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');

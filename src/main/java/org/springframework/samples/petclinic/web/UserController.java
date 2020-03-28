@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
 
 import java.util.Map;
@@ -20,15 +21,18 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
-import org.springframework.samples.petclinic.service.OwnerService;
-import org.springframework.samples.petclinic.service.VetService;
-import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.model.Reader;
+import org.springframework.samples.petclinic.service.ReaderService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedUsernameException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * @author Juergen Hoeller
@@ -39,37 +43,90 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class UserController {
 
-	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+	private static final String	VIEWS_READER_CREATE_FORM	= "users/createReaderForm";
 
-	private final OwnerService ownerService;
+	private static final String	VIEWS_READER_UPDATE_FORM	= "users/updateReaderForm";
+
+	private final ReaderService	readerService;
+
 
 	@Autowired
-	public UserController(OwnerService clinicService) {
-		this.ownerService = clinicService;
+	public UserController(final ReaderService readerService) {
+		this.readerService = readerService;
 	}
 
 	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
 	@GetMapping(value = "/users/new")
-	public String initCreationForm(Map<String, Object> model) {
-		Owner owner = new Owner();
-		model.put("owner", owner);
-		return VIEWS_OWNER_CREATE_FORM;
+	public String initCreationForm(final Map<String, Object> model) {
+		Reader reader = new Reader();
+		model.put("reader", reader);
+		return UserController.VIEWS_READER_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
-		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_FORM;
+	public String processCreationForm(@Valid final Reader reader, final BindingResult result) {
+		boolean userEmpty = false;
+		if (reader.getUser().getUsername().isEmpty()) {
+			userEmpty = true;
+			result.rejectValue("user.username", "notEmpty", "Must not be empty");
 		}
-		else {
-			//creating owner, user, and authority
-			this.ownerService.saveOwner(owner);
+		if (reader.getUser().getPassword().isEmpty()) {
+			userEmpty = true;
+			result.rejectValue("user.password", "notEmpty", "Must not be empty");
+		}
+		if (result.hasErrors() || userEmpty) {
+			return UserController.VIEWS_READER_CREATE_FORM;
+		} else {
+			//creating reader, user, and authority
+			try {
+				this.readerService.saveReader(reader);
+			} catch (DuplicatedUsernameException e) {
+				result.rejectValue("user.username", "duplicate", "Already exists");
+				return UserController.VIEWS_READER_CREATE_FORM;
+			}
 			return "redirect:/";
 		}
 	}
 
+	@GetMapping(value = "/users/update")
+	public String initUpdateForm(final Map<String, Object> model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		Reader reader = this.readerService.findReaderByUsername(userdetails.getUsername());
+		model.put("reader", reader);
+		return UserController.VIEWS_READER_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/users/update")
+	public String processUpdateForm(@Valid final Reader reader, final BindingResult result) {
+		boolean userEmpty = false;
+		if (reader.getUser().getPassword().isEmpty()) {
+			userEmpty = true;
+			result.rejectValue("user.password", "notEmpty", "Must not be empty");
+		}
+		if (result.hasErrors() || userEmpty) {
+			return UserController.VIEWS_READER_UPDATE_FORM;
+		} else {
+			try {
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				UserDetails userdetails = (UserDetails) auth.getPrincipal();
+				Reader reader0 = this.readerService.findReaderByUsername(userdetails.getUsername());
+				reader0.setAddress(reader.getAddress());
+				reader0.setCity(reader.getCity());
+				reader0.setFirstName(reader.getFirstName());
+				reader0.setLastName(reader.getLastName());
+				reader0.setTelephone(reader.getTelephone());
+				reader0.getUser().setPassword(reader.getUser().getPassword());
+				this.readerService.saveReader(reader0);
+			} catch (DuplicatedUsernameException e) {
+				result.rejectValue("user.username", "duplicate", "Already exists");
+				return UserController.VIEWS_READER_UPDATE_FORM;
+			}
+			return "redirect:/";
+		}
+	}
 }

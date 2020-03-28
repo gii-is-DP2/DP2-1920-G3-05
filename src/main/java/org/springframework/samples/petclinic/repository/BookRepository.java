@@ -16,7 +16,7 @@ public interface BookRepository {
 
 	List<Genre> findGenre() throws DataAccessException;
 
-	void save(Book book) throws DataAccessException;
+	Book save(Book book) throws DataAccessException;
 
 	Book findByISBN(String ISBN) throws DataAccessException;
 

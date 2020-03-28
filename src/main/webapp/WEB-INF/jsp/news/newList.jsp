@@ -14,7 +14,7 @@
     </h2>
     <div align="right">
     <c:if test="${AllNews}"><a class="btn btn-default" href='<spring:url value="/news" htmlEscape="true"/>'>All news</a></c:if>
-     <c:if test="${NewsRec}"><a class="btn btn-default" href='<spring:url value="/" htmlEscape="true"/>'>Recommended news</a></c:if>
+     <c:if test="${NewsRec}"><a class="btn btn-default" href='<spring:url value="/news/newsbookreview" htmlEscape="true"/>'>Recommended news</a></c:if>
 <sec:authorize access="hasAuthority('admin')">
      <a class="btn btn-default" style="margin: 10px" href='<spring:url value="/admin/news/create" htmlEscape="true"/>'>Add New</a>
      <br><br>

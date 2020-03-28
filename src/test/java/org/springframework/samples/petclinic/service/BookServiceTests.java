@@ -84,7 +84,7 @@ class BookServiceTests {
 
 	@Test
 	@Transactional
-	public void shouldInsertBookIntoDatabaseAndGenerateId() throws DataAccessException, DuplicatedISBNException {
+	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin() throws DataAccessException, DuplicatedISBNException {
 		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		User user = this.userService.findUserByUsername("admin1");
 		int count = list.size();
@@ -99,12 +99,41 @@ class BookServiceTests {
 		Collection<Genre> genres = this.sut.findGenre();
 		book.setGenre(EntityUtils.getById(genres, Genre.class, 3));
 		book.setSynopsis("Esto es una prueba");
-		book.setVerified(true);
 		book.setUser(user);
 
 		this.sut.save(book);
+		
 
 		Assertions.assertThat(book.getId()).isNotNull();
+		Assertions.assertThat(book.getVerified()).isTrue();
+		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
+		Assertions.assertThat(list.size()).isEqualTo(count + 1);
+
+	}
+	@Test
+	@Transactional
+	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin() throws DataAccessException, DuplicatedISBNException {
+		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
+		User user = this.userService.findUserByUsername("owner1");
+		int count = list.size();
+
+		Book book = new Book();
+		book.setTitle("prueba");
+		book.setAuthor("antonio");
+		book.setEditorial("SM");
+		book.setISBN("9788425223280");
+		book.setPages(574);
+		book.setPublicationDate(LocalDate.now());
+		Collection<Genre> genres = this.sut.findGenre();
+		book.setGenre(EntityUtils.getById(genres, Genre.class, 3));
+		book.setSynopsis("Esto es una prueba");
+		book.setUser(user);
+
+		this.sut.save(book);
+		
+
+		Assertions.assertThat(book.getId()).isNotNull();
+		Assertions.assertThat(book.getVerified()).isFalse();
 		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 

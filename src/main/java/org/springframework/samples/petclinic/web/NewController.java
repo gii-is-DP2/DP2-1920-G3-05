@@ -25,11 +25,14 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.NewService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -48,12 +51,14 @@ public class NewController {
 
 	private final NewService	newService;
 	private final BookService	bookService;
+	private final UserService	userService;
 
 
 	@Autowired
-	public NewController(final NewService newService, final BookService bookService) {
+	public NewController(final NewService newService, final BookService bookService, final UserService userService) {
 		this.newService = newService;
 		this.bookService = bookService;
+		this.userService = userService;
 	}
 
 	@GetMapping(value = "/")
@@ -64,9 +69,9 @@ public class NewController {
 			return "redirect:/news";
 		} else {
 			//TODO newsRecommended
-			//			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			//			Collection<New> results = this.newService.getNewsRecommended(userDetail.getUsername());
-			Collection<New> results = this.newService.getAllNews();
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			Collection<New> results = this.newService.getNewsBookReview(userDetail.getUsername());
+			//Collection<New> results = this.newService.getAllNews();
 			if (results.isEmpty()) {
 				return "redirect:/news";
 			}
@@ -83,10 +88,23 @@ public class NewController {
 		String authorities = auth.getAuthorities().toString();
 		if (!authorities.contains("ROLE_ANONYMOUS")) {
 			model.put("NewsRec", true);
+
 		}
 		Collection<New> results = this.newService.getAllNews();
 		model.put("news", results);
 		return "news/newList";
+	}
+	
+	@GetMapping(value = "/news/newsbookreview")
+	public String newBookReview(final Map<String, Object> model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		Collection<New> results = this.newService.getNewsBookReview(userdetails.getUsername());
+		model.put("AllNews", true);
+		model.put("news", results);
+		return "news/newList";
+		
+		
 	}
 
 	@GetMapping("/admin/news/{newId}")

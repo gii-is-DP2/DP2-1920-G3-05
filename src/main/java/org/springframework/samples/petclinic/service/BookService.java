@@ -30,6 +30,7 @@ import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteReviewException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.samples.petclinic.repository.ReviewRepository;
@@ -91,6 +92,19 @@ public class BookService {
 
 	@Transactional(rollbackFor = DuplicatedISBNException.class)
 	public void save(final Book book) throws DataAccessException, DuplicatedISBNException {
+		Boolean imAdmin = false;
+		for (Authorities ga : this.authoritiesService.getAuthoritiesByUsername(book.getUser().getUsername())) {
+			if (ga.getAuthority().equals("admin")) {
+				imAdmin = true;
+			}
+		}
+
+		if (imAdmin) {
+			book.setVerified(true);
+		} else {
+			book.setVerified(false);
+		}
+
 		Book bookWithSameIsbn = this.bookRepository.findByISBN(book.getISBN());
 		boolean isDuplicated = bookWithSameIsbn != null && bookWithSameIsbn.getId()!=book.getId(); //Que exista y no sea el de mi libro que lo estoy editando
 		if (isDuplicated) {

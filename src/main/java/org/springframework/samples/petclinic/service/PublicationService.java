@@ -82,4 +82,16 @@ public class PublicationService {
 
 		return mine||imAdmin;
 	}
+	
+	public Boolean publicationMio(int publicationId, String username) {
+		Boolean mine = false;
+		Publication publication = this.findById(publicationId);
+
+		if (username.equals(publication.getUser().getUsername())) {
+			mine = true;
+		}
+
+		return mine;
+	}
+	
 }

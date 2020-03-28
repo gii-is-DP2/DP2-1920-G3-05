@@ -38,7 +38,7 @@
          
      
     </table>
-     <c:if test="${propiedad}"> 
+     <c:if test="${propiedad2}"> 
     <a class="btn btn-default" href='<spring:url value="/publications/${publication.id}/updateForm" htmlEscape="true"/>'>Edit Publication</a>
 	</c:if>
  	<c:if test="${propiedad}">

@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.net.URL;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -18,18 +19,17 @@ public class PublicationValidator implements Validator{
 	@Override
 	public void validate(Object target, Errors errors) {
 		Publication publication = (Publication) target;
-		if (publication.getTitle().isEmpty()) {
+		if (Strings.isBlank(publication.getTitle())) {
 			errors.rejectValue("title", "Must not be empty", "Must not be empty");
 		}
 
-		if (publication.getDescription().isEmpty()) {
+		if (Strings.isBlank(publication.getDescription())) {
 			errors.rejectValue("description", "Must not be empty", "Must not be empty");
 		}
-		if (publication.getImage().isEmpty()) {
+		if (Strings.isBlank(publication.getImage())) {
 			errors.rejectValue("image", "Must not be empty", "Must not be empty");
 
-		}
-		if (!this.isValid(publication.getImage())) {
+		}else if (this.isValid(publication.getImage()) == false) {
 			errors.rejectValue("image", "Enter a valid URL", "Enter a valid URL");
 		}
 		

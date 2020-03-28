@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class NewServiceTest {
 
 	@Autowired
 	private BookInNewService	bookInNewService;
+	
+	@Autowired
+	private UserService 		userService;
 
 
 	@Test
@@ -71,6 +75,19 @@ public class NewServiceTest {
 		Assertions.assertThat(news.get(0).getId() == 5);
 	}
 
+	@Test
+	void shouldGetNewBookReview() {
+		User user = this.userService.findUserByUsername("admin1");
+		User user2 = this.userService.findUserByUsername("owner1");
+		
+		List<New> news = (List<New>) this.sut.getAllNews();
+		List<New> newsAdmin = (List<New>) this.sut.getNewsBookReview(user.getUsername());
+		List<New> newsOwner = (List<New>) this.sut.getNewsBookReview(user2.getUsername());
+		
+		Assertions.assertThat(news.size()>newsAdmin.size());
+		Assertions.assertThat(news.size()>newsOwner.size());
+	}
+	
 	@Test
 	void shouldGetBooksFromNewsId() {
 		List<Book> books = (List<Book>) this.sut.getBooksFromNews(1);

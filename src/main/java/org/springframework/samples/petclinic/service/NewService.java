@@ -61,6 +61,11 @@ public class NewService {
 	public Collection<New> getAllNews() throws DataAccessException {
 		return this.newRepo.getAllNews();
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<New> getNewsBookReview(final String userId) throws DataAccessException {
+		return this.newRepo.getNewsBookReview(userId);
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Book> getBooksFromNews(final int newId) {

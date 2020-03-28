@@ -8,5 +8,5 @@ public interface UserRepository {
 
 	User findByUsername(String username) throws DataAccessException;
 
-	void save(User user);
+	User save(User user);
 }

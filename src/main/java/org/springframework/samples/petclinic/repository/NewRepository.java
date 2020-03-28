@@ -27,6 +27,9 @@ public interface NewRepository {
 	@Transactional
 	New findById(int newId) throws DataAccessException;
 
-	void save(New neew) throws DataAccessException;
+	New save(New neew) throws DataAccessException;
+
+	@Transactional
+	Collection<New> getNewsBookReview(String userId) throws DataAccessException;
 
 }

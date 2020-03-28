@@ -30,7 +30,7 @@
                     <petclinic:selectField name="genre" label="Genre "
 						names="${genres}" size="5" /> 
             </div>
-            <petclinic:inputField label="Pages" name="pages" />
+            <petclinic:inputField label="Pages" name="pages"/>
             <petclinic:inputField label="Synopsis" name="synopsis" />
             <petclinic:inputField label="ISBN" name="ISBN" />
             <petclinic:inputField label="Publication Date"

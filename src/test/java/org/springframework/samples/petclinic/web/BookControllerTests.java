@@ -18,6 +18,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookInNewService;
 import org.springframework.samples.petclinic.service.BookService;
@@ -40,6 +41,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class BookControllerTests {
 
 	private static final int		TEST_BOOK_ID	= 1;
+
+	private static final int		TEST_BOOK_ID_2	= 2;
 
 	@MockBean
 	private UserService				userservice;
@@ -130,7 +133,7 @@ class BookControllerTests {
 		book1.setISBN("9788497593793");
 		booksNews2.add(book1);
 
-		Mockito.when(this.bookService.findBookById(BookControllerTests.TEST_BOOK_ID)).thenReturn(book1);
+		Mockito.when(this.bookService.findBookById(BookControllerTests.TEST_BOOK_ID_2)).thenReturn(book1);
 		Mockito.when(this.bookService.findBookByTitleAuthorGenreISBN("")).thenReturn(booksNews1);
 		Mockito.when(this.bookService.findBookByTitleAuthorGenreISBN("9788497593793")).thenReturn(booksNews2);
 
@@ -246,7 +249,7 @@ class BookControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowBook() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}", BookControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}", BookControllerTests.TEST_BOOK_ID_2)).andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("title", Matchers.is("Title test")))).andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("author", Matchers.is("Author test"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("ISBN", Matchers.is("9788497593793")))).andExpect(MockMvcResultMatchers.view().name("books/bookDetails"));
 	}

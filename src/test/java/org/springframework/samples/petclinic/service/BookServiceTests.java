@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,10 +183,10 @@ class BookServiceTests {
 
 		} catch (DuplicatedISBNException e) {
 			// TODO Auto-generated catch block
-			Assertions.assertThat(e.getCause());
-			//		Assertions.assertThrows(DuplicatedISBNException.class, () -> {
-			//			this.bookService.save(bookSameISBN);
-			//		});
+			//Assertions.assertThat(e.getCause());
+					assertThrows(DuplicatedISBNException.class, () -> {
+						this.sut.save(bookSameISBN);
+					});
 		}
 	}
 

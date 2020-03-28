@@ -107,7 +107,7 @@ public class ReviewServiceTest {
 	
 	@Test 
 	void cantWriteReviewBecauseBookIsNotRead() {
-		int bookId = 7;
+		int bookId = 2;
 		//El user admin1 no se ha leido el libro con id 7
 		String username = "admin1";
 		Boolean canWriteReview = this.sut.canWriteReview(bookId, username);

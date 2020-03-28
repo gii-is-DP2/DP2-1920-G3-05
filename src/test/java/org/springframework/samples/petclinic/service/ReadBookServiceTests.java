@@ -77,7 +77,7 @@ public class ReadBookServiceTests {
 		readBook.setBook(book);
 		readBook.setUser(user);
 		this.rbs.save(readBook);
-		Assertions.assertThat(booksIds).contains(4);
+		Assertions.assertThat(booksIds).contains(10);
 	}
 	
 	@Test

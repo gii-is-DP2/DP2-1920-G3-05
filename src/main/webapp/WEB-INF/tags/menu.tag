@@ -24,14 +24,14 @@
 			
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
-					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-home navbar-left" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'books'}" url="/books/find"
 					title="find books">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find books</span>
+					<span>Search</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'readBooks'}" url="/books/readBooks"
@@ -72,14 +72,53 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
+						<span class="glyphicon glyphicon-chevron-down"></span></a>
+						<ul class="dropdown-menu" >
+						<li>
+								<div class="navbar-login">
+									<div class="row">
+										<div class="col-lg-8">
+											<p class="text-left">
+												<strong>Options</strong>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+ 							
+							<li> 
+								<div class="navbar-login navbar-login-session">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="<c:url value="/login" />">Login</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li> 
+								<div class="navbar-login navbar-login-session">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="<c:url value="/users/new" />">Register</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+					</ul>
+					</li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
-							<strong><sec:authentication property="name" /></strong> <span
-							class="glyphicon glyphicon-chevron-down"></span>
+							 <span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 						<ul class="dropdown-menu">
 							<li>

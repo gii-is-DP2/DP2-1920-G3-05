@@ -117,7 +117,7 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(13,9, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(14,10, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(15,11, 'admin1');
 
-INSERT INTO wished_book (book_id, user_username) VALUES(2, 'admin1');
+INSERT INTO wished_book (book_id, user_username) VALUES(3, 'admin1');
 INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
 
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);

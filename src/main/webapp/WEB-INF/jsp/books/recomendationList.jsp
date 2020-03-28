@@ -5,8 +5,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="books">
-    <h2>Books</h2>
+<petclinic:layout pageName="recomendationss">
+    <c:if test="${emptyy}"> <h2>You need to have at least 1 book marked as read</h2></c:if>
+    <c:if test="${notEmpty}">
+    <h2>Recomendations</h2>
 
     <table id="booksTable" class="table table-striped">
         <thead>
@@ -58,5 +60,5 @@
         </tbody>
     </table>
        
-    
+    </c:if>
 </petclinic:layout>

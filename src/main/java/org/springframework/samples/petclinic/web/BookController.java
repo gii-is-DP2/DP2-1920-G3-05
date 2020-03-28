@@ -30,8 +30,8 @@ import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
 import org.springframework.samples.petclinic.service.BookService;
-import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.ReadBookService;
+import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.WishedBookService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
@@ -65,13 +65,14 @@ public class BookController {
 	private UserService			userService;
 
 	private ReadBookService		readBookService;
-	
+
 	private ReviewService		reviewService;
 
-	private WishedBookService		wishedBookService;
+	private WishedBookService	wishedBookService;
+
 
 	@Autowired
-	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, ReviewService reviewService) {
+	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService) {
 		this.bookService = bookService;
 		this.userService = userService;
 		this.readBookService = readBookService;
@@ -95,10 +96,32 @@ public class BookController {
 		model.put("book", new Book());
 		return "books/findBooks";
 	}
-	
-	@ModelAttribute("genres")
-	public Collection<Genre> populatePetTypes() {
-		return this.bookService.findGenre();
+
+	@GetMapping("/books/recomendations")
+	public String listadoDeRecomendaciones(final ModelMap modelMap) {
+		List<Book> selections = new ArrayList<>();
+		List<String> genres = new ArrayList<>();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		List<Integer> ids = this.readBookService.findBooksIdByUser(userdetails.getUsername());
+
+		if (ids.isEmpty()) {
+			modelMap.put("emptyy", true);
+			return "books/recomendationList";
+		}
+		modelMap.put("notEmpty", true);
+		for (Integer i : ids) {
+			Book book = this.bookService.findBookById(i);
+			selections.add(book);
+			genres.add(book.getGenre().getName());
+		}
+
+		String genreName = BookController.maxGenre(genres);
+		List<Book> recomendations = (List<Book>) this.bookService.findBookByTitleAuthorGenreISBN(genreName);
+		recomendations.removeAll(selections);
+		modelMap.put("selections", recomendations);
+
+		return "books/recomendationList";
 	}
 
 	@GetMapping(value = "/books")
@@ -141,7 +164,7 @@ public class BookController {
 		return "books/booksList";
 	}
 	@PostMapping("/books/readBooks/{bookId}")
-	public String anadirLiborlistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
+	public String anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 
 		Book book = this.bookService.findBookById(bookId);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -162,11 +185,11 @@ public class BookController {
 		Boolean notWishedBook = false;
 		Boolean hasAnyReview = false;
 		Boolean canWriteReview;
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
-		
-		if(!this.reviewService.getReviewsFromBook(bookId).isEmpty()) {
+
+		if (!this.reviewService.getReviewsFromBook(bookId).isEmpty()) {
 			hasAnyReview = true;
 		}
 		Book book = this.bookService.findBookById(bookId);
@@ -174,8 +197,7 @@ public class BookController {
 		notWishedBook = !this.wishedBookService.esWishedBook(bookId);
 		canWriteReview = this.reviewService.canWriteReview(bookId, userDetails.getUsername());
 		propiedad = this.bookService.canEditBook(bookId, userDetails.getUsername());
-		
-		
+
 		ModelAndView mav = new ModelAndView("books/bookDetails");
 		mav.addObject(book);
 		mav.addObject("propiedad", propiedad);
@@ -230,7 +252,7 @@ public class BookController {
 	}
 
 	@GetMapping(path = "/books/{bookId}/updateForm")
-	public String formEvento(final ModelMap modelMap, @PathVariable("bookId") final int bookId) {
+	public String formUpdateBooks(final ModelMap modelMap, @PathVariable("bookId") final int bookId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
 		if (!this.bookService.canEditBook(bookId, userdetails.getUsername())) {
@@ -240,8 +262,8 @@ public class BookController {
 		return "books/UpdateBookForm";
 	}
 
-	@PostMapping("/books/update/{book.id}")
-	public String updateBooks(@Valid final Book updatedBook, final BindingResult result, final ModelMap modelMap, @PathVariable("book.id") final int bookId) {
+	@PostMapping("/books/update/{bookId}")
+	public String updateBooks(@Valid final Book updatedBook, final BindingResult result, final ModelMap modelMap, @PathVariable("bookId") final int bookId) {
 
 		Book book = this.bookService.findBookById(bookId);
 
@@ -278,7 +300,7 @@ public class BookController {
 
 		modelMap.addAttribute("message", "Book successfully updated!");
 
-		return "redirect:/books/" + bookId;
+		return "redirect:/books/{bookId}";
 	}
 
 	@GetMapping("/admin/books/delete/{bookId}")
@@ -294,20 +316,22 @@ public class BookController {
 		this.bookService.verifyBook(bookId);
 		return "redirect:/books/" + bookId;
 	}
-	
-	/*private Boolean esReadBook(final Integer id) {
-		Boolean res = false;
-		Book book = this.bookService.findBookById(id);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		List<Integer> ids = this.readBookService.findBooksIdByUser(userdetails.getUsername());
-		for (Integer i : ids) {
-			if (this.bookService.findBookById(i).getId().equals(book.getId())) {
-				res = true;
-			}
-		}
-		return res;
-	}*/
+
+	/*
+	 * private Boolean esReadBook(final Integer id) {
+	 * Boolean res = false;
+	 * Book book = this.bookService.findBookById(id);
+	 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	 * UserDetails userdetails = (UserDetails) auth.getPrincipal();
+	 * List<Integer> ids = this.readBookService.findBooksIdByUser(userdetails.getUsername());
+	 * for (Integer i : ids) {
+	 * if (this.bookService.findBookById(i).getId().equals(book.getId())) {
+	 * res = true;
+	 * }
+	 * }
+	 * return res;
+	 * }
+	 */
 
 	@GetMapping("/books/wishList")
 	public String listadoDeLibrosDeseados(final ModelMap modelMap) {
@@ -332,18 +356,35 @@ public class BookController {
 			return "redirect:/oups";
 		}
 		Book book = this.bookService.findBookById(bookId);
-	
+
 		User user = this.userService.findUserByUsername(userdetails.getUsername());
 		WishedBook wishedBook = new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
 		try {
 			this.wishedBookService.save(wishedBook);
-		}catch (ReadOrWishedBookException e) {
+		} catch (ReadOrWishedBookException e) {
 			return "redirect:/oups";
 		}
 
 		return "redirect:/books";
 	}
-	
+	public static String maxGenre(final List<String> genres) {
+		String genre = genres.get(0);
+		Integer max = 0;
+
+		for (String g : genres) {
+			Integer count = 0;
+			for (int i = 0; i < genres.size(); i++) {
+				if (g.equals(genres.get(i))) {
+					count++;
+				}
+			}
+			if (count > max) {
+				max = count;
+				genre = g;
+			}
+		}
+		return genre;
+	}
 }

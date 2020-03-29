@@ -23,7 +23,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.core.style.ToStringCreator;
@@ -44,15 +44,15 @@ import lombok.Data;
 public class Reader extends Person {
 
 	@Column(name = "address")
-	@NotEmpty(message = "Must not be empty")
+	@NotBlank(message = "Must not be empty")
 	private String	address;
 
 	@Column(name = "city")
-	@NotEmpty(message = "Must not be empty")
+	@NotBlank(message = "Must not be empty")
 	private String	city;
 
 	@Column(name = "telephone")
-	@NotEmpty(message = "Must not be empty")
+	@NotBlank(message = "Must not be empty")
 	@Digits(fraction = 0, integer = 10, message = "Must be an integer from 1 to 10")
 	private String	telephone;
 

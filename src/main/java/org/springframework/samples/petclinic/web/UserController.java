@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Reader;
 import org.springframework.samples.petclinic.service.ReaderService;
@@ -70,11 +71,11 @@ public class UserController {
 	@PostMapping(value = "/users/new")
 	public String processCreationForm(@Valid final Reader reader, final BindingResult result) {
 		boolean userEmpty = false;
-		if (reader.getUser().getUsername().isEmpty()) {
+		if (Strings.isBlank(reader.getUser().getUsername())) {
 			userEmpty = true;
 			result.rejectValue("user.username", "notEmpty", "Must not be empty");
 		}
-		if (reader.getUser().getPassword().isEmpty()) {
+		if (Strings.isBlank(reader.getUser().getPassword())) {
 			userEmpty = true;
 			result.rejectValue("user.password", "notEmpty", "Must not be empty");
 		}
@@ -102,31 +103,27 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/users/update")
-	public String processUpdateForm(@Valid final Reader reader, final BindingResult result) {
+	public String processUpdateForm(@Valid final Reader reader, final BindingResult result) throws DuplicatedUsernameException {
 		boolean userEmpty = false;
-		if (reader.getUser().getPassword().isEmpty()) {
+		if (Strings.isBlank(reader.getUser().getPassword())) {
 			userEmpty = true;
 			result.rejectValue("user.password", "notEmpty", "Must not be empty");
 		}
 		if (result.hasErrors() || userEmpty) {
 			return UserController.VIEWS_READER_UPDATE_FORM;
 		} else {
-			try {
-				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-				UserDetails userdetails = (UserDetails) auth.getPrincipal();
-				Reader reader0 = this.readerService.findReaderByUsername(userdetails.getUsername());
-				reader0.setAddress(reader.getAddress());
-				reader0.setCity(reader.getCity());
-				reader0.setFirstName(reader.getFirstName());
-				reader0.setLastName(reader.getLastName());
-				reader0.setTelephone(reader.getTelephone());
-				reader0.getUser().setPassword(reader.getUser().getPassword());
-				this.readerService.saveReader(reader0);
-			} catch (DuplicatedUsernameException e) {
-				result.rejectValue("user.username", "duplicate", "Already exists");
-				return UserController.VIEWS_READER_UPDATE_FORM;
-			}
-			return "redirect:/";
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			UserDetails userdetails = (UserDetails) auth.getPrincipal();
+			Reader reader0 = this.readerService.findReaderByUsername(userdetails.getUsername());
+			reader0.setAddress(reader.getAddress());
+			reader0.setCity(reader.getCity());
+			reader0.setFirstName(reader.getFirstName());
+			reader0.setLastName(reader.getLastName());
+			reader0.setTelephone(reader.getTelephone());
+			reader0.getUser().setPassword(reader.getUser().getPassword());
+			this.readerService.saveReader(reader0);
 		}
+		return "redirect:/";
 	}
+
 }

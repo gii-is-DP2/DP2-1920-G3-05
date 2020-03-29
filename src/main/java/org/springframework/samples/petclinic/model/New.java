@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
@@ -18,17 +18,17 @@ import lombok.Data;
 @Table(name = "news")
 public class New extends NamedEntity {
 
-	@NotEmpty(message = "Must not be empty")
+	@NotBlank(message = "Must not be empty")
 	private String		head;
 
 	@NotNull(message = "Must not be empty")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate	fecha;
 
-	@NotEmpty(message = "Must not be empty")
+	@NotBlank(message = "Must not be empty")
 	private String		body;
 
-	@NotEmpty(message = "Must not be empty")
+	@NotBlank(message = "Must not be empty")
 	private String		redactor;
 
 	private String		tags;

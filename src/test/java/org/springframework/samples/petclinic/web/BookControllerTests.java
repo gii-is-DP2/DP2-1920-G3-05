@@ -22,6 +22,8 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.model.WishedBook;
+import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BookInNewService;
 import org.springframework.samples.petclinic.service.BookService;
@@ -33,6 +35,8 @@ import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.WishedBookService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
+import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -43,6 +47,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doThrow;
 
 
 @WebMvcTest(controllers = BookController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
@@ -54,9 +62,6 @@ class BookControllerTests {
 
 	@MockBean
 	private UserService				userservice;
-
-	@Autowired
-	private BookController			bookController;
 
 	@Autowired
 	private MockMvc					mockMvc;
@@ -87,6 +92,9 @@ class BookControllerTests {
 
     @MockBean
 	private AuthoritiesService	authoritiesService;
+
+	@MockBean
+	private BookRepository	bookRepo;
 
 	@MockBean
 	private WishedBookService		wishedBookService;
@@ -174,6 +182,8 @@ class BookControllerTests {
 			.andExpect(model().attributeExists("genres")).andExpect(view().name("books/UpdateBookForm"));
 
 	}
+
+	
 	@WithMockUser(value = "spring2")
 	@Test
 	void testInitUpdateBookFormWithOtherUser() throws Exception {
@@ -181,6 +191,7 @@ class BookControllerTests {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}/updateForm", BookControllerTests.TEST_BOOK_ID)).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/oups"));
 
 	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateBookFormSuccess() throws Exception {
@@ -189,6 +200,17 @@ class BookControllerTests {
 				.param("genre.name", "fiction").param("ISBN", "9780345805362").param("pages", "12").param("synopsis", "nuevaSinopsis").param("image", "https://www.nombrevasiento.com/").param("publicationDate", "2018/11/11"))
 			.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/books/" + BookControllerTests.TEST_BOOK_ID));
 	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessUpdateBookFormWithDuplicatedISBN() throws Exception {
+		doThrow(DuplicatedISBNException.class).when(bookService).save(any(Book.class));
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/books/update/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Change").param("author", "NewAuthor").param("editorial", "NewEdit")
+				.param("genre.name", "fiction").param("ISBN", "9780345805362").param("pages", "12").param("synopsis", "nuevaSinopsis").param("image", "https://www.nombrevasiento.com/").param("publicationDate", "2018/11/11"))
+			.andExpect(status().isOk()).andExpect(view().name("books/UpdateBookForm"));
+	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateBookFormWithErrors() throws Exception {
@@ -286,22 +308,18 @@ class BookControllerTests {
 				.with(csrf())).andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/books"));
 	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessNotAddWishedBook() throws Exception {
+		doThrow(ReadOrWishedBookException.class).when(wishedBookService).save(any(WishedBook.class));
+
 		when(this.wishedBookService.esWishedBook(TEST_BOOK_ID)).thenReturn(true);
 		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
 				.with(csrf())).andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/oups"));
 	}
-	@WithMockUser(value = "spring")
-	@Test
-	void testProcessNotAddReadBook() throws Exception {
-		when(this.readBookService.esReadBook(TEST_BOOK_ID, "spring")).thenReturn(true);
-		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
-				.with(csrf())).andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/oups"));
-	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindEmptyTopReadBooks() throws Exception {
@@ -318,4 +336,74 @@ class BookControllerTests {
 	.andExpect(status().is3xxRedirection())
 	.andExpect(view().name("redirect:/books/" + TEST_BOOK_ID));
 	}
+
+	@WithMockUser(value = "spring") 
+	@Test 
+	   void testAddBook() throws Exception { 
+		   mockMvc.perform(get("/books/add")).andExpect(status().isOk()) 
+				   .andExpect(view().name("books/bookAdd")).andExpect(model().attributeExists("book")); 
+	   } 
+
+	@WithMockUser(value = "spring") 
+	@Test 
+   void testSaveBook() throws Exception { 
+	   mockMvc.perform(post("/books/save") 
+						   .with(csrf()) 
+						   .param("title", "El nombre del viento") 
+						   .param("author", "Patrick") 
+						   .param("editorial", "SM") 
+						   .param("genre.name", "Novela") 
+						   .param("ISBN", "9780345805362") 
+						   .param("pages", "100") 
+						   .param("synopsis","He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí\"") 
+						   .param("publicationDate","2015/12/11") 
+						   .param("image","https://pictures.abebooks.com/isbn/9780575081406-es.jpg"))							 
+						   .andExpect(status().is3xxRedirection()) 
+						   .andExpect(redirectedUrl("/books")); 
+   } 
+
+	@WithMockUser(value = "spring") 
+	@Test 
+   void testSaveBookHasErrors() throws Exception { 
+	   mockMvc.perform(post("/books/save") 
+						   .with(csrf()) 
+						   .param("title", " ") 
+						   .param("author", " ") 
+						   .param("editorial", " ") 
+						   .param("genre", " ") 
+						   .param("ISBN", " ") 
+						   .param("pages", "1") 
+						   .param("synopsis"," ") 
+						   .param("publicationDate","2015/11/12") 
+						   .param("image",""))	 
+						   .andExpect(status().isOk()) 
+						   .andExpect(model().attributeHasErrors("book")) 
+						   .andExpect(model().attributeHasFieldErrors("book","title")) 
+						   .andExpect(model().attributeHasFieldErrors("book","author")) 
+						   .andExpect(model().attributeHasFieldErrors("book","editorial")) 
+						   .andExpect(model().attributeHasFieldErrors("book","genre")) 
+						   .andExpect(model().attributeHasFieldErrors("book","ISBN")) 
+						   .andExpect(model().attributeHasFieldErrors("book","synopsis")) 
+						   .andExpect(model().attributeHasFieldErrors("book","image")) 
+						   .andExpect(view().name("books/bookAdd")); 
+   } 
+
+   @WithMockUser(value = "spring") 
+	@Test 
+   void testSaveBookHasDuplicatedISBN() throws Exception { 
+	   doThrow(DuplicatedISBNException.class).when(bookService).save(any(Book.class));
+	   mockMvc.perform(post("/books/save") 
+						   .with(csrf()) 
+						   .param("title", "El nombre del viento") 
+						   .param("author", "Patrick") 
+						   .param("editorial", "SM") 
+						   .param("genre.name", "Novela") 
+						   .param("ISBN", "9780345805362") 
+						   .param("pages", "100") 
+						   .param("synopsis","He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí\"") 
+						   .param("publicationDate","2015/12/11") 
+						   .param("image","https://pictures.abebooks.com/isbn/9780575081406-es.jpg"))							 
+						   .andExpect(status().isOk()) 
+						   .andExpect(view().name("books/bookAdd")); 
+   }
 }

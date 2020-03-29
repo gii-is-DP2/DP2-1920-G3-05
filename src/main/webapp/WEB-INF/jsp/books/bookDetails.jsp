@@ -127,7 +127,7 @@
 	</c:if>
 
 	<c:choose>
-		<c:when test="${notWishedBook and notReadBook}">
+		<c:when test="${notWishedBook and noEsReadBook}">
 			<form:form modelAttribute="book" class="form-horizontal"
 				action="/books/wishList/${book.id}">
 				<button class="btn btn-default" type="submit">

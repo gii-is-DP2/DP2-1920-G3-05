@@ -337,13 +337,11 @@ public class BookController {
 
 		return "books/booksList";
 	}
+
 	@PostMapping("/books/wishList/{bookId}")
 	public String anadirLibroListaDeseados(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		if (this.wishedBookService.esWishedBook(bookId) || this.readBookService.esReadBook(bookId, userdetails.getUsername())) {
-			return "redirect:/oups";
-		}
 		Book book = this.bookService.findBookById(bookId);
 
 		User user = this.userService.findUserByUsername(userdetails.getUsername());

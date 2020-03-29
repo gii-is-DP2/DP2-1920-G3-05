@@ -38,14 +38,31 @@ public class UserControllerTests {
 		user.setUsername("username");
 		user.setPassword("pass");
 		Reader reader = new Reader();
+		reader.setId(1);
 		reader.setAddress("Address");
 		reader.setCity("City");
 		reader.setFirstName("First name");
 		reader.setLastName("Last name");
 		reader.setTelephone("12345678");
+		reader.setVerified(false);
 		reader.setUser(user);
 
-		Mockito.when(this.readerService.findReaderByUsername("username")).thenReturn(reader);
+		User user2 = new User();
+		user2.setUsername("username");
+		user2.setPassword("pass");
+		Reader reader2 = new Reader();
+		reader2.setId(2);
+		reader2.setAddress("Address");
+		reader2.setCity("City");
+		reader2.setFirstName("First name");
+		reader2.setLastName("Last name");
+		reader2.setTelephone("12345678");
+		reader2.setVerified(false);
+		reader2.setUser(user);
+
+		Mockito.when(this.readerService.findReaderByUsername("username")).thenReturn(reader2);
+		Mockito.doCallRealMethod().when(this.readerService).saveReader(reader);//Necesitamos que entre en el metodo para que lance la excepcion
+
 	}
 
 	@WithMockUser(value = "spring")
@@ -58,7 +75,7 @@ public class UserControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testCreateReaderErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/users/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("city", "Test city").param("telephone", "12234567").param("user.username", "username").param("user.password", "pass"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/users/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("city", "Test city").param("telephone", "12234567").param("user.username", "").param("user.password", ""))
 			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("reader", "address")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("reader", "firstName"))
 			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("reader", "lastName")).andExpect(MockMvcResultMatchers.view().name("users/createReaderForm"));
 	}
@@ -87,9 +104,17 @@ public class UserControllerTests {
 	@WithMockUser(value = "spring", username = "username")
 	@Test
 	void testUpdateReaderErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/users/update").with(SecurityMockMvcRequestPostProcessors.csrf()).param("city", "Test city").param("telephone", "12234567").param("user.password", "pass").param("address", "address"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/users/update").with(SecurityMockMvcRequestPostProcessors.csrf()).param("city", "Test city").param("telephone", "12234567").param("user.password", "").param("address", "address"))
 			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("reader", "firstName")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("reader", "lastName"))
 			.andExpect(MockMvcResultMatchers.view().name("users/updateReaderForm"));
 	}
 
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateReaderDuplicatedUsername() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/users/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("verified", "false").param("city", "City").param("telephone", "12345678").param("user.username", "username")
+				.param("user.password", "pass").param("address", "Address").param("firstName", "First name").param("lastName", "Last name").param("id", "1"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("reader", "user.username")).andExpect(MockMvcResultMatchers.view().name("users/createReaderForm"));
+	}
 }

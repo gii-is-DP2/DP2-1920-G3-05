@@ -54,7 +54,7 @@ public class Book extends BaseEntity {
 	@JoinColumn(name = "genre_id")
 	private Genre		genre;
 
-	@Column(name = "ISBN")
+	@Column(name = "ISBN", unique =  true)
 	@Digits(fraction = 0, integer = 13)
 	@NotEmpty
 	private String		ISBN;

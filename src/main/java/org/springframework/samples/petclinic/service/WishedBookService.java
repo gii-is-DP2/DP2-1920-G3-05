@@ -37,7 +37,7 @@ public class WishedBookService {
 
 	@Transactional
 	public void save(final WishedBook wishedBook) throws DataAccessException,ReadOrWishedBookException {
-		Boolean isReadOrWished=this.findBooksIdByUser(wishedBook.getUser().getUsername()).contains(wishedBook.getBook().getId())||readBookRepository.getBooksIdByUsername(wishedBook.getUser().getUsername()).contains(wishedBook.getBook().getId());
+		Boolean isReadOrWished=this.findBooksIdByUser(wishedBook.getUser().getUsername()).contains(wishedBook.getBook().getId()) || readBookRepository.getBooksIdByUsername(wishedBook.getUser().getUsername()).contains(wishedBook.getBook().getId());
 		if (isReadOrWished) {
 			throw new ReadOrWishedBookException("This book is already read or in the wish list.");
 		} else {

@@ -25,15 +25,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
-import org.springframework.samples.petclinic.model.Review;
+import org.springframework.samples.petclinic.model.Reader;
 import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteReviewException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.samples.petclinic.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +57,9 @@ public class BookService {
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
+
+	@Autowired
+	private ReaderService readerService;
 
 	@Autowired
 	public BookService(final BookRepository bookRepository) {
@@ -93,24 +91,33 @@ public class BookService {
 	@Transactional(rollbackFor = DuplicatedISBNException.class)
 	public void save(final Book book) throws DataAccessException, DuplicatedISBNException {
 		Boolean imAdmin = false;
+
+
+		Reader reader = this.readerService.findReaderByUsername(book.getUser().getUsername());
+		
 		for (Authorities ga : this.authoritiesService.getAuthoritiesByUsername(book.getUser().getUsername())) {
 			if (ga.getAuthority().equals("admin")) {
 				imAdmin = true;
 			}
 		}
 
-		if (imAdmin) {
+		if (imAdmin || reader.getVerified()) {
 			book.setVerified(true);
 		} else {
 			book.setVerified(false);
 		}
 
-		Book bookWithSameIsbn = this.bookRepository.findByISBN(book.getISBN());
-		boolean isDuplicated = bookWithSameIsbn != null && bookWithSameIsbn.getId()!=book.getId(); //Que exista y no sea el de mi libro que lo estoy editando
-		if (isDuplicated) {
+		try{
+			String isbn = book.getISBN();
+			Book bookWithSameIsbn = this.bookRepository.findByISBN(isbn);
+			boolean isDuplicated = bookWithSameIsbn != null && bookWithSameIsbn.getId()!=book.getId(); //Que exista y no sea el de mi libro que lo estoy editando
+			if (isDuplicated) {
+				throw new DuplicatedISBNException();
+			} else {
+				this.bookRepository.save(book);
+			}
+		}catch(Exception e){
 			throw new DuplicatedISBNException();
-		} else {
-			this.bookRepository.save(book);
 		}
 	}
 	

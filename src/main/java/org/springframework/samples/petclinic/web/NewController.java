@@ -27,7 +27,6 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.NewService;
-import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,7 +58,6 @@ public class NewController {
 		if (authorities.contains("ROLE_ANONYMOUS")) {
 			return "redirect:/news";
 		} else {
-			//TODO newsRecommended
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			Collection<New> results = this.newService.getNewsBookReview(userDetail.getUsername());
 			//Collection<New> results = this.newService.getAllNews();

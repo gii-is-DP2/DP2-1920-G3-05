@@ -12,7 +12,6 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
 import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

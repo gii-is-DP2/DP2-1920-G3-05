@@ -44,8 +44,8 @@ public interface SpringDataBookRepository extends BookRepository, CrudRepository
 	List<Genre> findGenre() throws DataAccessException;
 
 	@Override
-	@Query("Select b from Book b where b.ISBN = ?1")
-	Book findByISBN(@Param("ISBN") String ISBN);
+	@Query("Select DISTINCT b from Book b where b.ISBN = ?1")
+	Book findByISBN(String ISBN);
 	
 	@Override
 	@Query("SELECT genre FROM Genre genre WHERE genre.name =:name")

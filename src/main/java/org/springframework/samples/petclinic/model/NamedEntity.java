@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
@@ -31,6 +32,7 @@ import javax.validation.constraints.Size;
 public class NamedEntity extends BaseEntity {
 
 	@Size(min = 3, max = 50, message = "The size must be between 3 and 50")
+	@NotBlank(message = "Must not be empty")
 	@Column(name = "name")
 	private String name;
 

@@ -117,6 +117,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 |Dado el usuario juaferfer y el libro *La tesis de Nancy* que tiene incluido en sus libros leídos y del que ya ha escrito una review, cuando juaferfer intenta editar su review sobre *La tesis de Nancy*, entonces el sistema actualiza su review|Dado el usuario juaferfer y el libro *La tesis de Nancy* que tiene incluido en sus libros leídos y del que ya ha escrito una review, cuando juaferfer intenta editar su review sobre *La tesis de Nancy* pero introduce como nota 6 que es un dato erróneo, entonces el sistema le indica en el formulario que la nota debe tomar uno de los siguientes valores: 0, 1, 2, 3, 4 o 5|
 ||Dado el usuario fraperbar y el libro *La tesis de Nancy* que tiene incluido en sus libros leídos y del que ya ha escrito una review juaferfer, cuando fraperbar intenta editar la review sobre *La tesis de Nancy* de juaferfer, entonces el sistema le indica que no puede editar la review de otro usuario|
 |Dado el usuario juaferfer y el libro *La tesis de Nancy* que tiene incluido en sus libros leídos y del que ya ha escrito una review, cuando juaferfer intenta eliminar su review sobre *La tesis de Nancy*, entonces el sistema la elimina|Dado el usuario fraperbar y el libro *La tesis de Nancy* que tiene incluido en sus libros leídos y del que ya ha escrito una review juaferfer, cuando fraperbar intenta eliminar la review sobre *La tesis de Nancy* de juaferfer, entonces el sistema le indica que no puede editar la review de otro usuario|
+|Dado el usuario admnistrador y que el usuario juafefer ha hecho del libro *La tesis de Nancy*, que tiene incluido en sus libros leídos, una review, cuando el adminitrador intenta eliminar la review de otro usuario se lo permite para mantener el orden en la aplicación||
 
 - **HU-07**: Gestionar publicaciones de fan  
   
@@ -131,6 +132,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 |Dado el usuario ferromrio y el libro *La verdad sobre el caso Harry Quebert* que tiene marcado como leído y del que ha hecho una publicación, cuando intenta editar la publicación de dicho libro, entonces dicha publicación queda actualizada en el sistema|Dado el usuario ferromrio y el libro *La verdad sobre el caso Harry Quebert* que tiene marcado como leído y del que ha hecho una publicación y el usuario fraperbar que también tiene el libro marcado como leído, cuando fraperbar intenta editar la publicación de ferromrio, entonces el sistema le indica que no dispone de los permisos necesarios|
 ||Dado el usuario juafefer y el libro *El árbol de la ciencia* que tiene marcado como leído y del que ha hecho una publicación, cuando intenta editar la publicación de dicho libro con datos erróneos (como URL de imagen errónea), entonces el sistema le indica los fallos (URL no válida en este caso)|
 |Dado el usuario juaferfer y el libro *El árbol de la ciencia* que tiene marcado como leído y del que ha hecho una publicación, cuando intenta eliminar la publicación de dicho libro, entonces dicha publicación queda eliminada del sistema|Dado el usuario juaferfer y el libro *El árbol de la ciencia* que tiene marcado como leído y del que ha hecho una publicación y el usuario javgarcer, cuando javgarcer intenta eliminar la publicación de dicho libro de juafefer, entonces el sistema le indica que no dispone de los permisos necesarios|
+|Dado el usuario administrador y por otro lado a  juaferfer que tiene el libro *El árbol de la ciencia* marcado como leído y del que ha hecho una publicación, cuando el administrador intenta eliminar la publicación de juaferfer, el sistema se lo permite para que pueda controlar las publicaciones que se suben a la página||
 
 - **HU-08**: Crear reunión  
   
@@ -142,6 +144,8 @@ Las entidades que se verán involucradas en la aplicación web son:
 |-|-|
 |Dado el usuario administrador, cuando crea una reunión con datos correctos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 01/05/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces se crea la reunión para la fecha especificada sobre *El nombre del viento*|Dado el usuario administrador, cuando crea una reunión con datos correctos (reunión del libro *Luces de Bohemia* que no está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 01/05/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que para hacer una reunión sobre un libro debe estar verificado|
 ||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 30/02/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida|
+||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 25/02/2020 a las 19:00, duración de 2 horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida ya que debe haber como mínimo un plazo de 3 días para que se apunten usuarios|
+||Dado el usuario administrador, cuando crea una reunión con datos erróneos (reunión del libro *El nombre del viento* que está verificado, en la casa de la cultura de Los Palacios y Villafranca, el 25/02/2020 a las 19:00, duración de media horas, aforo 40 personas), entonces el sistema indica que no es una fecha válida ya que debe durar como mínimo una hora|
 
 - **HU-09**: Inscribirse a reunión  
   
@@ -186,6 +190,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 |Escenario positivo|Escenario negativo|
 |-|-|
 |Dado el usuario ferromrio y que hay 12 libros en el sistema del autor Brandon Sanderson, cuando ferromrio selecciona buscar por autor e introduce *Brandon Sanderson*, entonces el sistema le mostrará un listado con los 12 libros de dicho autor|Dado el usuario ferromrio y que no hay ningún libro con ISBN 33, cuando ferromrio selecciona buscar por ISBN e introduce 33, entonces el sistema le indicará que no dispone de ningún libro que se adecúe a la búsqueda|
+|Dado el usuario ferromrio y que hay solo un libro en el sistema del autor Pío Baroja, cuando ferromrio selecciona buscar por autor e introduce *Pío Baroja*, entonces el sistema le mostrará directamente los detalles de dicho libro||
 
 - **HU-13**: Añadir libro a leídos  
   
@@ -227,6 +232,7 @@ Dado el usuario estgantri y el libro *Las reliquias de la muerte* que no tiene m
 |Escenario positivo|Escenario negativo|
 |-|-|
 |Dado que el usuario javgarcer tiene en su colección de libros leídos como género más repetido fantasía, cuando pide que se le recomienden libros que no ha leído, entonces el sistema le recomienda libros de fantasía que no ha leído, como: *Elantris*, *El camino de los reyes*, etc. |Dado que el usuario juaferfer que no tiene ningún libro como leído en su perfil, cuando pide que se le recomienden libros, entonces el sistema le indica que para ello necesita tener algún libro como leído para ver sus gustos|
+||Dado que el usuario fraperbar que tiene como género más leído fantasía pero no hay ñibros de fantasía que no haya leído en el sistema, cuando pide que se le recomienden libros, entonces el sistema le indicará que no hay más libros de su género favorito|
 
 - **HU-17**: Top libros más leídos por los usuarios 
   

@@ -21,30 +21,49 @@
 		</div>
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
-
+			
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
-					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-home navbar-left" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
+				
+				<petclinic:menuItem active="${name eq 'books'}" url="/books/find"
+					title="find books">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners</span>
+					<span>Search</span>
 				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
-					title="veterinarians">
+				
+				<petclinic:menuItem active="${name eq 'readBooks'}" url="/books/readBooks"
+					title="Read books">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
+					<span>Read books</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'wishList'}" url="/books/wishList"
+					title="To read list">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>To read list</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'recomendations'}" url="/books/recomendations"
+					title="Recomendations">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Recomendations</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'topReadBooks'}" url="/books/topRead"
+					title="Top read books">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Top read books</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
-					title="trigger a RuntimeException to see how it is handled">
-					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
+				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings"
+					title="Meetings">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Meetings</span>
 				</petclinic:menuItem>
+
+		
 
 			</ul>
 
@@ -53,14 +72,53 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
+						<span class="glyphicon glyphicon-chevron-down"></span></a>
+						<ul class="dropdown-menu" >
+						<li>
+								<div class="navbar-login">
+									<div class="row">
+										<div class="col-lg-8">
+											<p class="text-left">
+												<strong>Options</strong>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+ 							
+							<li> 
+								<div class="navbar-login navbar-login-session">
+									<div class="row">
+										<div class="col-lg-8">
+											<p class="text-left">
+												<a href="<c:url value="/login" />" class="btn btn-primary btn-block btn-sm">Login</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li> 
+								<div class="navbar-login navbar-login-session">
+									<div class="row">
+										<div class="col-lg-8">
+											<p class="text-left">
+												<a href="<c:url value="/users/new" />" class="btn btn-primary btn-block btn-sm">Register</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+					</ul>
+					</li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
-							<strong><sec:authentication property="name" /></strong> <span
-							class="glyphicon glyphicon-chevron-down"></span>
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
+							 <span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 						<ul class="dropdown-menu">
 							<li>
@@ -84,21 +142,19 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
+ 							
                             <li> 
 								<div class="navbar-login navbar-login-session">
 									<div class="row">
 										<div class="col-lg-12">
 											<p>
-												<a href="#" class="btn btn-primary btn-block">My Profile</a>
-												<a href="#" class="btn btn-danger btn-block">Change
-													Password</a>
+												<a href="/users/update" class="btn btn-primary btn-block">My Profile</a>
 											</p>
 										</div>
 									</div>
 								</div>
 							</li>
--->
+
 						</ul></li>
 				</sec:authorize>
 			</ul>

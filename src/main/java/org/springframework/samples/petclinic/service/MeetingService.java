@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +69,10 @@ public class MeetingService {
 	@Transactional
 	public Meeting findMeetingById(int meetingid) throws DataAccessException {
 		return this.meetingRepository.findById(meetingid);
+	}
+
+	@Transactional
+	public Collection<Meeting> findMeetingsByNamePlaceBookTile(String name) throws DataAccessException {
+		return this.meetingRepository.findBookByNamePlaceBookTile(name.toUpperCase());
 	}
 }

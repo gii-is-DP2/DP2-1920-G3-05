@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,26 +17,23 @@ public class MeetingAssistantServiceTest {
 	@Autowired
 	private MeetingAssistantService sut;
 	
-	@Test
-	void shouldGetMeetingAssistantsIdsFromMeetingId() {
-		int meetingId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1,2",
+		"3,2",
+		"4,0"
+	})
+	void shouldGetMeetingAssistantsIdsFromMeetingId(int meetingId, int results) {
 		List<Integer> meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
-		Assertions.assertThat(meetingAssistantsIds.size()).isEqualTo(2);
-		Assertions.assertThat(meetingAssistantsIds).contains(1,2);
-		
-		meetingId = 3;
-		meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
-		Assertions.assertThat(meetingAssistantsIds.size()).isEqualTo(2);
-		Assertions.assertThat(meetingAssistantsIds).contains(5,6);
-		
-		meetingId = 4;
-		meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
-		Assertions.assertThat(meetingAssistantsIds).isEmpty();
+		Assertions.assertThat(meetingAssistantsIds.size()).isEqualTo(results);
 	}
 	
-	@Test
-	void shouldDeleteMeetingAssistantFromMeeting() {
-		int meetingId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1",
+		"3"
+	})
+	void shouldDeleteMeetingAssistantFromMeeting(int meetingId) {
 		List<Integer> meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
 		Assertions.assertThat(meetingAssistantsIds.size()).isEqualTo(2);
 		

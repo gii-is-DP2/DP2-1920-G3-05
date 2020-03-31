@@ -7,9 +7,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -222,10 +223,11 @@ class BookServiceTests {
 
 	}
 	
-	@Test
-	void adminCanDeleteBookWithNoRelations() {
-		int bookId = 6;
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"6,admin1"
+	})
+	void adminCanDeleteBookWithNoRelations(int bookId, String username) {
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Assertions.assertThat(existsBook).isTrue();
 		
@@ -235,26 +237,26 @@ class BookServiceTests {
 		Assertions.assertThat(existsBook).isFalse();		
 	}
 	
-	@Test
-	void adminCanDeleteBookAndNew() {
-		int bookId = 11;
-		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"11,2,admin1",
+		"1,3,admin1"
+	})
+	void adminCanDeleteBookAndNew(int bookId, int newId, String username) {
 		this.sut.deleteById(bookId, username);
-		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId); 
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsNew).isFalse();
 	}
 	
-	@Test
-	void adminCanDeleteBookButNoNew() {
-		int bookId = 2;
-		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"2,1,admin1",
+		"4,4,admin1",
+		"6,5,admin1"
+	})
+	void adminCanDeleteBookButNoNew(int bookId, int newId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -266,12 +268,13 @@ class BookServiceTests {
 		Assertions.assertThat(booksInNewIds).hasSize(1).doesNotContain(bookId);
 	}
 	
-	@Test
-	void adminCanDeleteBookWithMeeting() {
-		int bookId = 10;
-		int meetingId = 4;
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"10,4,admin1",
+		"2,3,admin1",
+		"1,2,admin1"
+	})
+	void adminCanDeleteBookWithMeeting(int bookId, int meetingId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -280,12 +283,13 @@ class BookServiceTests {
 		Assertions.assertThat(existsMeeting).isFalse();
 	}
 	
-	@Test
-	void adminCanDeleteBookWithReview() {
-		int bookId = 4;
-		int reviewId = 6;
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"4,6,admin1",
+		"3,5,admin1",
+		"5,7,admin1"
+	})
+	void adminCanDeleteBookWithReview(int bookId, int reviewId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -294,7 +298,12 @@ class BookServiceTests {
 		Assertions.assertThat(existsReview).isFalse();
 	}
 	
-	@Test
+	@ParameterizedTest
+	@CsvSource({
+		"8,5,admin1",
+		"10,6,admin1",
+		"7,4,admin1"
+	})
 	void adminCanDeleteBookWithPublication() {
 		int bookId = 8;
 		int publicationId = 5;
@@ -308,18 +317,11 @@ class BookServiceTests {
 		Assertions.assertThat(existsPublication).isFalse();
 	}
 	
-	@Test
-	void adminCanDeleteBookWithEverything() {
-		int bookId = 1;
-		int newId = 3; //Solo un libro --> se borra noticia
-		int reviewId1 = 1;
-		int reviewId2 = 2;
-		int reviewId3 = 3;
-		int publicationId1 = 1;
-		int publicationId2 = 2;
-		int meetingId = 2;
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"1,3,1,2,3,1,2,2,admin1"
+	})
+	void adminCanDeleteBookWithEverything(int bookId, int newId, int reviewId1, int reviewId2, int reviewId3, int publicationId1, int publicationId2, int meetingId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);

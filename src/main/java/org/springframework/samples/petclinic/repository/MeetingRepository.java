@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -28,5 +29,8 @@ public interface MeetingRepository{
 
 	@Transactional
 	Meeting findById(int id) throws DataAccessException;
+
+	@Transactional
+	Collection<Meeting> findBookByNamePlaceBookTile(String name) throws DataAccessException;
 	
 }

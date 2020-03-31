@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,43 +33,25 @@ public class PublicationServiceTests {
 	@Autowired
 	private BookService	sut2;
 	
-	@Test
-	void shouldFindPublicationsIdByBookId() {
-		int bookId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1,2",
+		"2,1",
+		"9,0"
+	})
+	void shouldFindPublicationsIdByBookId(int bookId, int results) {
 		List<Integer> publicationsId = this.sut.getPublicationsFromBook(bookId);
-		Assertions.assertThat(publicationsId.size()).isEqualTo(2);
-		
-		bookId = 2;
-		publicationsId = this.sut.getPublicationsFromBook(bookId);
-		Assertions.assertThat(publicationsId.size()).isEqualTo(1);
-		
-		bookId = 9;
-		publicationsId = this.sut.getPublicationsFromBook(bookId);
-		Assertions.assertThat(publicationsId).isEmpty();
+		Assertions.assertThat(publicationsId.size()).isEqualTo(results);
 	}
 	
-	@Test
-	void shouldDeletePublicationWithImages() {
-		int publicationId = 1;
-		
-		List<Integer> imagesId = this.imageService.getImagesFromPublication(publicationId);
-				
+	@ParameterizedTest
+	@CsvSource({
+		"1",
+		"2",
+		"3"
+	})
+	void shouldDeletePublication(int publicationId){
 		this.sut.deletePublication(publicationId);
-		Boolean exisitsPublication = this.sut.existsPublicationById(publicationId);
-		Assertions.assertThat(exisitsPublication).isFalse();
-
-		for(Integer i: imagesId) {
-			Boolean existsImageInPublication = this.imageService.existsImageById(i);
-			Assertions.assertThat(existsImageInPublication).isFalse();
-		}
-	}
-	
-	@Test
-	void shouldDeletePublicationWithoutImages(){
-		int publicationId = 6;
-		
-		this.sut.deletePublication(publicationId);
-		
 		Boolean exisitsPublication = this.sut.existsPublicationById(publicationId);
 		Assertions.assertThat(exisitsPublication).isFalse();
 	}

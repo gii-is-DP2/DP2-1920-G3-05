@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,22 +17,22 @@ public class BookInNewServiceTests {
 	@Autowired
 	private BookInNewService sut;
 	
-	@Test
-	void shouldGetBooksInNew() {
-		int newId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1,2",
+		"2,1"
+	})
+	void shouldGetBooksInNew(int newId, int results) {
 		List<Integer> booksIds = this.sut.getBooksInNewFromNew(newId);
-		Assertions.assertThat(booksIds.size()).isEqualTo(2);
-		Assertions.assertThat(booksIds).contains(2,3);
-
-		newId = 2;
-		booksIds = this.sut.getBooksInNewFromNew(newId);
-		Assertions.assertThat(booksIds.size()).isEqualTo(1);
-		Assertions.assertThat(booksIds).contains(11);
+		Assertions.assertThat(booksIds.size()).isEqualTo(results);
 	}
 	
-	@Test
-	void shouldDeleteBookFromNew() {
-		int newId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1",
+		"4"
+	})
+	void shouldDeleteBookFromNew(int newId) {
 		List<Integer> booksIds = this.sut.getBooksInNewFromNew(newId);
 		Assertions.assertThat(booksIds.size()).isEqualTo(2);
 		

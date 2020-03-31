@@ -57,7 +57,7 @@
 					<span>Top read books</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings"
+				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings/find"
 					title="Meetings">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Meetings</span>

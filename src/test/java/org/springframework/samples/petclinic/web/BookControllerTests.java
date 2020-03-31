@@ -20,6 +20,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.Poem;
 import org.springframework.samples.petclinic.model.Review;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
@@ -30,6 +31,7 @@ import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.MeetingAssistantService;
 import org.springframework.samples.petclinic.service.MeetingService;
 import org.springframework.samples.petclinic.service.NewService;
+import org.springframework.samples.petclinic.service.PoemService;
 import org.springframework.samples.petclinic.service.PublicationService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.ReviewService;
@@ -98,6 +100,10 @@ class BookControllerTests {
 
 	@MockBean
 	private WishedBookService		wishedBookService;
+
+	@MockBean
+	private PoemService				poemService;
+
 	private Book					book;
 
 	private Genre					genre;
@@ -258,7 +264,8 @@ class BookControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitFindForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/find")).andExpect(status().isOk()).andExpect(model().attributeExists("book")).andExpect(view().name("books/findBooks"));
+		when(poemService.getRandomPoem()).thenReturn(new Poem());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/find")).andExpect(status().isOk()).andExpect(model().attributeExists("book")).andExpect(model().attributeExists("poem")).andExpect(view().name("books/findBooks"));
 	}
 
 	@WithMockUser(value = "spring")

@@ -26,10 +26,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.Poem;
 import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
 import org.springframework.samples.petclinic.service.BookService;
+import org.springframework.samples.petclinic.service.PoemService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -70,14 +72,17 @@ public class BookController {
 
 	private WishedBookService	wishedBookService;
 
+	private PoemService			poemService;
+
 
 	@Autowired
-	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService) {
+	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService, final PoemService poemService) {
 		this.bookService = bookService;
 		this.userService = userService;
 		this.readBookService = readBookService;
 		this.wishedBookService = wishedBookService;
 		this.reviewService = reviewService;
+		this.poemService = poemService;
 
 	}
 
@@ -94,6 +99,8 @@ public class BookController {
 	@GetMapping(value = "/books/find")
 	public String initFindForm(final Map<String, Object> model) {
 		model.put("book", new Book());
+		Poem poem = this.poemService.getRandomPoem();
+		model.put("poem", poem);
 		return "books/findBooks";
 	}
 

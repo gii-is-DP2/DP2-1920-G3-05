@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -182,7 +184,6 @@ class BookServiceTests {
 			this.sut.save(bookSameISBN);
 
 		} catch (DuplicatedISBNException e) {
-			// TODO Auto-generated catch block
 			//Assertions.assertThat(e.getCause());
 					assertThrows(DuplicatedISBNException.class, () -> {
 						this.sut.save(bookSameISBN);
@@ -190,35 +191,43 @@ class BookServiceTests {
 		}
 	}
 
-	@Test
-	@Transactional
-	public void shouldUpdateBookName() throws Exception {
-		Book book3 = this.sut.findBookById(3);
-		String oldTitle = book3.getTitle();
+	@ParameterizedTest
+	@CsvSource({
+		"1", "2", "3"
+	})
+	public void shouldUpdateBookName(final int bookId) throws Exception {
+		Book book = this.sut.findBookById(bookId);
+		String oldTitle = book.getTitle();
 
 		String newTitle = oldTitle + "X";
-		book3.setTitle(newTitle);
-		this.sut.save(book3);
+		book.setTitle(newTitle);
+		this.sut.save(book);
 
-		book3 = this.sut.findBookById(3);
-		Assertions.assertThat(book3.getTitle()).isEqualTo(newTitle);
+		book = this.sut.findBookById(bookId);
+		Assertions.assertThat(book.getTitle()).isEqualTo(newTitle);
 
 	}
-	@Test
-	void shouldFindAllGenres() {
+	@ParameterizedTest
+	@CsvSource({
+		"1, Fantasy",
+		"4, Contemporary"
+	})
+	void shouldFindAllGenres(int genreId, String name) {
 		Collection<Genre> bookGenre = this.sut.findGenre();
 
-		Genre genre1 = EntityUtils.getById(bookGenre, Genre.class, 1);
-		Assertions.assertThat(genre1.getName()).isEqualTo("Fantasy");
-		Genre genre4 = EntityUtils.getById(bookGenre, Genre.class, 4);
-		Assertions.assertThat(genre4.getName()).isEqualTo("Contemporary");
-	}
-	@Test
-	@Transactional
-	public void shouldFindGenre() throws Exception {
-		Genre genre3 = this.sut.findGenreByName("Romance");
+		Genre genre1 = EntityUtils.getById(bookGenre, Genre.class, genreId);
+		Assertions.assertThat(genre1.getName()).isEqualTo(name);
 
-		Assertions.assertThat("Romance").isEqualTo(genre3.getName());
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"Romance", "Fiction", "Horror"
+	})
+	public void shouldFindGenre(String genre) throws Exception {
+		Genre genre3 = this.sut.findGenreByName(genre);
+
+		Assertions.assertThat(genre).isEqualTo(genre3.getName());
 
 	}
 	

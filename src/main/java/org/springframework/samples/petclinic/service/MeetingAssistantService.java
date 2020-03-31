@@ -1,6 +1,8 @@
+
 package org.springframework.samples.petclinic.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,21 +16,27 @@ public class MeetingAssistantService {
 
 	@Autowired
 	private MeetingAssistantRepository meetingAssistantRepository;
-		
+
+
 	@Transactional(readOnly = true)
-	public List<Integer> getAssistantsMeeting(int meetingId) throws DataAccessException {
+	public List<Integer> getAssistantsMeeting(final int meetingId) throws DataAccessException {
 		return this.meetingAssistantRepository.getAssistantsMeeting(meetingId);
 	}
-	
+
 	@Transactional
 	@Modifying
-	public void deleteAssistantById(int assistantId) throws DataAccessException {
+	public void deleteAssistantById(final int assistantId) throws DataAccessException {
 		this.meetingAssistantRepository.deleteAssistantById(assistantId);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Boolean existsAssistantById(int assistantId) throws DataAccessException {
+	public Boolean existsAssistantById(final int assistantId) throws DataAccessException {
 		return this.meetingAssistantRepository.existsById(assistantId);
 	}
-	
+	@Transactional(readOnly = true)
+	public Optional<Integer> findMeetingAssistantByUsernameAndMeetingId(final int meetingId, final String username) {
+
+		return this.meetingAssistantRepository.findMeetingAssistantByUsernameAndMeetingId(meetingId, username);
+	}
+
 }

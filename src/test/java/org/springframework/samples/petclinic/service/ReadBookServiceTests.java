@@ -70,13 +70,13 @@ public class ReadBookServiceTests {
 	
 	@Test
 	void shouldChangeTopReadBooks() {
-		List<Integer> booksIds = this.rbs.topReadBooks();
-		Book book = this.bs.findBookById(4);
+		Book book = this.bs.findBookById(10);
 		User user = this.us.findUserByUsername("vet1");
 		ReadBook readBook = new ReadBook();
 		readBook.setBook(book);
 		readBook.setUser(user);
 		this.rbs.save(readBook);
+		List<Integer> booksIds = this.rbs.topReadBooks();
 		Assertions.assertThat(booksIds).contains(10);
 	}
 	

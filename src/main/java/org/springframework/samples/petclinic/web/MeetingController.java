@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
@@ -32,6 +35,37 @@ public class MeetingController {
         this.bookService = bookService;
     }
 
+    @GetMapping(value = "/meetings/find")
+	public String initFindForm(final Map<String, Object> model) {
+		model.put("meeting", new Meeting());
+		return "meetings/findMeetings";
+    }
+
+    @GetMapping(value = "/meetings")
+	public String processFindForm(Meeting meeting, final BindingResult result, final Map<String, Object> model) {
+
+		// allow parameterless GET request for /meetings to return all records
+		if (meeting.getName() == null) {
+			meeting.setName(""); // empty string signifies broadest possible search
+		}
+
+		// find meetings
+		Collection<Meeting> results = this.meetingService.findMeetingsByNamePlaceBookTile(meeting.getName());
+		if (results.isEmpty()) {
+			// no meetings found
+			result.rejectValue("name", "notFound", "not found");
+			return "meetings/findMeetings";
+		} else if (results.size() == 1) {
+			// 1 meeting found
+			meeting = results.iterator().next();
+			return "redirect:/meetings/" + meeting.getId();
+		} else {
+			// multiple meetings found
+			model.put("meetings", results);
+			return "meetings/meetingsList";
+		}
+	}
+    
 	@InitBinder("meeting")
 	public void initMeetingBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new MeetingValidator());
@@ -43,7 +77,7 @@ public class MeetingController {
 		dataBinder.setValidator(new MeetingValidator());
 	}
     
-    @GetMapping(value = "/meetings")
+   /* @GetMapping(value = "/meetings")
 	public String getMeetings(Meeting meeting, final BindingResult result, final ModelMap model) {
 
 		// find books by title
@@ -62,7 +96,7 @@ public class MeetingController {
 			model.put("meetings", meetings);
 			return "meetings/meetingsList";
 		}
-    }
+    }*/
     
     @GetMapping(value = "/meetings/{meetingId}")
     public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId) {

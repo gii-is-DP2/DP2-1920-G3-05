@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -56,14 +57,15 @@ public class MeetingControllerTests {
     @MockBean
     private LocalDateTimeFormatter localDateTimeFormatter;
 
+
     @BeforeEach
     void setup() throws ParseException{
         Book book = new Book();
         book.setId(TEST_BOOK_ID);
 
-        Meeting meeting = new Meeting();
         LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
         LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
+        Meeting meeting = new Meeting();
         meeting.setName("Meeting");
         meeting.setPlace("Library");
         meeting.setStart(begin);
@@ -72,7 +74,16 @@ public class MeetingControllerTests {
         meeting.setBook(book);
         meeting.setId(TEST_MEETING_ID);
 
+        Collection<Meeting> meetingsOneResult = new ArrayList<>();
+        meetingsOneResult.add(meeting);
+
+        Collection<Meeting> meetingsSeveralResults = new ArrayList<>();
+        meetingsSeveralResults.add(new Meeting());
+        meetingsSeveralResults.add(new Meeting());
+
         when(meetingService.findMeetingById(TEST_MEETING_ID)).thenReturn(meeting);
+        when(meetingService.findMeetingsByNamePlaceBookTile("One result")).thenReturn(meetingsOneResult);
+        when(meetingService.findMeetingsByNamePlaceBookTile("Several results")).thenReturn(meetingsSeveralResults);
 
         when(localDateTimeFormatter.parse(eq("2020-10-10T17:00"), any(Locale.class))).thenReturn(begin);
         when(localDateTimeFormatter.parse(eq("2020-10-10T19:00"), any(Locale.class))).thenReturn(end);
@@ -80,38 +91,33 @@ public class MeetingControllerTests {
     }
 
     @WithMockUser(value = "spring")
+	@Test
+	void testInitFindForm() throws Exception {
+		this.mockMvc.perform(get("/meetings/find")).andExpect(status().isOk()).andExpect(model().attributeExists("meeting")).andExpect(view().name("meetings/findMeetings"));
+	}
+
+    @WithMockUser(value = "spring")
     @Test
-    void testGetMeetingsNoFound() throws Exception {
-        when(meetingService.findAllMeetings()).thenReturn(new ArrayList<Meeting>());
-        mockMvc.perform(get("/meetings"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("meetings/meetingsList"))
-                .andExpect(model().attributeDoesNotExist("meetings"));
+    void testFindMeetingsNoFound() throws Exception {
+        this.mockMvc.perform(get("/meetings").param("name", "Unknown Name")).andExpect(status().isOk()).andExpect(model().attributeHasFieldErrors("meeting", "name"))
+        .andExpect(model().attributeHasFieldErrorCode("meeting", "name", "notFound")).andExpect(view().name("meetings/findMeetings"));
     }
 
     @WithMockUser(value = "spring")
     @Test
     void testGetMeetingsOneFound() throws Exception {
-        List<Meeting> meetings = new ArrayList<Meeting>();
-        Meeting meeting = new Meeting();
-        meeting.setId(TEST_MEETING_ID);
-        meetings.add(meeting);
-        when(meetingService.findAllMeetings()).thenReturn(meetings);
-        mockMvc.perform(get("/meetings"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/meetings/" + TEST_MEETING_ID));
+        this.mockMvc.perform(get("/meetings").param("name", "One result"))
+                    .andExpect(status().is3xxRedirection())
+                    .andExpect(redirectedUrl("/meetings/" + TEST_MEETING_ID));
     }
 
     @WithMockUser(value = "spring")
     @Test
     void testGetMeetingsSeveralFound() throws Exception {
-        List<Meeting> meetings = new ArrayList<Meeting>();
-        meetings.add(new Meeting());
-        meetings.add(new Meeting());
-        when(meetingService.findAllMeetings()).thenReturn(meetings);
-        mockMvc.perform(get("/meetings"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("meetings/meetingsList"));
+        this.mockMvc.perform(get("/meetings").param("name", "Several results"))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeExists("meetings"))
+        .andExpect(view().name("meetings/meetingsList"));
     }
 
     @WithMockUser(value = "spring")

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,39 +32,34 @@ public class NewServiceTest {
 	private UserService 		userService;
 
 
-	@Test
-	void shouldGetNewsIdsFromBookId() {
-		int bookId = 2;
+	@ParameterizedTest
+	@CsvSource({
+		"2,1",
+		"7,0"
+	})
+	void shouldGetNewsIdsFromBookId(int bookId, int results) {
 		List<Integer> newsIds = this.sut.getNewsFromBook(bookId);
-		Assertions.assertThat(newsIds.size()).isEqualTo(1);
-		Assertions.assertThat(newsIds).contains(1);
-
-		bookId = 7;
-		newsIds = this.sut.getNewsFromBook(bookId);
-		Assertions.assertThat(newsIds).isEmpty();
+		Assertions.assertThat(newsIds.size()).isEqualTo(results);
 	}
 
-	@Test
-	void shouldNotDeleteNewWithMoreThanOneBook() { //Como hay mas de un libro deberia borrar el libro de la noticia, pero permanecer la noticia
-		int newId = 1;
-		int bookId = 2;
-
+	@ParameterizedTest
+	@CsvSource({
+		"1,2",
+		"4,4"
+	})
+	void shouldNotDeleteNewWithMoreThanOneBook(int newId, int bookId) { //Como hay mas de un libro deberia borrar el libro de la noticia, pero permanecer la noticia
 		this.sut.deleteNew(newId, bookId);
-
 		Boolean existsNew = this.sut.existsNewById(newId);
 		Assertions.assertThat(existsNew).isTrue();
-
-		List<Integer> bookIds = this.bookInNewService.getBooksInNewFromNew(newId);
-		Assertions.assertThat(bookIds.size()).isEqualTo(1);
 	}
 
-	@Test
-	void shouldDeleteNewWithOneBook() { //Como solo hay un libro deberia borrar el libro de la noticia y la propia noticia
-		int newId = 2;
-		int bookId = 11;
-
+	@ParameterizedTest
+	@CsvSource({
+		"2,11",
+		"3,1"
+	})
+	void shouldDeleteNewWithOneBook(int newId, int bookId) { //Como solo hay un libro deberia borrar el libro de la noticia y la propia noticia
 		this.sut.deleteNew(newId, bookId);
-
 		Boolean existsNew = this.sut.existsNewById(newId);
 		Assertions.assertThat(existsNew).isFalse();
 		List<Integer> bookIds = this.bookInNewService.getBooksInNewFromNew(newId);

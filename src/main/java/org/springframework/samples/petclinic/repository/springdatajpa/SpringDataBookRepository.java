@@ -61,4 +61,8 @@ public interface SpringDataBookRepository extends BookRepository, CrudRepository
 	@Modifying
 	@Query("UPDATE Book SET verified=true WHERE id =:bookId")
 	void verifyBook(@Param("bookId") int bookId);
+	
+	@Override
+	@Query("SELECT book.verified FROM Book book WHERE book.user.username =:username")
+	List<Boolean> getVerifiedFromBooksByUsername(@Param("username") String username);
 }

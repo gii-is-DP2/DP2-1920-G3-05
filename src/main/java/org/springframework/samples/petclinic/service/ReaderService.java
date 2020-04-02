@@ -53,6 +53,17 @@ public class ReaderService {
 	}
 
 	@Transactional
+	public Iterable<Reader> findReaders() {
+		return this.readerRepository.findAll();
+	}
+	
+	@Transactional
+	public void verifyUser(int userId) {
+		this.readerRepository.verifyUser(userId);
+		Reader reader= this.readerRepository.findById(userId);
+		this.readerRepository.verifyBooksByUser(reader.getUser().getUsername());
+	}
+	@Transactional
 	public void saveReader(final Reader reader) throws DataAccessException, DuplicatedUsernameException {
 		Reader readeer = this.findReaderByUsername(reader.getUser().getUsername());
 		if (readeer == null) {
@@ -71,6 +82,10 @@ public class ReaderService {
 		} else {
 			throw new DuplicatedUsernameException();
 		}
+	}
+
+	public Reader findById(int userId) {
+		return this.readerRepository.findById(userId);
 	}
 
 }

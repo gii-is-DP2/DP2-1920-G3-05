@@ -154,7 +154,19 @@
 									</div>
 								</div>
 							</li>
-
+							<sec:authorize access="hasAuthority('admin')">
+							<li> 
+								<div class="navbar-login navbar-login-admin">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="/admin/listUsers" class="btn btn-primary btn-block">List users</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							</sec:authorize>
 						</ul></li>
 				</sec:authorize>
 			</ul>

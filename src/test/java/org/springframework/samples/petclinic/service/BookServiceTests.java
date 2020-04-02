@@ -388,5 +388,12 @@ class BookServiceTests {
 		Boolean canEdit = this.sut.canEditBook(bookId, username);
 		Assertions.assertThat(canEdit).isTrue();
 	}
-
+	
+	@Test
+	void shouldHaveVerifiedBooks(){
+		String username = "admin1";
+		List<Boolean> verified= this.sut.getVerifiedFromBooksByUsername(username);
+		Assertions.assertThat(verified).allMatch(i->i==true);
+	}
+	
 }

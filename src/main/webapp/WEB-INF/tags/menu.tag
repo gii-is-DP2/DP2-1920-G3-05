@@ -8,30 +8,25 @@
 	description="Name of the active menu: home, owners, vets or error"%>
 
 <nav class="navbar navbar-default" role="navigation">
-	<div class="container">
-		<div class="navbar-header">
-			<a class="navbar-brand"
-				href="<spring:url value="/" htmlEscape="true" />"><span></span></a>
-			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target="#main-navbar">
-				<span class="sr-only"><os-p>Toggle navigation</os-p></span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-		</div>
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 			
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
-					title="home page">
+					title="Home page">
 					<span class="glyphicon glyphicon-home navbar-left" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'books'}" url="/books/find"
-					title="find books">
+					title="Find books">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Search</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'topRaited'}" url="/books/topRaited"
+					title="Top raited books">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Top raited books</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'readBooks'}" url="/books/readBooks"
@@ -160,7 +155,4 @@
 			</ul>
 		</div>
 
-
-
-	</div>
 </nav>

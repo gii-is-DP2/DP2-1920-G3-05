@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -175,8 +177,8 @@ public class ReviewServiceTest {
 			this.sut.writeReview(review, user.getUsername());
 		}catch (CantWriteReviewException e){}
 
-		//Le toca la id 8 
-		Review savedReview = this.sut.findReviewById(8);
+		int id = review.getId();
+		Review savedReview = this.sut.findReviewById(id);
 		Assertions.assertThat(savedReview.getOpinion()).isEqualTo(opinion);
 		Assertions.assertThat(savedReview.getRaiting()).isEqualTo(rating);
 		Assertions.assertThat(savedReview.getTitle()).isEqualTo(title);
@@ -236,5 +238,21 @@ public class ReviewServiceTest {
 		int reviewId = 4;
 		String username = "vet1";
 		assertThrows(CantDeleteReviewException.class, ()-> this.sut.deleteReviewById(reviewId, username));
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"4,9,13","3,12,7","8,2,10"})
+	void shouldGetTopRaitedBooks(int bookId1, int bookId2, int bookId3) { 
+		List<Integer> topRaited = this.sut.topRaitedBooks();
+		Assertions.assertThat(topRaited).contains(bookId1,bookId2);
+		Assertions.assertThat(topRaited).doesNotContain(bookId3);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"2,5.0","11,4.0","6,3.5"})
+	void shouldGetRaitingBooks(int bookId, double raiting) { 
+		Assertions.assertThat(this.sut.getRaitingBooks(bookId)).isEqualTo(raiting);
 	}
 }

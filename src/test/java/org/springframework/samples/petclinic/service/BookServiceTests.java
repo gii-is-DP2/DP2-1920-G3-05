@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,41 +50,13 @@ class BookServiceTests {
 	private BookInNewService bookInNewsService;
 
 
-	@Test
-	void shouldFindBooksByTitle() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("harry");
-		Assertions.assertThat(books.size()).isEqualTo(2);
-	}
-
-	@Test
-	void shouldFindBooksByAuthor() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("Julia");
-		Assertions.assertThat(books.size()).isEqualTo(2);
-
-	}
-
-	@Test
-	void shouldFindBooksByGenre() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("Novel");
-		Assertions.assertThat(books.size()).isEqualTo(1);
-	}
-
-	@Test
-	void shouldFindBooksByISBN() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("9788466345347");
-		Assertions.assertThat(books.size()).isEqualTo(1);
-	}
-
-	@Test
-	void shouldFindBooksByTitleAuthorGenre() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("el");
-		Assertions.assertThat(books.size()).isEqualTo(3);
-	}
-
-	@Test
-	void shouldNotFindBooksByTitleAuthorGenre() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("harrry");
-		Assertions.assertThat(books.isEmpty()).isTrue();
+	@ParameterizedTest
+	@CsvSource({
+		"harry,2","Julia,2","Novel,1","9788466345347,1","el,3","harrry,0"
+	})
+	void shouldFindBooksByTitleAuthorGenre(String title,int size) {
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN(title);
+		Assertions.assertThat(books.size()).isEqualTo(size);
 	}
 
 	@Test

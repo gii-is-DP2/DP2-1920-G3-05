@@ -132,5 +132,15 @@ public class ReviewService {
 		}
 
 	}
+	
+	@Transactional
+	public List<Integer> topRaitedBooks() {
+		return this.reviewRepo.getTopRaitedBooks();
+	}
+	
+	@Transactional
+	public Double getRaitingBooks(int bookId) {
+		return this.reviewRepo.getRaitingBooks(bookId);
+	}
 
 }

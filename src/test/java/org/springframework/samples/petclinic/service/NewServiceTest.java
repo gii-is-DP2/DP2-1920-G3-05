@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -69,13 +71,15 @@ public class NewServiceTest {
 		Assertions.assertThat(bookIds).isEmpty();
 	}
 
-	@Test
-	void shouldGetAllNewOrderByDate() {
+	@ParameterizedTest
+	@CsvSource({
+		"0,5","1,4","5,1"
+	})
+	void shouldGetAllNewOrderByDate(int index, int newId) {
 
 		List<New> news = (List<New>) this.sut.getAllNews();
 
-		Assertions.assertThat(news.size() == 6);
-		Assertions.assertThat(news.get(0).getId() == 5);
+		Assertions.assertThat(news.get(index).getId() == newId);
 	}
 
 	@Test
@@ -91,48 +95,50 @@ public class NewServiceTest {
 		Assertions.assertThat(news.size()>newsOwner.size());
 	}
 	
-	@Test
-	void shouldGetBooksFromNewsId() {
-		List<Book> books = (List<Book>) this.sut.getBooksFromNews(1);
-		Assertions.assertThat(books.size() == 2);
-		Assertions.assertThat(books.get(0).getId() == 2);
-		Assertions.assertThat(books.get(1).getId() == 3);
+	@ParameterizedTest
+	@CsvSource({
+		"1,2,3","4,4,5"
+	})
+	void shouldGetBooksFromNewsId(int newId, int bookId1, int bookId2) {
+		List<Book> books = (List<Book>) this.sut.getBooksFromNews(newId);
+		Assertions.assertThat(books.get(0).getId() == bookId1);
+		Assertions.assertThat(books.get(1).getId() == bookId2);
 	}
 
-	@Test
-	void shouldDeteteNewById() {
-		this.sut.deleteById(1);
-		Assertions.assertThat(this.sut.getNewById(1)).isNull();
+	@ParameterizedTest
+	@CsvSource({
+		"1","2"
+	})
+	void shouldDeteteNewById(int newId) {
+		this.sut.deleteById(newId);
+		Assertions.assertThat(this.sut.getNewById(newId)).isNull();
 	}
 
-	@Test
-	void shouldNotAddDuplicatedBookInNew() {
-		int newId = 1;
-		int bookId1 = 4;
-		int bookId2 = 5;
-		this.sut.saveBookInNew(newId, bookId1);
-		this.sut.saveBookInNew(newId, bookId1);
-		this.sut.saveBookInNew(newId, bookId2);
-		this.sut.saveBookInNew(newId, bookId2);
-		BookInNew book = this.bookInNewService.getByNewIdBookId(newId, bookId1);
+	@ParameterizedTest
+	@CsvSource({
+		"1,4","2,3"
+	})
+	void shouldNotAddDuplicatedBookInNew(int newId, int bookId) {
+		this.sut.saveBookInNew(newId, bookId);
+		this.sut.saveBookInNew(newId, bookId);
+		BookInNew book = this.bookInNewService.getByNewIdBookId(newId, bookId);
 		Assertions.assertThat(book).isNotNull();
 
 	}
 
-	@Test
-	void shouldDeleteBookInNew() throws DataAccessException, CantDeleteBookInNewException {
-		int newId = 6;
-		int bookId = 3;
-
+	@ParameterizedTest
+	@CsvSource({
+		"1,2","4,4"
+	})
+	void shouldDeleteBookInNew(int newId, int bookId) throws DataAccessException, CantDeleteBookInNewException {
 		this.sut.deleteBookInNew(newId, bookId);
-
 	}
 
-	@Test
-	void shouldNotDeleteBookInNew() {
-		int newId = 2;
-		int bookId = 11;
-
+	@ParameterizedTest
+	@CsvSource({
+		"2,11","3,1"
+	})
+	void shouldNotDeleteBookInNew(int newId, int bookId) {
 		try {
 			this.sut.deleteBookInNew(newId, bookId);
 
@@ -141,19 +147,22 @@ public class NewServiceTest {
 		}
 	}
 
-	@Test
-	public void shouldSaveNew() {
+	@ParameterizedTest
+	@CsvSource({
+		"Name 1","Name 2"
+	})
+	public void shouldSaveNew(String name) {
 		New neew = new New();
 		neew.setBody("body");
 		LocalDate fecha = LocalDate.of(2019, 12, 02);
 		neew.setFecha(fecha);
 		neew.setHead("head");
-		neew.setName("name");
+		neew.setName(name);
 		neew.setRedactor("redactor");
 		this.sut.save(neew);
 		New neew2 = this.sut.getNewById(neew.getId());
 		Assertions.assertThat(neew2).isNotNull();
-		Assertions.assertThat(neew2.getName()).isEqualTo("name");
+		Assertions.assertThat(neew2.getName()).isEqualTo(name);
 
 	}
 }

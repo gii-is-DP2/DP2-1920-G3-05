@@ -169,7 +169,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 |Escenario positivo|Escenario negativo|
 |-|-|
 |Dado el usuario fraperbar que se ha leido el libro *Las memorias políticas del emperador Augusto* y está inscrito a una reunión del mismo con fecha 08/05/2020, cuando fraperbarr a fecha 04/03/2020 hace click en desinscribirse de la reunión, entonces queda desinscrito de dicha reunión|Dado el usuario juafefer que se ha leido el libro *Las memorias políticas del emperador Augusto* y no está inscrito a la reunión del mismo con fecha 08/05/2020, cuando juafefer intenta desapuntarse a través de URL, entonces el sistema no se lo permite y le indica que no es una acción legal|
-||Dado el usuario fraperbar que se ha leido el libro *Las memorias políticas del emperador Augusto* y está inscrito a una reunión del mismo con fecha 08/05/2020, cuando fraperbarr a fecha 09/03/2020 hace click en desinscribirse de la reunión, entonces el sistema le indica que la reunión ya se ha celebrado|
+||Dado el usuario fraperbar que se ha leido el libro *Las memorias políticas del emperador Augusto* y está inscrito a una reunión del mismo con fecha 08/05/2020, cuando fraperbarr a fecha 09/05/2020 hace click en desinscribirse de la reunión, entonces el sistema le indica que la reunión ya se ha celebrado|
 
 - **HU-11**: Filtrar reuniones por atributos  
   

@@ -10,7 +10,8 @@ import org.junit.runner.RunWith;
         features= {"src/test/java/"},	
         tags = {"not @ignore"},
         plugin = {"pretty",                                
-                "json:target/cucumber-reports/cucumber-report.json"}, 
+                "json:target/cucumber-reports/cucumber-report.json",
+                "html:target/cucumber-html-report"}, 
         monochrome=true)
 public class CucumberUITest {
 }

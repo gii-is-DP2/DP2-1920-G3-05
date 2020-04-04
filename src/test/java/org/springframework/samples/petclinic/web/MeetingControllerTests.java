@@ -60,6 +60,7 @@ public class MeetingControllerTests {
 
 	@MockBean
 	private LocalDateTimeFormatter	localDateTimeFormatter;
+	private Meeting					meeting;
 
     @BeforeEach
     void setup() throws ParseException{
@@ -67,24 +68,24 @@ public class MeetingControllerTests {
         book.setId(TEST_BOOK_ID);
 
         LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-        Meeting meeting = new Meeting();
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
-        meeting.setStart(begin);
-        meeting.setEnd(end);
-        meeting.setCapacity(50);
-        meeting.setBook(book);
-        meeting.setId(TEST_MEETING_ID);
+		LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
+		this.meeting = new Meeting();
+        this.meeting.setName("Meeting");
+        this.meeting.setPlace("Library");
+        this.meeting.setStart(begin);
+        this.meeting.setEnd(end);
+        this.meeting.setCapacity(50);
+        this.meeting.setBook(book);
+        this.meeting.setId(TEST_MEETING_ID);
 
         Collection<Meeting> meetingsOneResult = new ArrayList<>();
-        meetingsOneResult.add(meeting);
+        meetingsOneResult.add(this.meeting);
 
         Collection<Meeting> meetingsSeveralResults = new ArrayList<>();
         meetingsSeveralResults.add(new Meeting());
         meetingsSeveralResults.add(new Meeting());
 
-        when(meetingService.findMeetingById(TEST_MEETING_ID)).thenReturn(meeting);
+        when(meetingService.findMeetingById(TEST_MEETING_ID)).thenReturn(this.meeting);
         when(meetingService.findMeetingsByNamePlaceBookTile("One result")).thenReturn(meetingsOneResult);
         when(meetingService.findMeetingsByNamePlaceBookTile("Several results")).thenReturn(meetingsSeveralResults);
 
@@ -211,6 +212,16 @@ public class MeetingControllerTests {
 		Mockito.when(this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(MeetingControllerTests.TEST_MEETING_ID, "spring")).thenReturn(Optional.empty());
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/meetings/{meetingId}/unsuscribe", MeetingControllerTests.TEST_MEETING_ASSISTANT_ID)).andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attribute("mensaje", "You are not suscribed!")).andExpect(MockMvcResultMatchers.view().name("meetings/meetingDetails"));
+
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testUnsubscribeErrorDate() throws Exception {
+		this.meeting.setStart(LocalDateTime.of(2019, 10, 10, 17, 00, 00));
+		this.meeting.setEnd(LocalDateTime.of(2019, 10, 10, 19, 00, 00));
+		Mockito.when(this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(MeetingControllerTests.TEST_MEETING_ID, "spring")).thenReturn(Optional.of(1));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/meetings/{meetingId}/unsuscribe", MeetingControllerTests.TEST_MEETING_ASSISTANT_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attribute("mensaje", "The meeting has already been held!")).andExpect(MockMvcResultMatchers.view().name("meetings/meetingDetails"));
 
 	}
 

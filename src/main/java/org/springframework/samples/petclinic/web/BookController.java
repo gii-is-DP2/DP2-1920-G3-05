@@ -39,7 +39,6 @@ import org.springframework.samples.petclinic.service.WishedBookService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -116,7 +115,7 @@ public class BookController {
 			modelMap.put("emptyy", true);
 			return "books/recomendationList";
 		}
-		modelMap.put("notEmpty", true);
+
 		for (Integer i : ids) {
 			Book book = this.bookService.findBookById(i);
 			selections.add(book);
@@ -126,11 +125,16 @@ public class BookController {
 		String genreName = BookController.maxGenre(genres);
 		List<Book> recomendations = (List<Book>) this.bookService.findBookByTitleAuthorGenreISBN(genreName);
 		recomendations.removeAll(selections);
+		if (recomendations.isEmpty()) {
+			modelMap.put("NoMore", true);
+			modelMap.put("genreName", genreName.toLowerCase());
+			return "books/recomendationList";
+		}
+		modelMap.put("notEmpty", true);
 		modelMap.put("selections", recomendations);
 
 		return "books/recomendationList";
 	}
-
 	@GetMapping(value = "/books")
 	public String processFindForm(Book book, final BindingResult result, final Map<String, Object> model) {
 
@@ -229,7 +233,7 @@ public class BookController {
 		User u = new User();
 		u = this.userService.findUserByUsername(userDetail.getUsername());
 		book.setUser(u);
-		
+
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
 			return "books/bookAdd";
@@ -308,9 +312,9 @@ public class BookController {
 
 	@GetMapping("/admin/books/{bookId}/verify")
 	public String verifyBook(@PathVariable("bookId") final int bookId) {
-	    	this.bookService.verifyBook(bookId);
-			return "redirect:/books/" + bookId;
-		
+		this.bookService.verifyBook(bookId);
+		return "redirect:/books/" + bookId;
+
 	}
 
 	/*
@@ -381,11 +385,11 @@ public class BookController {
 		}
 		return genre;
 	}
-	
+
 	@GetMapping("/books/topRead")
 	public String topLibrosLeidos(final ModelMap modelMap) {
 		List<Book> selections = new ArrayList<>();
-		List<Integer> ids=this.readBookService.topReadBooks();
+		List<Integer> ids = this.readBookService.topReadBooks();
 		for (Integer i : ids) {
 			selections.add(this.bookService.findBookById(i));
 

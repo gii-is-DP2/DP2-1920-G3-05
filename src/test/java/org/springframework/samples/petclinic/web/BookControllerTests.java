@@ -10,6 +10,7 @@ import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -56,7 +58,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doThrow;
-
 
 @WebMvcTest(controllers = BookController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class BookControllerTests {
@@ -95,11 +96,11 @@ class BookControllerTests {
 	@MockBean
 	private ReadBookService			readBookService;
 
-    @MockBean
-	private AuthoritiesService	authoritiesService;
+	@MockBean
+	private AuthoritiesService		authoritiesService;
 
 	@MockBean
-	private BookRepository	bookRepo;
+	private BookRepository			bookRepo;
 
 	@MockBean
 	private WishedBookService		wishedBookService;
@@ -121,7 +122,7 @@ class BookControllerTests {
 		this.user.setEnabled(true);
 		this.user.setUsername("Owner2");
 		this.user.setPassword("0wn3r");
-    	genre.setId(3);
+		this.genre.setId(3);
 		this.genre.setName("Novela");
 		this.book.setId(BookControllerTests.TEST_BOOK_ID);
 		this.book.setAuthor("Patrick Rothfuss");
@@ -136,8 +137,8 @@ class BookControllerTests {
 		this.book.setTitle("The name of the Wind");
 		this.book.setUser(this.user);
 		this.book.setVerified(false);
-        when(this.bookService.findGenre()).thenReturn(Lists.newArrayList(genre));
-		BDDMockito.given(this.userservice.findUserByUsername(user.getUsername())).willReturn(this.user);
+		Mockito.when(this.bookService.findGenre()).thenReturn(Lists.newArrayList(this.genre));
+		BDDMockito.given(this.userservice.findUserByUsername(this.user.getUsername())).willReturn(this.user);
 		BDDMockito.given(this.bookService.findBookById(BookControllerTests.TEST_BOOK_ID)).willReturn(this.book);
 		BDDMockito.given(this.bookService.canEditBook(BookControllerTests.TEST_BOOK_ID, "spring")).willReturn(true);
 		Mockito.when(this.reviewService.getReviewsIdFromBook(BookControllerTests.TEST_BOOK_ID)).thenReturn(new ArrayList<Integer>());
@@ -179,27 +180,26 @@ class BookControllerTests {
 	@Test
 	void testDelete() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/books/delete/{bookId}", BookControllerTests.TEST_BOOK_ID)).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/books"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/books/delete/{bookId}", BookControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/books"));
 
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitUpdateBookForm() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}/updateForm", BookControllerTests.TEST_BOOK_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("book"))
-			.andExpect(model().attribute("book", Matchers.hasProperty("title", Matchers.is("The name of the Wind"))))
-			.andExpect(model().attribute("book", Matchers.hasProperty("image", Matchers.is("https://www.nombreviento.com/"))))
-			.andExpect(model().attribute("book", Matchers.hasProperty("verified", Matchers.is(false)))).andExpect(model().attribute("book", Matchers.hasProperty("genre", Matchers.is(this.genre))))
-			.andExpect(model().attributeExists("genres")).andExpect(view().name("books/UpdateBookForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}/updateForm", BookControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("book"))
+			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("title", Matchers.is("The name of the Wind"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("image", Matchers.is("https://www.nombreviento.com/"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("verified", Matchers.is(false)))).andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("genre", Matchers.is(this.genre))))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("genres")).andExpect(MockMvcResultMatchers.view().name("books/UpdateBookForm"));
 
 	}
 
-	
 	@WithMockUser(value = "spring2")
 	@Test
 	void testInitUpdateBookFormWithOtherUser() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}/updateForm", BookControllerTests.TEST_BOOK_ID)).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/oups"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}/updateForm", BookControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/oups"));
 
 	}
 
@@ -209,17 +209,17 @@ class BookControllerTests {
 		this.mockMvc
 			.perform(MockMvcRequestBuilders.post("/books/update/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Change").param("author", "NewAuthor").param("editorial", "NewEdit")
 				.param("genre.name", "fiction").param("ISBN", "9780345805362").param("pages", "12").param("synopsis", "nuevaSinopsis").param("image", "https://www.nombrevasiento.com/").param("publicationDate", "2018/11/11"))
-			.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/books/" + BookControllerTests.TEST_BOOK_ID));
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/books/" + BookControllerTests.TEST_BOOK_ID));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateBookFormWithDuplicatedISBN() throws Exception {
-		doThrow(DuplicatedISBNException.class).when(bookService).save(any(Book.class));
+		Mockito.doThrow(DuplicatedISBNException.class).when(this.bookService).save(ArgumentMatchers.any(Book.class));
 		this.mockMvc
 			.perform(MockMvcRequestBuilders.post("/books/update/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Change").param("author", "NewAuthor").param("editorial", "NewEdit")
 				.param("genre.name", "fiction").param("ISBN", "9780345805362").param("pages", "12").param("synopsis", "nuevaSinopsis").param("image", "https://www.nombrevasiento.com/").param("publicationDate", "2018/11/11"))
-			.andExpect(status().isOk()).andExpect(view().name("books/UpdateBookForm"));
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/UpdateBookForm"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -228,7 +228,7 @@ class BookControllerTests {
 		this.mockMvc
 			.perform(MockMvcRequestBuilders.post("/books/update/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "").param("author", "NewAuthor").param("editorial", "NewEdit")
 				.param("genre.name", "fiction").param("ISBN", "9780345805362").param("pages", "12").param("synopsis", "nuevaSinopsis").param("image", "https://www.nombrevasiento.com/").param("publicationDate", "2018/11/11"))
-			.andExpect(status().isOk()).andExpect(view().name("/books/UpdateBookForm"));
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("/books/UpdateBookForm"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
@@ -236,36 +236,48 @@ class BookControllerTests {
 		List<Integer> ids = new ArrayList<>();
 		ids.add(BookControllerTests.TEST_BOOK_ID);
 		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(ids);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/readBooks")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
-			.andExpect(view().name("books/booksList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/readBooks")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections"))
+			.andExpect(MockMvcResultMatchers.view().name("books/booksList"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testAddReadBook() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/readBooks/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(status().is3xxRedirection())
-			.andExpect(redirectedUrl("/books"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/readBooks/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.redirectedUrl("/books"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowRecomendationsListWithReadBooksHtml() throws Exception {
 		List<Integer> ids = new ArrayList<>();
+		List<Book> books = new ArrayList<>();
+		Book book2 = new Book();
+
 		ids.add(BookControllerTests.TEST_BOOK_ID);
+		books.add(book2);
 		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(ids);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
-			.andExpect(model().attribute("notEmpty", Matchers.is(true))).andExpect(view().name("books/recomendationList"));
+		Mockito.when(this.bookService.findBookByTitleAuthorGenreISBN(this.book.getGenre().getName())).thenReturn(books);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections"))
+			.andExpect(MockMvcResultMatchers.model().attribute("notEmpty", Matchers.is(true))).andExpect(MockMvcResultMatchers.view().name("books/recomendationList"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowRecomendationsListWithoutReadBooksHtml() throws Exception {
 
 		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(new ArrayList<>());
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(status().isOk()).andExpect(model().attribute("emptyy", Matchers.is(true)))
-			.andExpect(view().name("books/recomendationList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attribute("emptyy", Matchers.is(true)))
+			.andExpect(MockMvcResultMatchers.view().name("books/recomendationList"));
 	}
 
-
-
-	
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowRecomendationsListWithoutRecomendationsHtml() throws Exception {
+		List<Integer> ids = new ArrayList<>();
+		ids.add(BookControllerTests.TEST_BOOK_ID);
+		Mockito.when(this.readBookService.findBooksIdByUser("spring")).thenReturn(ids);
+		Mockito.when(this.bookService.findBookByTitleAuthorGenreISBN(this.book.getGenre().getName())).thenReturn(new ArrayList<>());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/recomendations")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attribute("NoMore", Matchers.is(true)))
+			.andExpect(MockMvcResultMatchers.model().attribute("genreName", this.book.getGenre().getName().toLowerCase())).andExpect(MockMvcResultMatchers.view().name("books/recomendationList"));
+	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitFindForm() throws Exception {
@@ -276,129 +288,104 @@ class BookControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books")).andExpect(status().isOk()).andExpect(model().attributeExists("selections")).andExpect(view().name("books/booksList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections")).andExpect(MockMvcResultMatchers.view().name("books/booksList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books").param("title", "9788497593793")).andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/books/" + BookControllerTests.TEST_BOOK_ID));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books").param("title", "9788497593793")).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/books/" + BookControllerTests.TEST_BOOK_ID));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindFormNoBooksFound() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books").param("title", "Unknown Title")).andExpect(status().isOk()).andExpect(model().attributeHasFieldErrors("book", "title"))
-			.andExpect(model().attributeHasFieldErrorCode("book", "title", "notFound")).andExpect(view().name("books/findBooks"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books").param("title", "Unknown Title")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "title"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrorCode("book", "title", "notFound")).andExpect(MockMvcResultMatchers.view().name("books/findBooks"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowBook() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}", BookControllerTests.TEST_BOOK_ID_2)).andExpect(status().isOk())
-			.andExpect(model().attribute("book", Matchers.hasProperty("title", Matchers.is("Title test")))).andExpect(model().attribute("book", Matchers.hasProperty("author", Matchers.is("Author test"))))
-			.andExpect(model().attribute("book", Matchers.hasProperty("ISBN", Matchers.is("9788497593793")))).andExpect(view().name("books/bookDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/{bookId}", BookControllerTests.TEST_BOOK_ID_2)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("title", Matchers.is("Title test")))).andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("author", Matchers.is("Author test"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("book", Matchers.hasProperty("ISBN", Matchers.is("9788497593793")))).andExpect(MockMvcResultMatchers.view().name("books/bookDetails"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindTopReadBooks() throws Exception {
-		mockMvc.perform(get("/books/topRead")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
-				.andExpect(view().name("books/booksList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/topRead")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections"))
+			.andExpect(MockMvcResultMatchers.view().name("books/booksList"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessListWishedBooks() throws Exception {
-		mockMvc.perform(get("/books/wishList")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
-				.andExpect(view().name("books/booksList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/wishList")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("selections"))
+			.andExpect(MockMvcResultMatchers.view().name("books/booksList"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessAddWishedBooks() throws Exception {
-		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
-				.with(csrf())).andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/books"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/wishList/{book.id}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/books"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessNotAddWishedBook() throws Exception {
-		doThrow(ReadOrWishedBookException.class).when(wishedBookService).save(any(WishedBook.class));
+		Mockito.doThrow(ReadOrWishedBookException.class).when(this.wishedBookService).save(ArgumentMatchers.any(WishedBook.class));
 
-		when(this.wishedBookService.esWishedBook(TEST_BOOK_ID)).thenReturn(true);
-		mockMvc.perform(post("/books/wishList/{book.id}",TEST_BOOK_ID)
-				.with(csrf())).andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/oups"));
+		Mockito.when(this.wishedBookService.esWishedBook(BookControllerTests.TEST_BOOK_ID)).thenReturn(true);
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/wishList/{book.id}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/oups"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindEmptyTopReadBooks() throws Exception {
-		when(this.readBookService.topReadBooks()).thenReturn(Lists.newArrayList());
-		mockMvc.perform(get("/books/topRead")).andExpect(status().isOk()).andExpect(model().attribute("selections", IsEmptyCollection.empty()))
-				.andExpect(view().name("books/booksList"));
+		Mockito.when(this.readBookService.topReadBooks()).thenReturn(Lists.newArrayList());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/topRead")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attribute("selections", IsEmptyCollection.empty()))
+			.andExpect(MockMvcResultMatchers.view().name("books/booksList"));
 	}
 
-	@WithMockUser(value = "spring",authorities= {"admin"})
+	@WithMockUser(value = "spring", authorities = {
+		"admin"
+	})
 	@Test
 	void testVerifyBookAdmin() throws Exception {
-		mockMvc.perform(get("/admin/books/{bookId}/verify",TEST_BOOK_ID)
-				)
-	.andExpect(status().is3xxRedirection())
-	.andExpect(view().name("redirect:/books/" + TEST_BOOK_ID));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/books/{bookId}/verify", BookControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/books/" + BookControllerTests.TEST_BOOK_ID));
 	}
 
-	@WithMockUser(value = "spring") 
-	@Test 
-	   void testAddBook() throws Exception { 
-		   mockMvc.perform(get("/books/add")).andExpect(status().isOk()) 
-				   .andExpect(view().name("books/bookAdd")).andExpect(model().attributeExists("book")); 
-	   } 
+	@WithMockUser(value = "spring")
+	@Test
+	void testAddBook() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/add")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("books/bookAdd")).andExpect(MockMvcResultMatchers.model().attributeExists("book"));
+	}
 
-	@WithMockUser(value = "spring") 
-	@Test 
-   void testSaveBook() throws Exception { 
-	   mockMvc.perform(post("/books/save") 
-						   .with(csrf()) 
-						   .param("title", "El nombre del viento") 
-						   .param("author", "Patrick") 
-						   .param("editorial", "SM") 
-						   .param("genre.name", "Novela") 
-						   .param("ISBN", "9780345805362") 
-						   .param("pages", "100") 
-						   .param("synopsis","He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí\"") 
-						   .param("publicationDate","2015/12/11") 
-						   .param("image","https://pictures.abebooks.com/isbn/9780575081406-es.jpg"))							 
-						   .andExpect(status().is3xxRedirection()) 
-						   .andExpect(redirectedUrl("/books")); 
-   } 
+	@WithMockUser(value = "spring")
+	@Test
+	void testSaveBook() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/save").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "El nombre del viento").param("author", "Patrick").param("editorial", "SM").param("genre.name", "Novela")
+			.param("ISBN", "9780345805362").param("pages", "100")
+			.param("synopsis",
+				"He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí\"")
+			.param("publicationDate", "2015/12/11").param("image", "https://pictures.abebooks.com/isbn/9780575081406-es.jpg")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/books"));
+	}
 
-	@WithMockUser(value = "spring") 
-	@Test 
-   void testSaveBookHasErrors() throws Exception { 
-	   mockMvc.perform(post("/books/save") 
-						   .with(csrf()) 
-						   .param("title", " ") 
-						   .param("author", " ") 
-						   .param("editorial", " ") 
-						   .param("genre", " ") 
-						   .param("ISBN", " ") 
-						   .param("pages", "1") 
-						   .param("synopsis"," ") 
-						   .param("publicationDate","2015/11/12") 
-						   .param("image",""))	 
-						   .andExpect(status().isOk()) 
-						   .andExpect(model().attributeHasErrors("book")) 
-						   .andExpect(model().attributeHasFieldErrors("book","title")) 
-						   .andExpect(model().attributeHasFieldErrors("book","author")) 
-						   .andExpect(model().attributeHasFieldErrors("book","editorial")) 
-						   .andExpect(model().attributeHasFieldErrors("book","genre")) 
-						   .andExpect(model().attributeHasFieldErrors("book","ISBN")) 
-						   .andExpect(model().attributeHasFieldErrors("book","synopsis")) 
-						   .andExpect(model().attributeHasFieldErrors("book","image")) 
-						   .andExpect(view().name("books/bookAdd")); 
-   } 
+	@WithMockUser(value = "spring")
+	@Test
+	void testSaveBookHasErrors() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/books/save").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", " ").param("author", " ").param("editorial", " ").param("genre", " ").param("ISBN", " ").param("pages", "1")
+				.param("synopsis", " ").param("publicationDate", "2015/11/12").param("image", ""))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("book")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "title"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "author")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "editorial"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "genre")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "ISBN"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "synopsis")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "image")).andExpect(MockMvcResultMatchers.view().name("books/bookAdd"));
+	}
 
    @WithMockUser(value = "spring") 
 	@Test 

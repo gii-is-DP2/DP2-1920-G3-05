@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,11 +124,16 @@ public class MeetingController {
 	public ModelAndView Unsuscribe(@PathVariable("meetingId") final int meetingId, final ModelMap modelMap) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
+		Meeting meeting = this.meetingService.findMeetingById(meetingId);
 		Optional<Integer> meetingAssistantId = this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(meetingId, userdetails.getUsername());
 
 		if (meetingAssistantId.isPresent()) {
-			this.meetingAssistantService.deleteAssistantById(meetingAssistantId.get());
-			modelMap.put("mensaje", "You are successfully unsubscribed");
+			if (!meeting.getEnd().isBefore(LocalDateTime.now())) {
+				this.meetingAssistantService.deleteAssistantById(meetingAssistantId.get());
+				modelMap.put("mensaje", "You are successfully unsubscribed");
+			} else {
+				modelMap.put("mensaje", "The meeting has already been held!");
+			}
 		} else {
 			modelMap.put("mensaje", "You are not suscribed!");
 

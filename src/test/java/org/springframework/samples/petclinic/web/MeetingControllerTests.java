@@ -52,6 +52,7 @@ public class MeetingControllerTests {
 
 	@MockBean
 	private LocalDateTimeFormatter	localDateTimeFormatter;
+	private Meeting					meeting;
 
 
 	@BeforeEach
@@ -59,18 +60,18 @@ public class MeetingControllerTests {
 		Book book = new Book();
 		book.setId(MeetingControllerTests.TEST_BOOK_ID);
 
-		Meeting meeting = new Meeting();
+		this.meeting = new Meeting();
 		LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
 		LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-		meeting.setName("Meeting");
-		meeting.setPlace("Library");
-		meeting.setStart(begin);
-		meeting.setEnd(end);
-		meeting.setCapacity(50);
-		meeting.setBook(book);
-		meeting.setId(MeetingControllerTests.TEST_MEETING_ID);
+		this.meeting.setName("Meeting");
+		this.meeting.setPlace("Library");
+		this.meeting.setStart(begin);
+		this.meeting.setEnd(end);
+		this.meeting.setCapacity(50);
+		this.meeting.setBook(book);
+		this.meeting.setId(MeetingControllerTests.TEST_MEETING_ID);
 
-		Mockito.when(this.meetingService.findMeetingById(MeetingControllerTests.TEST_MEETING_ID)).thenReturn(meeting);
+		Mockito.when(this.meetingService.findMeetingById(MeetingControllerTests.TEST_MEETING_ID)).thenReturn(this.meeting);
 
 		Mockito.when(this.localDateTimeFormatter.parse(ArgumentMatchers.eq("2020-10-10T17:00"), ArgumentMatchers.any(Locale.class))).thenReturn(begin);
 		Mockito.when(this.localDateTimeFormatter.parse(ArgumentMatchers.eq("2020-10-10T19:00"), ArgumentMatchers.any(Locale.class))).thenReturn(end);
@@ -188,6 +189,16 @@ public class MeetingControllerTests {
 		Mockito.when(this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(MeetingControllerTests.TEST_MEETING_ID, "spring")).thenReturn(Optional.empty());
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/meetings/{meetingId}/unsuscribe", MeetingControllerTests.TEST_MEETING_ASSISTANT_ID)).andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attribute("mensaje", "You are not suscribed!")).andExpect(MockMvcResultMatchers.view().name("meetings/meetingDetails"));
+
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testUnsubscribeErrorDate() throws Exception {
+		this.meeting.setStart(LocalDateTime.of(2019, 10, 10, 17, 00, 00));
+		this.meeting.setEnd(LocalDateTime.of(2019, 10, 10, 19, 00, 00));
+		Mockito.when(this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(MeetingControllerTests.TEST_MEETING_ID, "spring")).thenReturn(Optional.of(1));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/meetings/{meetingId}/unsuscribe", MeetingControllerTests.TEST_MEETING_ASSISTANT_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attribute("mensaje", "The meeting has already been held!")).andExpect(MockMvcResultMatchers.view().name("meetings/meetingDetails"));
 
 	}
 

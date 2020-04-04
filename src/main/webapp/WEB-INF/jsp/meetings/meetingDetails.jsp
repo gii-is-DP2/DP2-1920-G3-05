@@ -41,7 +41,7 @@
 	<c:if test="${suscribed}">
 	<a class="btn btn-default"
 			href='<spring:url value="/meetings/${meeting.id}/unsuscribe" htmlEscape="true"/>'
-			onclick="return confirm('Are you sure you want to unsubscribe?');">Unsubscribe</a>
+			>Unsubscribe</a>
 		
 	</c:if>
 	

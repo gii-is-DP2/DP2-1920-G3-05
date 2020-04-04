@@ -84,8 +84,7 @@
 	<sec:authorize access="hasAuthority('admin')">
 		<a class="btn btn-default"
 			href='<spring:url value="/admin/books/delete/${book.id}" htmlEscape="true"/>'
-			onclick="return confirm('Are you sure you want to delete this book?');">Delete
-			Book</a>
+			onclick="return confirm('Are you sure you want to delete this book?');" id="deleteBook">Delete Book</a>
 		<c:if test="${book.verified}">
 		<a class="btn btn-default"
 			href='<spring:url value="/admin/books/${book.id}/meetings/new" htmlEscape="true"/>'>

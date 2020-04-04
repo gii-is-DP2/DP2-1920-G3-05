@@ -75,7 +75,8 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario administrador y el libro *Muerte en el Nilo* que tiene asociado 3 reviews y 2 publicaciones, cuando el administrador intenta borrar *Muerte en el Nilo* y lo confirma, entonces tanto las reviews, como las publicaciones como el libro quedan eliminados del sistema | Dado el usuario estgantri y el libro *Africanus, el hijo del consul*, cuando estgantri intenta borrar *Africanus, el hijo del consul*, entonces el sistema le indcica que no dispone de los permisos necesarios ya que sólo el administrador puede eliminar libros|
+|Dado el usuario administrador y el libro *Muerte en el Nilo* que tiene asociado 3 reviews y 2 publicaciones, cuando el administrador intenta borrar *Muerte en el Nilo* y lo confirma, entonces tanto las reviews, como las publicaciones como el libro quedan eliminados del sistema | Dado el usuario administrador y el libro *Muerte en el Nilo* que tiene asociado 3 reviews y 2 publicaciones, cuando el administrador intenta borrar *Muerte en el Nilo* y no lo confirma, entonces el libro no se borra|
+|| Dado el usuario estgantri y el libro *Africanus, el hijo del consul*, cuando estgantri intenta borrar *Africanus, el hijo del consul*, entonces el sistema le indcica que no dispone de los permisos necesarios ya que sólo el administrador puede eliminar libros|
 
 
 - **HU-04**: Verificar libro  

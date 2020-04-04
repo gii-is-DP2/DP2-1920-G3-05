@@ -1,6 +1,8 @@
+
 package org.springframework.samples.petclinic.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,16 +38,30 @@ public class MeetingAssistantServiceTest {
 	void shouldDeleteMeetingAssistantFromMeeting(int meetingId) {
 		List<Integer> meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
 		Assertions.assertThat(meetingAssistantsIds.size()).isEqualTo(2);
-		
+
 		this.sut.deleteAssistantById(meetingAssistantsIds.get(0));
-		
+
 		meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
 		Assertions.assertThat(meetingAssistantsIds.size()).isEqualTo(1);
-		
+
 		this.sut.deleteAssistantById(meetingAssistantsIds.get(0));
-		
+
 		meetingAssistantsIds = this.sut.getAssistantsMeeting(meetingId);
 		Assertions.assertThat(meetingAssistantsIds).isEmpty();
-		
+
 	}
+
+    @ParameterizedTest
+	@CsvSource({
+		"1, admin1, 1",
+		"1, owner1, 2",
+		"2, admin1, 3"
+	})
+	void shouldfindMeetingAssistantByUsernameAndMeetingId(final int meetingId, final String username, int meetingAssitantId) {
+
+		Optional<Integer> meetingAssistantsId = this.sut.findMeetingAssistantByUsernameAndMeetingId(meetingId, username);
+		Assertions.assertThat(meetingAssistantsId.get()).isEqualTo(meetingAssitantId);
+
+	}
+
 }

@@ -1,5 +1,5 @@
-package org.springframework.samples.petclinic.service;
 
+package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,19 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MeetingService {
 
-	private MeetingRepository meetingRepository;
-	
-	private MeetingAssistantService meetingAssistantService;
+	private MeetingRepository		meetingRepository;
+
+	private MeetingAssistantService	meetingAssistantService;
 
 
 	@Autowired
-	public MeetingService(MeetingRepository meetingRepository, MeetingAssistantService meetingAssistantService, BookService bookService) {
+	public MeetingService(final MeetingRepository meetingRepository, final MeetingAssistantService meetingAssistantService, final BookService bookService) {
 		this.meetingRepository = meetingRepository;
 		this.meetingAssistantService = meetingAssistantService;
 	}
-		
+
 	@Transactional(readOnly = true)
-	public List<Integer> getMeetingsIdFromBook(int bookId) throws DataAccessException {
+	public List<Integer> getMeetingsIdFromBook(final int bookId) throws DataAccessException {
 		return this.meetingRepository.getMeetingsFromBook(bookId);
 	}
 
@@ -36,38 +36,38 @@ public class MeetingService {
 	public List<Meeting> findAllMeetings() throws DataAccessException {
 		return this.meetingRepository.findAll();
 	}
-	
+
 	@Transactional
 	@Modifying
-	public void deleteMeeting(int meetingId) throws DataAccessException {
+	public void deleteMeeting(final int meetingId) throws DataAccessException {
 		//Primero hay que borrar los asistentes a la reunion
 		List<Integer> meetingAssistantsId = this.meetingAssistantService.getAssistantsMeeting(meetingId);
-		if(meetingAssistantsId!=null && !meetingAssistantsId.isEmpty()) {
-			for(Integer i: meetingAssistantsId) {
+		if (meetingAssistantsId != null && !meetingAssistantsId.isEmpty()) {
+			for (Integer i : meetingAssistantsId) {
 				this.meetingAssistantService.deleteAssistantById(i);
 			}
 		}
 		this.meetingRepository.deleteMeetingById(meetingId);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Boolean existsMeetingById(int meetingId) throws DataAccessException {
+	public Boolean existsMeetingById(final int meetingId) throws DataAccessException {
 		return this.meetingRepository.existsById(meetingId);
 	}
 
 	@Transactional
 	@Modifying
-	public void addMeeting(Meeting meeting) throws DataAccessException, NotVerifiedBookMeetingException {
+	public void addMeeting(final Meeting meeting) throws DataAccessException, NotVerifiedBookMeetingException {
 		Boolean isVerifiedBook = meeting.getBook().getVerified();
-		if(isVerifiedBook){
+		if (isVerifiedBook) {
 			this.meetingRepository.save(meeting);
-		}else{
+		} else {
 			throw new NotVerifiedBookMeetingException();
 		}
 	}
 
 	@Transactional
-	public Meeting findMeetingById(int meetingid) throws DataAccessException {
+	public Meeting findMeetingById(final int meetingid) throws DataAccessException {
 		return this.meetingRepository.findById(meetingid);
 	}
 

@@ -9,7 +9,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <petclinic:layout pageName="meeting">
-
+<div style="color:red"><c:out value="${mensaje}"></c:out></div>
 	<h2>Meeting Information</h2>
 
 	<table class="table table-striped">
@@ -38,5 +38,12 @@
 			<td><c:out value="${meeting.book.title}" /></td>
 		</tr>
 	</table>
-
+	<c:if test="${suscribed}">
+	<a class="btn btn-default"
+			href='<spring:url value="/meetings/${meeting.id}/unsuscribe" htmlEscape="true"/>'
+			onclick="return confirm('Are you sure you want to unsubscribe?');">Unsubscribe</a>
+		
+	</c:if>
+	
+	
 </petclinic:layout>

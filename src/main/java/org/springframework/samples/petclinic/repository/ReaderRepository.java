@@ -37,5 +37,11 @@ public interface ReaderRepository {
 	Reader save(Reader reader) throws DataAccessException;
 
 	Reader findReaderByUsername(String username) throws DataAccessException;
+	
+	Iterable<Reader> findAll() throws DataAccessException;
+	
+	void verifyUser(int userId);
+
+	void verifyBooksByUser(String username);
 
 }

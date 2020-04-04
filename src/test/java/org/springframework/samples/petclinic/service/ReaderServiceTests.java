@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,6 +20,9 @@ class ReaderServiceTests {
 
 	@Autowired
 	private ReaderService	readerService;
+	
+	@Autowired
+	private BookService	bookService;
 
 
 	@ParameterizedTest
@@ -94,6 +99,15 @@ class ReaderServiceTests {
 		this.readerService.saveReader(reader);
 		Reader reader2 = this.readerService.findReaderByUsername(username);
 		Assertions.assertThat(reader2.getFirstName()).isEqualTo(firstname);
+	}
+	
+	@Test
+	void shouldVerifyReader() {
+		this.readerService.verifyUser(2);
+		Reader reader = this.readerService.findReaderByUsername("owner1");
+		Assertions.assertThat(reader.getVerified()).isTrue();
+		List<Boolean> verified= this.bookService.getVerifiedFromBooksByUsername(reader.getUser().getUsername());
+		Assertions.assertThat(verified).allMatch(i->i==true);
 	}
 
 }

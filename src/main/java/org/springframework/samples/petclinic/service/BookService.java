@@ -205,5 +205,10 @@ public class BookService {
 
 		return res;
 	}
+	@Transactional(readOnly = true)
+	public List<Boolean> getVerifiedFromBooksByUsername(final String username) throws DataAccessException {
+		return this.bookRepository.getVerifiedFromBooksByUsername(username);
+
+	}
 
 }

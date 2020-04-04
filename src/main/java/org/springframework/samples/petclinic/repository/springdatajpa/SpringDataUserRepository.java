@@ -12,5 +12,6 @@ public interface SpringDataUserRepository extends UserRepository, Repository<Use
 	@Override
 	@Query("SELECT user FROM User user WHERE user.username = :username")
 	User findByUsername(@Param("username") String username);
+	
 
 }

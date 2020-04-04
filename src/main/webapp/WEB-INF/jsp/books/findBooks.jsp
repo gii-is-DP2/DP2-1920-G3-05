@@ -1,3 +1,4 @@
+<%@page pageEncoding="UTF-8"%>
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -5,7 +6,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+    uri="http://www.springframework.org/security/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
 <petclinic:layout pageName="books">
@@ -34,8 +36,19 @@
         </div>
 
     </form:form>
+
     <a class="btn btn-default" href='<spring:url value="/books/add" htmlEscape="true"/>'>Add Book</a>
 
     <br/> 
-	
+    <br/> 
+    
+    <div style="text-align: center;">
+    <pre>
+    <p><b><c:out value="${poem.title}"/></b></p>
+    <c:out value="${poem.content}"/>
+    <br/> 
+    <p>Writed by <c:out value="${poem.poet.name}"/></p>
+    </pre>
+    </div>
+
 </petclinic:layout>

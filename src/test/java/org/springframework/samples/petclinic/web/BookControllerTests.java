@@ -42,6 +42,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -139,8 +142,10 @@ class BookControllerTests {
 		Mockito.doNothing().when(this.readBookService).deleteReadBookByBookId(BookControllerTests.TEST_BOOK_ID);
 		Mockito.doNothing().when(this.wishedBookService).deleteByBookId(BookControllerTests.TEST_BOOK_ID);
 		Mockito.doNothing().when(this.bookService).deleteById(BookControllerTests.TEST_BOOK_ID, "spring");
-
-
+		List<Integer> topRaited = new ArrayList<Integer>();
+		topRaited.add(TEST_BOOK_ID_2);
+		Mockito.when(this.reviewService.topRaitedBooks()).thenReturn(topRaited);
+		Mockito.when(this.reviewService.getRaitingBooks(TEST_BOOK_ID_2)).thenReturn(4.0);
         List<Book> booksNews1 = new ArrayList<Book>();
 		booksNews1.add(new Book());
 		booksNews1.add(new Book());
@@ -406,4 +411,13 @@ class BookControllerTests {
 						   .andExpect(status().isOk()) 
 						   .andExpect(view().name("books/bookAdd")); 
    }
+   
+   @WithMockUser(value = "spring")
+	@Test
+	void testTopLibrosMejorValorados() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/topRaited")).andExpect(status().isOk()).andExpect(model().attributeExists("selections"))
+		.andExpect(model().attributeExists("raiting")).andExpect(view().name("books/topRaitedBooks"));
+
+	}
 }

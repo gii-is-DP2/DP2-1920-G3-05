@@ -199,7 +199,8 @@ public class ReviewServiceTest {
 			this.sut.writeReview(review, username);
 		}catch (CantWriteReviewException e){}
 
-		Review savedReview = this.sut.findReviewById(futureId);
+		int id = review.getId();
+		Review savedReview = this.sut.findReviewById(id);
 		Assertions.assertThat(savedReview.getOpinion()).isEqualTo(opinion);
 		Assertions.assertThat(savedReview.getRaiting()).isEqualTo(rating);
 		Assertions.assertThat(savedReview.getTitle()).isEqualTo(title);
@@ -276,5 +277,21 @@ public class ReviewServiceTest {
 	})
 	void shouldNotDeleteOthersReview(int reviewId, String username) { 
 		assertThrows(CantDeleteReviewException.class, ()-> this.sut.deleteReviewById(reviewId, username));
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"4,9,13","3,12,7","8,2,10"})
+	void shouldGetTopRaitedBooks(int bookId1, int bookId2, int bookId3) { 
+		List<Integer> topRaited = this.sut.topRaitedBooks();
+		Assertions.assertThat(topRaited).contains(bookId1,bookId2);
+		Assertions.assertThat(topRaited).doesNotContain(bookId3);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"2,5.0","11,4.0","6,3.5"})
+	void shouldGetRaitingBooks(int bookId, double raiting) { 
+		Assertions.assertThat(this.sut.getRaitingBooks(bookId)).isEqualTo(raiting);
 	}
 }

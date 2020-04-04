@@ -8,9 +8,13 @@ INSERT INTO authorities VALUES ('owner1','owner');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities VALUES ('vet1','veterinarian');
 
+INSERT INTO users(username,password,enabled) VALUES ('reader1','reader',TRUE);
+INSERT INTO authorities VALUES ('reader1','reader');
+
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023',TRUE, 'admin1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749',FALSE, 'owner1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763',TRUE, 'vet1');
+INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (4, 'George', 'Rodriquez', '2694 Commerce St.', 'McFarland', '6085558764',TRUE, 'reader1');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -104,6 +108,9 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (9, 'Un cuento perfecto', 'Elisabet Benavent', 3, 9788491291916 , 640, 'Erase una vez una mujer que lo tenia todo y un chico que no tenia nada. Erase una vez una historia de amor entre el exito y la duda. Erase una vez un cuento perfecto.', 'SUMA','2020-02-20',FALSE,'https://imagessl6.casadellibro.com/a/l/t5/16/9788491291916.jpg','vet1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (10, 'El Principito', 'Antoine de Saint-Exupery', 22, 9788498381498 , 96, 'Un aviador queda incomunicado en el desierto tras sufrir una averia en su avion a mil millas de cualquier region habitada. Alli se encontrara con un pequeño principe de cabellos de oro que afirma vivir en el asteroide B 612.', 'Salamandra','1943-04-01',FALSE,'https://imagessl7.casadellibro.com/a/l/t5/07/9788498386707.jpg','vet1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (11, 'El hijo del italiano', 'Rafel Nadal', 4, 9788408208426 , 480, 'Mateu crece en una familia rota que no siente como suya. Desde pequeño lucha por dejar atrás los gritos y la miseria de la Mina, la casa más pobre de Caldes de Malavella.', 'Planeta','2019-05-14',TRUE,'https://imagessl6.casadellibro.com/a/l/t5/26/9788408208426.jpg','vet1');
+INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (12, 'Reina Roja', 'Juan Gomez-Jurado', 4, 9788466664417 , 568, 'Antonia Scott es una mujer muy especial. Tiene un don que es al mismo tiempo una maldición: una extraordinaria inteligencia. Gracias a ella ha salvado decenas de vidas, pero también lo ha perdido todo.', 'S.A. EDICIONES B','2018-05-14',TRUE,'https://imagessl7.casadellibro.com/a/l/t5/17/9788466664417.jpg','reader1');
+INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (13, 'Loba negra', 'Juan Gomez-Jurado', 4, 9788466666497 , 552, 'Antonia Scott no tiene miedo a nada. Solo a sí misma.NUNCA FUE. Pero hay alguien más peligroso que ella. Alguien que podría vencerla. TAN DIFÍCIL', 'S.A. EDICIONES B','2018-05-14',TRUE,'https://imagessl7.casadellibro.com/a/l/t5/97/9788466666497.jpg','reader1');
+
 
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);
@@ -151,6 +158,12 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(12,8, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(13,9, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(14,10, 'admin1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(15,11, 'admin1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(16,6, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(17,7, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(18,8, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(19,9, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(20,10, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(21,11, 'reader1');
 
 INSERT INTO wished_book (book_id, user_username) VALUES(3, 'admin1');
 INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
@@ -162,6 +175,13 @@ INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (4,5,
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (5,3,'Libro para pasar el rato','Es un libro corto y curioso',3,'vet1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (6,3,'Libro ameno','Es un libro interesante pero muy tipico',4,'vet1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (7,4,'Libro interesante','Es un libro magnifico innovativo que trata una tematica poco comun',5,'owner1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (8,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',6,'reader1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (9,3,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',6,'vet1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (10,3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',12,'reader1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (11,5,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',8,'reader1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (12,3,'Libro para pasar el rato','Es un libro corto y curioso',9,'reader1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (13,2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',10,'reader1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (14,4,'Libro interesante','Es un libro magnifico innovativo que trata una tematica poco comun',11,'reader1');
 
 
 

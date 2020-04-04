@@ -388,4 +388,18 @@ public class BookController {
 		return "books/booksList";
 	}
 	
+	@GetMapping("/books/topRaited")
+	public String topLibrosMejorValorados(final ModelMap modelMap) {
+		List<Book> selections = new ArrayList<>();
+		List<Integer> ids=this.reviewService.topRaitedBooks();
+		List<Double> raiting = new ArrayList<>();
+		for (Integer i : ids) {
+			selections.add(this.bookService.findBookById(i));
+			raiting.add(this.reviewService.getRaitingBooks(i)*20);
+		}
+		modelMap.put("raiting", raiting);
+		modelMap.put("selections", selections);
+		return "books/topRaitedBooks";
+	}
+	
 }

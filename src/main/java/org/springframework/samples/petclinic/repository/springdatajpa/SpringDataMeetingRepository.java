@@ -21,4 +21,5 @@ public interface SpringDataMeetingRepository extends CrudRepository<Meeting, Int
 	@Modifying
 	@Query("DELETE FROM Meeting WHERE id = ?1")
 	public void deleteMeetingById(int meetingId);
+	
 }

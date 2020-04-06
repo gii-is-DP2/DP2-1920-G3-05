@@ -38,5 +38,7 @@
 			<td><c:out value="${meeting.book.title}" /></td>
 		</tr>
 	</table>
+		<a class="btn btn-default"
+				href='<spring:url value="/meetings/${meeting.id}/inscribe" htmlEscape="true"/>'>Inscribe</a>
 
 </petclinic:layout>

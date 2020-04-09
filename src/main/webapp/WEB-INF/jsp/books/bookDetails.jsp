@@ -10,7 +10,7 @@
 
 <petclinic:layout pageName="books">
 
-	<h2>Book Information</h2>
+	<h2 id="bookDetail">Book Information</h2>
 
 	<table class="table table-striped">
 		<tr>
@@ -24,7 +24,7 @@
 		</tr>
 		<tr>
 			<th>Author</th>
-			<td><c:out value="${book.author}" /></td>
+			<td id="authorBook"><c:out value="${book.author}" /></td>
 		</tr>
 		<tr>
 			<th>Genre</th>

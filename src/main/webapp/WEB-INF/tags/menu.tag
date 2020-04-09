@@ -20,7 +20,7 @@
 				<petclinic:menuItem active="${name eq 'books'}" url="/books/find"
 					title="Find books">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Search</span>
+					<span id="findBook">Search</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'topRaited'}" url="/books/topRaited"

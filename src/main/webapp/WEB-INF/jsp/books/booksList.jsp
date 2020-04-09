@@ -7,7 +7,7 @@
 
 <petclinic:layout pageName="books">
 	<c:if test="${!empty selections}">
-	<h2>Books</h2>
+	<h2  id="booksList">Books</h2>
 	
 		<table id="booksTable" class="table table-striped">
 

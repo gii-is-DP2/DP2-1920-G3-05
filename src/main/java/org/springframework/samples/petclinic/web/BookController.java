@@ -174,23 +174,31 @@ public class BookController {
 
 		return "books/booksList";
 	}
-	@PostMapping("/books/readBooks/{bookId}")
-	public String anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
+	@GetMapping("/books/readBooks/{bookId}")
+	public ModelAndView anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 
 		Book book = this.bookService.findBookById(bookId);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
 		User user = this.userService.findUserByUsername(userdetails.getUsername());
 		ReadBook readBook = new ReadBook();
-		readBook.setBook(book);
-		readBook.setUser(user);
-		this.readBookService.save(readBook);
-		this.wishedBookService.deleteByBookId(bookId);
 
-		return "redirect:/books";
+		if (!this.readBookService.esReadBook(bookId, user.getUsername())) {
+			readBook.setBook(book);
+			readBook.setUser(user);
+			this.readBookService.save(readBook);
+			this.wishedBookService.deleteByBookId(bookId);
+		} else {
+			modelMap.addAttribute("errorReadBook", "you have already read the book!");
+			return this.showBook(bookId, modelMap);
+
+		}
+
+		return this.showBook(bookId, modelMap);
 	}
+
 	@GetMapping("/books/{bookId}")
-	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
+	public ModelAndView showBook(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 		Boolean propiedad = false;
 		Boolean noEsReadBook = false;
 		Boolean notWishedBook = false;
@@ -398,19 +406,19 @@ public class BookController {
 
 		return "books/booksList";
 	}
-	
+
 	@GetMapping("/books/topRaited")
 	public String topLibrosMejorValorados(final ModelMap modelMap) {
 		List<Book> selections = new ArrayList<>();
-		List<Integer> ids=this.reviewService.topRaitedBooks();
+		List<Integer> ids = this.reviewService.topRaitedBooks();
 		List<Double> raiting = new ArrayList<>();
 		for (Integer i : ids) {
 			selections.add(this.bookService.findBookById(i));
-			raiting.add(this.reviewService.getRaitingBooks(i)*20);
+			raiting.add(this.reviewService.getRaitingBooks(i) * 20);
 		}
 		modelMap.put("raiting", raiting);
 		modelMap.put("selections", selections);
 		return "books/topRaitedBooks";
 	}
-	
+
 }

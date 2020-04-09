@@ -9,7 +9,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <petclinic:layout pageName="books">
-
+<div style="color:red">	<c:out value="${errorReadBook}"></c:out></div>
 	<h2>Book Information</h2>
 
 	<table class="table table-striped">
@@ -97,12 +97,9 @@
 	</sec:authorize>
 
 	<c:if test="${noEsReadBook}">
-		<form:form modelAttribute="book" class="form-horizontal"
-			action="/books/readBooks/${book.id}">
-			<button class="btn btn-default" type="submit">
-				<fmt:message key="addReadBook" />
-			</button>
-		</form:form>
+
+			<a class="btn btn-default"
+				href='<spring:url value="/books/readBooks/${book.id}" htmlEscape="true"/>'>Add to read books</a>
 	</c:if>
 
 	<c:choose>

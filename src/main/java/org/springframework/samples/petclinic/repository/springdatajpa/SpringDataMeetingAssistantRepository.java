@@ -26,6 +26,8 @@ public interface SpringDataMeetingAssistantRepository extends MeetingAssistantRe
 	public void deleteAssistantById(int assistantId);
 	
 	@Override
-	@Query("SELECT DISTINCT m from Meeting m WHERE m.id in (SELECT meetingAssistant.meeting.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.user.id = ?1 )")
+	@Query("SELECT DISTINCT m from Meeting m WHERE m.id in (SELECT meetingAssistant.meeting.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.user.username = ?1 )")
 	List<Meeting> getMeetingUser (String userId);
+	
+	
 }

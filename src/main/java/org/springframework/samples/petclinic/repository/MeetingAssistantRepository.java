@@ -22,9 +22,12 @@ public interface MeetingAssistantRepository {
 	@Transactional(readOnly = true)
 	Boolean existsById(int assistantId) throws DataAccessException;
 	
+	@Modifying
 	MeetingAssistant save(MeetingAssistant meetingAssistant) throws DataAccessException;
 	
 	MeetingAssistant findById(int id) throws DataAccessException;
 
+	
 	List<Meeting> getMeetingUser(String userId);
+	
 }

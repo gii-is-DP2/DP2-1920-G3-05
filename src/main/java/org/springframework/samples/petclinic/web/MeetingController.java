@@ -5,9 +5,18 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Meeting;
+import org.springframework.samples.petclinic.model.MeetingAssistant;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
+import org.springframework.samples.petclinic.service.MeetingAssistantService;
 import org.springframework.samples.petclinic.service.MeetingService;
+import org.springframework.samples.petclinic.service.ReadBookService;
+import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.CantInscribeMeetingException;
 import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookMeetingException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -25,11 +34,22 @@ public class MeetingController {
 
     private BookService bookService;
 
+    private MeetingAssistantService meetingAssistantService;
+    
+    private UserService	 userService;
+    
+    private ReadBookService readBookService;
+
 
     @Autowired
-    public MeetingController(MeetingService meetingService, BookService bookService){
+    public MeetingController(MeetingService meetingService, BookService bookService, 
+    		MeetingAssistantService meetingAssistantService, UserService userService,
+    		ReadBookService readBookService){
         this.meetingService = meetingService;
         this.bookService = bookService;
+        this.meetingAssistantService= meetingAssistantService;
+        this.userService = userService;
+        this.readBookService = readBookService;
     }
 
 	@InitBinder("meeting")
@@ -66,8 +86,12 @@ public class MeetingController {
     
     @GetMapping(value = "/meetings/{meetingId}")
     public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
         Meeting meeting = this.meetingService.findMeetingById(meetingId);
         ModelAndView mav = new ModelAndView("meetings/meetingDetails");
+        Boolean CanInscribe = this.meetingAssistantService.canInscribe(meetingId, userDetail.getUsername(), meeting.getBook().getId());
+        mav.addObject("canInscribe", CanInscribe);
         mav.addObject("meeting", meeting);
         return mav;
     }
@@ -103,5 +127,22 @@ public class MeetingController {
             }
         }
     }
+	@GetMapping(value = "/meetings/{meetingId}/inscribe")
+	public String inscribe(@PathVariable("meetingId") final int meetingId, final ModelMap modelMap) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		Meeting meeting = this.meetingService.findMeetingById(meetingId);
+		MeetingAssistant meetingAssistant = new MeetingAssistant();
+		User user = this.userService.findUserByUsername(userDetail.getUsername());
+		meetingAssistant.setMeeting(meeting);
+		meetingAssistant.setUser(user);
+		try {
+			this.meetingAssistantService.save(meetingAssistant);
+		} catch (CantInscribeMeetingException e) {
+			return "redirect:/oups";
+		}
+		return "redirect:/meetings";
+
+	}
 
 }

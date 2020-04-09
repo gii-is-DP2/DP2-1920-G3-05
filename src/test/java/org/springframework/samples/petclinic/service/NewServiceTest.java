@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -78,17 +80,21 @@ public class NewServiceTest {
 		Assertions.assertThat(news.get(0).getId() == 5);
 	}
 
-	@Test
-	void shouldGetNewBookReview() {
+	@ParameterizedTest
+	@CsvSource({
+		"admin1",
+		"owner1",
+		"vet1"
+	})
+	void shouldGetNewBookReview(String username) {
 		User user = this.userService.findUserByUsername("admin1");
-		User user2 = this.userService.findUserByUsername("owner1");
 		
 		List<New> news = (List<New>) this.sut.getAllNews();
-		List<New> newsAdmin = (List<New>) this.sut.getNewsBookReview(user.getUsername());
-		List<New> newsOwner = (List<New>) this.sut.getNewsBookReview(user2.getUsername());
+		List<New> newsUser = (List<New>) this.sut.getNewsBookReview(user.getUsername());
+
 		
-		Assertions.assertThat(news.size()>newsAdmin.size());
-		Assertions.assertThat(news.size()>newsOwner.size());
+		Assertions.assertThat(news.size()>=newsUser.size());
+
 	}
 	
 	@Test

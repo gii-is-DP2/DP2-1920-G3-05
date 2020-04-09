@@ -26,13 +26,13 @@ public class SearchMeetingsStepDefinitions extends AbstractStep {
         stopDriver();
     } 
     
-    @Then("the system redirects me to a list with the results")
+    @Then("the system redirects me to a list with the meetings results")
     public void severalResult() throws Exception {
         checkSeveralResults();
         stopDriver();
     } 
 
-    @Then("the system will indicate me that there are no results")
+    @Then("the system will indicate me that there are no meetings that coincide")
     public void noResult() throws Exception {
         checkNoResults();
         stopDriver();

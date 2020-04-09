@@ -16,17 +16,13 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class PublicationServiceTests {
 	
 	@Autowired
 	private PublicationService sut;
-	
-	@Autowired 
-	private ImageService imageService;
-	
+
 	@Autowired
 	private UserService	userService;
 	
@@ -56,20 +52,16 @@ public class PublicationServiceTests {
 		Assertions.assertThat(exisitsPublication).isFalse();
 	}
 	
-	@Test
-	void shouldFindBookById() {
-		Publication publication = this.sut.findById(1);
-
-		Assertions.assertThat(publication.getId()).isEqualTo(1);
-	}
 	
-	
-	@Test
-	@Transactional
-	public void shouldInsertPublicationIntoDatabaseAndGenerateId() throws DataAccessException {
-		Collection<Publication> list = this.sut.findAllPublicationFromBook(1);
-		User user = this.userService.findUserByUsername("admin1");
-		Book book = this.sut2.findBookById(1);
+	@ParameterizedTest
+	@CsvSource({
+		"1,admin1,7",
+		"2,owner1,8"
+	})
+	public void shouldInsertPublicationIntoDatabaseAndGenerateId(int bookId, String username, int futureId) throws DataAccessException {
+		Collection<Publication> list = this.sut.findAllPublicationFromBook(bookId);
+		User user = this.userService.findUserByUsername(username);
+		Book book = this.sut2.findBookById(bookId);
 		int count = list.size();
 
 		Publication publication = new Publication();
@@ -82,62 +74,77 @@ public class PublicationServiceTests {
 
 		this.sut.save(publication);
 
-		Assertions.assertThat(publication.getId()).isNotNull();
-		list = this.sut.findAllPublicationFromBook(1);
+		Assertions.assertThat(futureId).isNotNull();
+		list = this.sut.findAllPublicationFromBook(bookId);
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 
 	}
 	
-	@Test
-	@Transactional
-	public void shouldUpdatePublicationTitle() throws Exception {
-		Publication publication = this.sut.findById(1);
+	@ParameterizedTest
+	@CsvSource({
+		"1",
+		"2"
+	})
+	public void shouldUpdatePublicationTitle(int publicationId) throws Exception {
+		Publication publication = this.sut.findById(publicationId);
 		String oldTitle = publication.getTitle();
 
 		String newTitle = oldTitle + "X";
 		publication.setTitle(newTitle);
 		this.sut.save(publication);
 
-		publication = this.sut.findById(1);
+		publication = this.sut.findById(publicationId);
 		Assertions.assertThat(publication.getTitle()).isEqualTo(newTitle);
 	}
 
-	@Test
-	void publicationShouldBeMine(){
-		String username = "owner1";
-		int publicationId = 2;
+	@ParameterizedTest
+	@CsvSource({
+		"owner1,2",
+		"admin1,1",
+		"owner1,4"
+	})
+	void publicationShouldBeMine(String username, int publicationId){
 		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
 		Assertions.assertThat(isMine).isTrue();
 	}
 
-	@Test
-	void publicationShouldBeMineImAdmin(){
-		String username = "admin1";
-		int publicationId = 2;
+	@ParameterizedTest
+	@CsvSource({
+		"admin1,2",
+		"admin1,4"
+	})
+	void publicationShouldBeMineImAdmin(String username, int publicationId){
 		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
 		Assertions.assertThat(isMine).isTrue();
 	}
 
-	@Test
-	void publicationShouldNotBeMine(){
-		String username = "vet1";
-		int publicationId = 2;
+	@ParameterizedTest
+	@CsvSource({
+		"vet1,2",
+		"owner1,1"
+	})
+	void publicationShouldNotBeMine(String username, int publicationId){
 		Boolean isMine = this.sut.publicationMioOAdmin(publicationId, username);
 		Assertions.assertThat(isMine).isFalse();
 	}
 	
-	@Test
-	void publicationShouldBeMine2() {
-		String username = "owner1";
-		int publicationId = 2;
+	@ParameterizedTest
+	@CsvSource({
+		"owner1,2",
+		"admin1,1"
+	})
+	void publicationShouldBeMine2(String username, int publicationId) {
 		Boolean esMio = this.sut.publicationMio(publicationId, username);
 		Assertions.assertThat(esMio).isTrue();
 	}
 	
-	@Test
-	void publicationShouldNotBeMine2() {
-		String username = "vet1";
-		int publicationId = 2;
+	@ParameterizedTest
+	@CsvSource({
+		"vet1,2",
+		"owner1,5",
+		
+	})
+	void publicationShouldNotBeMine2(String username, int publicationId) {
 		Boolean esMio = this.sut.publicationMio(publicationId, username);
 		Assertions.assertThat(esMio).isFalse();
 	}

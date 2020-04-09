@@ -58,11 +58,13 @@ class BookServiceTests {
 		Assertions.assertThat(books.size()).isEqualTo(size);
 	}
 
-	@Test
-	@Transactional
-	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin() throws DataAccessException, DuplicatedISBNException {
-		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
-		User user = this.userService.findUserByUsername("admin1");
+	@ParameterizedTest
+	@CsvSource({
+		"prueba,admin1,13"
+	})
+	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
+		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
 
 		Book book = new Book();
@@ -79,18 +81,20 @@ class BookServiceTests {
 
 		this.sut.save(book);
 		
-
-		Assertions.assertThat(book.getId()).isNotNull();
+		//Le toca el id 13
+		Assertions.assertThat(futureBookId).isNotNull();
 		Assertions.assertThat(book.getVerified()).isTrue();
 		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 
 	}
-	@Test
-	@Transactional
-	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin() throws DataAccessException, DuplicatedISBNException {
-		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
-		User user = this.userService.findUserByUsername("owner1");
+	@ParameterizedTest
+	@CsvSource({
+		"prueba,owner1,14"
+	})
+	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
+		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
 
 		Book book = new Book();
@@ -108,17 +112,19 @@ class BookServiceTests {
 		this.sut.save(book);
 		
 
-		Assertions.assertThat(book.getId()).isNotNull();
+		Assertions.assertThat(futureBookId).isNotNull();
 		Assertions.assertThat(book.getVerified()).isFalse();
 		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 
 	}
 
-	@Test
-	@Transactional
-	public void shouldThrowExceptionInsertingBooksWithTheSameISBN() {
-		User user = this.userService.findUserByUsername("admin1");
+	@ParameterizedTest
+	@CsvSource({
+		"admin1"
+	})
+	public void shouldThrowExceptionInsertingBooksWithTheSameISBN(String username) {
+		User user = this.userService.findUserByUsername(username);
 
 		Book book = new Book();
 		book.setTitle("prueba");
@@ -137,7 +143,7 @@ class BookServiceTests {
 			this.sut.save(book);
 
 		} catch (DuplicatedISBNException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		Book bookSameISBN = new Book();

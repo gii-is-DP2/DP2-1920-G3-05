@@ -38,6 +38,17 @@
 			<td><c:out value="${meeting.book.title}" /></td>
 		</tr>
 	</table>
+	<c:choose>
+		<c:when test="${canInscribe}">
+			<a class="btn btn-default"
+				href='<spring:url value="/meetings/${meeting.id}/inscribe" htmlEscape="true"/>'>Inscribe</a>
+		</c:when>
+		<c:otherwise>
+			<a class="btn btn-default"
+				onclick="alert('In order to inscribe a meeting you must have read the book and you can only attend one meeeting at the same time, it cant be in the past and there must be capacity')">Inscribe</a>
+		</c:otherwise>
+	</c:choose>
+				
 	<c:if test="${suscribed}">
 	<a class="btn btn-default"
 			href='<spring:url value="/meetings/${meeting.id}/unsuscribe" htmlEscape="true"/>'

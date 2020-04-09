@@ -22,7 +22,7 @@ public class MeetingService {
 
 
 	@Autowired
-	public MeetingService(final MeetingRepository meetingRepository, final MeetingAssistantService meetingAssistantService, final BookService bookService) {
+	public MeetingService(MeetingRepository meetingRepository, MeetingAssistantService meetingAssistantService, final BookService bookService) {
 		this.meetingRepository = meetingRepository;
 		this.meetingAssistantService = meetingAssistantService;
 	}

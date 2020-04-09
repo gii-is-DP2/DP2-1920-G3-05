@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,9 +19,13 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Meeting;
+import org.springframework.samples.petclinic.model.MeetingAssistant;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.MeetingAssistantService;
 import org.springframework.samples.petclinic.service.MeetingService;
+import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.CantInscribeMeetingException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -33,7 +36,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.Collection;
 import java.util.Locale;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(controllers=MeetingController.class,
 excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
@@ -43,16 +48,25 @@ public class MeetingControllerTests {
 	private static final int		TEST_BOOK_ID				= 1;
 
 	private static final int		TEST_MEETING_ID				= 2;
+    
+    private static final int 		TEST_MEETINGASSISTANT_ID = 1;
+    
+    private static final int		TEST_MEETINGASSISTANT_ID2 = 2;
+    
+    private static final int 		TEST_BOOK_ID2 = 2;
 
 	private static final int		TEST_MEETING_ASSISTANT_ID	= 2;
 
-	@Autowired
-	private MockMvc					mockMvc;
+    private static final int 		TEST_MEETING_ID2 = 3;
+    
 
-	@MockBean
-	private MeetingService			meetingService;
+    @Autowired
+    private MockMvc mockMvc;
 
-	@MockBean
+    @MockBean
+    private MeetingService meetingService;
+    
+    @MockBean
 	private MeetingAssistantService	meetingAssistantService;
 
 	@MockBean
@@ -60,10 +74,14 @@ public class MeetingControllerTests {
 
 	@MockBean
 	private LocalDateTimeFormatter	localDateTimeFormatter;
+
+	@MockBean
+	private UserService				userService;
+
 	private Meeting					meeting;
 
     @BeforeEach
-    void setup() throws ParseException{
+    void setup() throws ParseException, CantInscribeMeetingException{
         Book book = new Book();
         book.setId(TEST_BOOK_ID);
 
@@ -90,8 +108,15 @@ public class MeetingControllerTests {
         when(meetingService.findMeetingsByNamePlaceBookTile("Several results")).thenReturn(meetingsSeveralResults);
 
         when(localDateTimeFormatter.parse(eq("2020-10-10T17:00"), any(Locale.class))).thenReturn(begin);
-        when(localDateTimeFormatter.parse(eq("2020-10-10T19:00"), any(Locale.class))).thenReturn(end);
-	}
+		when(localDateTimeFormatter.parse(eq("2020-10-10T19:00"), any(Locale.class))).thenReturn(end);
+		
+		User user = new User();
+		user.setEnabled(true);
+		user.setUsername("spring");
+		user.setPassword("spring");
+        when(userService.findUserByUsername(user.getUsername())).thenReturn(user);
+    }
+	
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -189,17 +214,6 @@ public class MeetingControllerTests {
 
 	@WithMockUser(value = "spring")
 	@Test
-	void testSaveMeetingNotVerifiedBook() throws Exception {
-		Book book = new Book();
-		book.setId(MeetingControllerTests.TEST_BOOK_ID);
-		book.setVerified(false);
-		Mockito.when(this.bookService.findBookById(MeetingControllerTests.TEST_BOOK_ID)).thenReturn(book);
-		Mockito.doCallRealMethod().when(this.meetingService).addMeeting(ArgumentMatchers.any(Meeting.class));
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/books/{bookId}/meetings/new", MeetingControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Test name").param("place", "Test place")
-			.param("capacity", "50").param("start", "2020-10-10T17:00").param("end", "2020-10-10T19:00")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/oups"));
-	}
-	@WithMockUser(value = "spring")
-	@Test
 	void testUnsubscribe() throws Exception {
 		Mockito.when(this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(MeetingControllerTests.TEST_MEETING_ID, "spring")).thenReturn(Optional.of(1));
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/meetings/{meetingId}/unsuscribe", MeetingControllerTests.TEST_MEETING_ASSISTANT_ID)).andExpect(MockMvcResultMatchers.status().isOk())
@@ -225,4 +239,41 @@ public class MeetingControllerTests {
 
 	}
 
+    @WithMockUser(value = "spring")
+    @Test
+    void testSaveMeetingNotVerifiedBook() throws Exception {
+        Book book = new Book();
+        book.setId(TEST_BOOK_ID);
+        book.setVerified(false);
+        when(bookService.findBookById(TEST_BOOK_ID)).thenReturn(book);
+        doCallRealMethod().when(meetingService).addMeeting(any(Meeting.class));
+        mockMvc.perform(post("/admin/books/{bookId}/meetings/new", TEST_BOOK_ID)
+                .with(csrf())
+                .param("name", "Test name")
+                .param("place", "Test place")
+                .param("capacity", "50")
+                .param("start", "2020-10-10T17:00")
+                .param("end", "2020-10-10T19:00"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/oups"));
+    }
+    @WithMockUser(value = "spring")
+    @Test
+    void testInscribeReunion() throws Exception{
+    	when(meetingAssistantService.canInscribe(TEST_MEETING_ID2, "spring", TEST_BOOK_ID)).thenReturn(true);
+        mockMvc.perform(get("/meetings/{meetingId}/inscribe", TEST_MEETING_ID2))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/meetings"));
+    }
+    @WithMockUser(value = "spring")
+    @Test
+    void testInscribeReunionWithErrors() throws Exception{
+    	doCallRealMethod().when(meetingAssistantService).save(any(MeetingAssistant.class));
+     	when(meetingAssistantService.canInscribe(TEST_MEETING_ID,"spring" ,TEST_BOOK_ID)).thenReturn(false);
+        mockMvc.perform(get("/meetings/{meetingId}/inscribe", TEST_MEETING_ID))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/oups"));
+    }
+    
+    
 }

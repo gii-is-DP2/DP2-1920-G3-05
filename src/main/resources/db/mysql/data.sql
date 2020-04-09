@@ -139,13 +139,18 @@ INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);
-INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-10-20 19:30', '2020-10-20 21:00', 20, 10);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-05-20 19:30', '2020-05-20 21:00', 20, 10);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (5,'Reunion prueba aforo','Nowhere', '2020-03-15 16:30', '2020-03-15 21:00', 2, 8);
+
+
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (3, 2, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (4, 2, 'owner1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (5, 3, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (6, 3, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (7, 5, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (8, 5, 'owner1');
 
 
 INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );

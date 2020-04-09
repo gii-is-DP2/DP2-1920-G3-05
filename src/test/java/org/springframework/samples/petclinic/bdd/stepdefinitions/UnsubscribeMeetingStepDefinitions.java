@@ -69,7 +69,7 @@ public class UnsubscribeMeetingStepDefinitions extends AbstractStep {
 
 	}
 	private void whenITryToUnsubscribeFromAMeetingThatHasAlreadyHeld() {
-		this.getDriver().findElement(By.xpath("//a[contains(text(),'Libro forum')]")).click();
+		this.getDriver().findElement(By.xpath("//a[contains(text(),'Reunion prueba aforo')]")).click();
 		this.getDriver().findElement(By.xpath("//a[contains(text(),'Unsubscribe')]")).click();
 
 	}

@@ -5,8 +5,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="books">
-    <h2>Meetings</h2>
+<petclinic:layout pageName="meetings list">
+    <h2 id="page title">Meetings</h2>
 
     <c:if test="${empty meetings}">
         <h2>No meetings found</h2>

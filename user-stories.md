@@ -180,7 +180,8 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El nombre del viento*, cuando ferromrio selecciona buscar por título de libro e introduce *El nombre del viento*, entonces el sistema le mostrará un listado con esa única reunión|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El temor de un hombre sabio*, cuando ferromrio selecciona buscar por título de libro e introduce *El temor de un hombre sabio*, entonces el sistema le indicará que no dispone de ninguna reunión que se adecúe a la búsqueda|
+|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El nombre del viento*, cuando ferromrio selecciona buscar por título de libro e introduce *El nombre del viento*, entonces el sistema le mostrará los detalles de esa reunión|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El temor de un hombre sabio*, cuando ferromrio selecciona buscar por título de libro e introduce *El temor de un hombre sabio*, entonces el sistema le indicará que no dispone de ninguna reunión que se adecúe a la búsqueda|
+|Dado el usuario ferromrio y que hay varias reuniones en el sistema del libro *El temor de un hombre sabio*, cuando ferromrio selecciona buscar por título de libro e introduce *El temor de un hombre sabio*, entonces el sistema le mostrará un listado con esaas reunines||
 
 - **HU-12**: Filtrar libros por atributos  
   

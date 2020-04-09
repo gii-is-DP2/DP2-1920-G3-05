@@ -10,7 +10,7 @@
 
 <petclinic:layout pageName="meeting">
 <div style="color:red"><c:out value="${mensaje}"></c:out></div>
-	<h2>Meeting Information</h2>
+	<h2 id="info">Meeting Information</h2>
 
 	<table class="table table-striped">
 		<tr>
@@ -35,7 +35,7 @@
 		</tr>
 		<tr>
 			<th>Book</th>
-			<td><c:out value="${meeting.book.title}" /></td>
+			<td id="booksTitle"><c:out value="${meeting.book.title}" /></td>
 		</tr>
 	</table>
 	<c:choose>

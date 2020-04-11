@@ -87,8 +87,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario administrador y el libro *Los pilares de la tierra* no verificado, cuando el administrador intenta verificarlo, entonces *Los pilares de la tierra* queda como verificado en el sistema|Dado el usuario javgarcer y el libro *Los pilares de la tierra* no verificado, cuando javgarcer intenta verificarlo, entonces el sistema le indica que no dispone de los permisos sufcientes|
-||Dado el usuario administrador y el libro *Fortunata y Jacinta* verificado, cuando el administrador intenta verificarlo, entonces el sistema le indica que ya está verificado|
+|Dado el usuario administrador y el libro *Los pilares de la tierra* no verificado, cuando el administrador intenta verificarlo, entonces *Los pilares de la tierra* queda como verificado en el sistema|Dado el usuario administrador y el libro *Fortunata y Jacinta* verificado, cuando el administrador intenta verificarlo, entonces el sistema le indica que ya está verificado|
 
 - **HU-05**: Gestionar noticias  
   

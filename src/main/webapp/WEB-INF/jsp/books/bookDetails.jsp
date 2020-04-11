@@ -120,7 +120,7 @@
 
 
 	<c:if test="${hasAnyReview}">
-		<a class="btn btn-default"
+		<a class="btn btn-default" id="Go to the reviews"
 			href='<spring:url value="/books/${book.id}/reviews" htmlEscape="true"/>'>Go
 			to the reviews</a>
 	</c:if>

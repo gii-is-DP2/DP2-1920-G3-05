@@ -254,7 +254,7 @@ Dado el usuario estgantri y el libro *Las reliquias de la muerte* que no tiene m
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado que hay usuarios en el sistema que han realizado alguna review, cuando el usuario ferrommio solicita ver los libros mejor valorados, entonces el sistema le muesrta un top basado en los libros con media más alta de sus review|Dado que no se ha hecho ninguna review a ningún libro, cuando el usuario javgarcer solicita ver los libros mejor valorados, entonces el sistema le indica que no se puede mostrar porque aún no hay datos suficientes en la aplicación|
+|Dado que hay usuarios en el sistema que han realizado alguna review, cuando el usuario ferrommio solicita ver los libros mejor valorados, entonces el sistema le muestra un top basado en los libros con media más alta de sus review|Dado que no se ha hecho ninguna review a ningún libro, cuando el usuario javgarcer solicita ver los libros mejor valorados, entonces el sistema le indica que no se puede mostrar porque aún no hay datos suficientes en la aplicación|
 
 - **HU-19**: Información sobre las reuniones
   

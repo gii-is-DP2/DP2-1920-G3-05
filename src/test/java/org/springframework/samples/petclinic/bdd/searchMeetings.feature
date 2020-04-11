@@ -11,7 +11,7 @@ Feature: search meetings
         Given I am logged withh username "owner1" and password "0wn3r"
         When I search a meeting by "ETSII"
         Then the system redirects me to a list with the meetings results
-        
+
     Scenario: Search meetings with no results (Negative)
         Given I am logged withh username "owner1" and password "0wn3r"
         When I search a meeting by "No results"

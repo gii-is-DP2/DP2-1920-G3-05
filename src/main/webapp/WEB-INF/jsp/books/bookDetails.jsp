@@ -53,7 +53,7 @@
 		</tr>
 		<tr>
 			<th>Verified</th>
-			<td><c:if test="${book.verified}">
+			<td id="verified"><c:if test="${book.verified}">
 					<c:out value="Yes" />
 					<sec:authorize access="hasAuthority('admin')">
 						<a class="btn btn-default"

@@ -201,7 +201,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario estgantri y el libro *Yo, Julia* que no tiene marcado como leído, cuando le da a marcar como leído, entonces el libro *Yo, Julia* se añade a su colección de libros leídos|Dado el usuario estgantri y el libro *La piedra filosofal* que ya tiene marcado como leído, cuando le da a marcar como leído de nuevo, entonces el sistema le indica que ya lo tiene en su colección de libros leídos|
+|Dado el usuario estgantri y el libro *Yo, Julia* que no tiene marcado como leído, cuando le da a marcar como leído, entonces el libro *Yo, Julia* se añade a su colección de libros leídos|Dado el usuario estgantri y el libro *La piedra filosofal* que ya tiene marcado como leído, cuando intenta añadirlo por URL, entonces el sistema le indica que ya lo tiene en su colección de libros leídos|
 |Dado el usuario estgantri y el libro *El príncipe mestizo* que tiene marcado como libro a leer, cuando le da a marcar como leído, entonces el libro *El príncipe mestizo* se añade a su colección de libros leídos y se retira de la colección de libros a leer||
 
 - **HU-14**: Colección de libros a leer en el perfil  

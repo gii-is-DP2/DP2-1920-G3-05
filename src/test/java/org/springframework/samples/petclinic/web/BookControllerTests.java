@@ -242,8 +242,21 @@ class BookControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testAddReadBook() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/books/readBooks/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/books"));
+		BDDMockito.given(this.userservice.findUserByUsername("spring")).willReturn(this.user);
+		Mockito.when(this.readBookService.esReadBook(book.getId(),user.getUsername())).thenReturn(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/readBooks/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("books/bookDetails"));
+	}
+	@WithMockUser(value = "spring")
+	@Test
+	void testAddReadBookThatWasAdded() throws Exception {
+		BDDMockito.given(this.userservice.findUserByUsername("spring")).willReturn(this.user);
+		Mockito.when(this.readBookService.esReadBook(book.getId(),user.getUsername())).thenReturn(true);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/readBooks/{bookId}", BookControllerTests.TEST_BOOK_ID).with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attribute("errorReadBook", "you have already read the book!"))
+			.andExpect(MockMvcResultMatchers.view().name("books/bookDetails"));
 	}
 	@WithMockUser(value = "spring")
 	@Test

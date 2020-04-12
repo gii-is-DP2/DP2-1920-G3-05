@@ -52,7 +52,6 @@ class ReaderServiceTests {
 		reader.setFirstName(firstname);
 		reader.setLastName("last name");
 		reader.setTelephone("12356789");
-
 		this.readerService.saveReader(reader);
 		Reader reader2 = this.readerService.findReaderByUsername(username);
 		Assertions.assertThat(reader2).isNotNull();

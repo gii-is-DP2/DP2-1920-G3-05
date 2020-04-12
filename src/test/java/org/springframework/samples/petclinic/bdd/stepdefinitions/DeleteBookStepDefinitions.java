@@ -107,7 +107,7 @@ public class DeleteBookStepDefinitions extends AbstractStep {
     public void deleteBook() {
         goToBookList();
         booksAtTheBeginning = countBooks();
-        bookTitle = "Las marcas de la muerte";
+        bookTitle = "Destinos divididos";
         getDriver().findElement(By.linkText(bookTitle)).click();
     }
 

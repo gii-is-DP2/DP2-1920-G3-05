@@ -26,7 +26,7 @@
 				<petclinic:menuItem active="${name eq 'topRaited'}" url="/books/topRaited"
 					title="Top raited books">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Top raited books</span>
+					<span id="topRaited">Top raited books</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'readBooks'}" url="/books/readBooks"

@@ -9,7 +9,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <petclinic:layout pageName="books">
 <c:if test="${!empty selections}">
-<h2>Top best raited books</h2>
+<h2 id="topRaitedBooks">Top best raited books</h2>
 
 		<table id="booksTable" class="table table-striped">
 
@@ -45,7 +45,7 @@
 		</table>
 		</c:if>
 		<c:if test="${empty selections}">
-	<h1><font size="15">Not enough data in the app yet</font></h1>
+	<h1 id="emptyTopRaited"><font size="15">Not enough data in the app yet</font></h1>
 	</c:if>
 </petclinic:layout>
 

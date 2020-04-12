@@ -11,7 +11,7 @@ Feature: Find books
         Given I am logged withh username "owner1" and password "0wn3r"
         When I search a book by "J.K. Rowling"
         Then the system redirects me to a list with the results
-        
+
     Scenario: Search books with no results (Negative)
         Given I am logged withh username "owner1" and password "0wn3r"
         When I search a book by "9788466333720"

@@ -123,6 +123,7 @@ class NewControllerTest {
 		ids.add(this.new1);
 		ids.add(this.new2);
 		Mockito.when(this.newService.getNewsBookReview("spring")).thenReturn((Collection<New>)ids);
+		Mockito.when(this.newService.getNewsBookReview2("spring")).thenReturn((Collection<New>)ids);
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("news"))
 			.andExpect(MockMvcResultMatchers.model().attribute("AllNews", Matchers.is(true))).andExpect(MockMvcResultMatchers.view().name("news/newList"));
 	}

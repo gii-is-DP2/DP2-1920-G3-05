@@ -90,14 +90,22 @@ public class NewControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testAllNews() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/news")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("NewsRec")).andExpect(MockMvcResultMatchers.model().attributeExists("news"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/news"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("NewsRec"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("news"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("canShowNewsBookReview"))
 			.andExpect(MockMvcResultMatchers.view().name("news/newList"));
 	}
 
 	@WithMockUser(value = "spring", authorities = "ROLE_ANONYMOUS")
 	@Test
 	void testAllNewsAnónimo() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/news")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("NewsRec")).andExpect(MockMvcResultMatchers.model().attributeExists("news"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/news"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("NewsRec"))
+		.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("canShowNewsBookReview"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("news"))
 			.andExpect(MockMvcResultMatchers.view().name("news/newList"));
 	}
 

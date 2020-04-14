@@ -263,7 +263,7 @@ public class MeetingControllerTests {
     	when(meetingAssistantService.canInscribe(TEST_MEETING_ID2, "spring", TEST_BOOK_ID)).thenReturn(true);
         mockMvc.perform(get("/meetings/{meetingId}/inscribe", TEST_MEETING_ID2))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/meetings"));
+                .andExpect(redirectedUrl("/meetings/"));
     }
     @WithMockUser(value = "spring")
     @Test

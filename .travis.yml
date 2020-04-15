@@ -8,4 +8,11 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.11.1-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
-script: mvn verify -PAcceptanceTests
+
+cache: bundler
+ 
+rvm:
+  - 1.9.3
+ 
+before_script: 'bundle install'
+script: 'bundle exec cucumber'

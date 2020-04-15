@@ -4,5 +4,5 @@ cache: bundler
 rvm:
   - 1.9.3
  
-before_script: 'bundle install'
+before_script: 'gem install cucumber'
 script: 'bundle exec cucumber'

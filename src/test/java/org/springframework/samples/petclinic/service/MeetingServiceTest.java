@@ -74,9 +74,9 @@ public class MeetingServiceTest {
 
 	@ParameterizedTest
 	@CsvSource({
-		"1,6",
-		"2,7",
-		"4,8"
+		"1,14",
+		"2,15",
+		"4,16"
 	})
 	void shouldAddMeeting(int bookId, int futureMeetingId) {
 		Meeting meeting = new Meeting();
@@ -137,7 +137,7 @@ public class MeetingServiceTest {
 
 	@ParameterizedTest
 	@CsvSource({
-		"circulo,1",
+		"circulo,3",
 		"nowhere,2",
 		"erorr, 0"
 	})

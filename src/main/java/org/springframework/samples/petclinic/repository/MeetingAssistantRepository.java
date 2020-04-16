@@ -1,15 +1,14 @@
 
 package org.springframework.samples.petclinic.repository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.MeetingAssistant;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface MeetingAssistantRepository {
@@ -33,5 +32,19 @@ public interface MeetingAssistantRepository {
 
 	
 	List<Meeting> getMeetingUser(String userId);
+
+	@Transactional
+	Integer numberOfMeetingsAssistant() throws DataAccessException;
+	
+	@Transactional
+	Object[] assistantByGenre() throws DataAccessException;
+	
+
+	@Transactional
+	Object[] assistantByMeeting() throws DataAccessException;
+
+	@Transactional
+	List<User> usersAssisted() throws DataAccessException;
+
 	
 }

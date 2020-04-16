@@ -17,20 +17,8 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateTitleEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle(" ");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
+		Book book = this.create();
+		book.setTitle(" ");
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -41,20 +29,8 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateAuthorEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
+		Book book = this.create();
 		book.setAuthor(" ");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -65,20 +41,8 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateEditorialEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
+		Book book = this.create();
 		book.setEditorial(" ");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -89,18 +53,8 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateGenreEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial"); 
+		Book book = this.create();
 		book.setGenre(null);
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -111,20 +65,8 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateISBNEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
+		Book book = this.create();
 		book.setISBN("0123456789");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -135,20 +77,9 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateImageURL() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
+		Book book = this.create();
 		book.setImage("pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
+		
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -158,20 +89,9 @@ class BookValidatorTests {
 	}
 	@Test
 	void shouldNoValidateImageEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
+		Book book = this.create();
 		book.setImage("");
-		book.setPages(100);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
+		
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -182,20 +102,9 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidatePageEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
+		Book book = this.create();
 		book.setPages(null);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
+		
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -206,20 +115,9 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidatePageLess1() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
+		Book book = this.create();
 		book.setPages(-1);
-		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
-
+	
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
 		bookValidator.validate(book, errors);
@@ -230,19 +128,8 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidatePublicationDateEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Book book = new Book();
-		book.setTitle("Prueba");	
-		book.setAuthor("author");
-		book.setEditorial("editorial");
-		Genre genre = new Genre();
-		genre.setName("name");
-		book.setGenre(new Genre());
-		book.setISBN("9780345805362");
-		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
-		book.setPages(100);
+		Book book = this.create();
 		book.setPublicationDate(null);
-		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
 
 		BookValidator bookValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(book, "book");
@@ -255,6 +142,18 @@ class BookValidatorTests {
 
 	@Test
 	void shouldNoValidateSynopsisEmpty() {
+		Book book = this.create();
+		book.setSynopsis("");
+
+		BookValidator bookValidator = createValidator();
+		Errors errors = new BeanPropertyBindingResult(book, "book");
+		bookValidator.validate(book, errors);
+		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
+		Assertions.assertThat(errors.hasFieldErrors("synopsis")).isTrue();
+		Assertions.assertThat(errors.getAllErrors().get(0).getCode()).isEqualTo("Must not be empty");   
+	}
+	
+	private Book create() {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		Book book = new Book();
 		book.setTitle("Prueba");	
@@ -267,15 +166,10 @@ class BookValidatorTests {
 		book.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
 		book.setPages(100);
 		book.setPublicationDate(LocalDate.now());
-		book.setSynopsis("");
-
-		BookValidator bookValidator = createValidator();
-		Errors errors = new BeanPropertyBindingResult(book, "book");
-		bookValidator.validate(book, errors);
-		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
-		Assertions.assertThat(errors.hasFieldErrors("synopsis")).isTrue();
-		Assertions.assertThat(errors.getAllErrors().get(0).getCode()).isEqualTo("Must not be empty");   
+		book.setSynopsis("He robado princesas a reyes agónicos. Incendié la ciudad de Trebon. He pasado la noche con Felurian y he despertado vivo y cuerdo. Me expulsaron de la Universidad a una edad a la que a la mayoría todavía no los dejan entrar. He recorrido de noche caminos de los que otros no se atreven a hablar ni siquiera de día. He hablado con dioses, he amado a mujeres y he escrito canciones que hacen llorar a los bardos. Me llamo Kvothe. Quizá hayas oído hablar de mí");
+		
+		return book;
+		
 	}
-
 
 }

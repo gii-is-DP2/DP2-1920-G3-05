@@ -55,6 +55,22 @@
 			>Unsubscribe</a>
 		
 	</c:if>
+		<br>
+		<br>
+	<h2 id="info">Meeting Assistants</h2>
+	<table class="table table-striped">
+	<c:forEach items="${assistants}" var="assistant">
 	
+		<tr>
+			<th>Username</th>
+			<td><b><c:out value="${assistant.user.username}" /></b></td>
+		</tr>
+	
+	</c:forEach>
+	<tr>
+			<th>Remaining meeting seats</th>
+			<td><b><c:out value="${remainingSeats}" /></b></td>
+		</tr>
+	</table>
 	
 </petclinic:layout>

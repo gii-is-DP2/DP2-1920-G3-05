@@ -20,6 +20,11 @@ public interface SpringDataMeetingAssistantRepository extends MeetingAssistantRe
 	@Transactional
 	@Query("SELECT meetingAssistant.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.meeting.id = ?1")
 	List<Integer> getAssistantsMeeting(int meetingId);
+	
+	@Override
+	@Transactional
+	@Query("SELECT meetingAssistant FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.meeting.id = ?1")
+	List<MeetingAssistant> getAssistantsOfMeeting(int meetingId);
 
 	@Override
 	@Transactional

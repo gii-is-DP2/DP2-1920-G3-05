@@ -16,6 +16,9 @@ public interface MeetingAssistantRepository {
 
 	@Transactional(readOnly = true)
 	List<Integer> getAssistantsMeeting(int meetingId) throws DataAccessException;
+	
+	@Transactional(readOnly = true)
+	List<MeetingAssistant> getAssistantsOfMeeting(int meetingId);
 
 	@Transactional
 	@Modifying

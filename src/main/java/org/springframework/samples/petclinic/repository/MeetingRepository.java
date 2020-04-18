@@ -33,4 +33,13 @@ public interface MeetingRepository{
 	@Transactional
 	Collection<Meeting> findBookByNamePlaceBookTile(String name) throws DataAccessException;
 	
+	@Transactional
+	Integer numberOfMeetings() throws DataAccessException;
+	
+	@Transactional
+	Object[] meetingsByDay() throws DataAccessException;
+	
+	
+	
+	
 }

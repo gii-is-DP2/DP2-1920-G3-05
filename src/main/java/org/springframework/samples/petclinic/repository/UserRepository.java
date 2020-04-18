@@ -9,4 +9,7 @@ public interface UserRepository {
 	User findByUsername(String username) throws DataAccessException;
 
 	User save(User user);
+	
+	Integer numberUser() throws DataAccessException;
+
 }

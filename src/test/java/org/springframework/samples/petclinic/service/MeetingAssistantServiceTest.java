@@ -4,12 +4,10 @@ package org.springframework.samples.petclinic.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.MeetingAssistant;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.CantInscribeMeetingException;
-import org.springframework.samples.petclinic.service.exceptions.CantWriteReviewException;
 import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookMeetingException;
 import org.springframework.stereotype.Service;
 
@@ -257,8 +254,8 @@ public class MeetingAssistantServiceTest {
 	
 	@ParameterizedTest
 	@CsvSource({
-		"4,admin1,9",
-		"2,vet1,10"
+		"4,admin1,18",
+		"2,vet1,19"
 	})
 	void shouldInscribeMeeting(int meetingId, String username, int futureId) {
 		Meeting meeting = this.meetingService.findMeetingById(meetingId);

@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,4 +29,16 @@ public interface SpringDataMeetingRepository extends CrudRepository<Meeting, Int
 	@Transactional
 	@Query("SELECT meeting FROM Meeting meeting WHERE UPPER(meeting.name) LIKE %:name% OR UPPER(meeting.place) LIKE %:name% OR UPPER(meeting.book.title) LIKE %:name%")
 	public Collection<Meeting> findBookByNamePlaceBookTile(@Param("name") String name);
+	
+	@Override
+	@Transactional
+	@Query("SELECT COUNT(*) FROM Meeting meeting WHERE (MONTH(meeting.start) = (MONTH(NOW())-1) AND YEAR(meeting.start) = (YEAR(NOW()))) ")
+	Integer numberOfMeetings() throws DataAccessException;
+	
+	@Override
+	@Transactional
+	@Query("SELECT DAY(meeting.start),COUNT(*) FROM Meeting meeting WHERE (MONTH(meeting.start) = (MONTH(NOW())-1) AND YEAR(meeting.start) = (YEAR(NOW())))  group by DAY(meeting.start)")
+	Object[] meetingsByDay() throws DataAccessException;
+	
+	
 }

@@ -50,6 +50,17 @@ public class MeetingAssistantServiceTest {
 	
 	@ParameterizedTest
 	@CsvSource({
+		"1,2",
+		"3,2",
+		"4,0"
+	})
+	void shouldGetMeetingAssistantsFromMeetingId(int meetingId, int results) {
+		List<MeetingAssistant> meetingAssistants = this.sut.getAssistantsOfMeeting(meetingId);
+		Assertions.assertThat(meetingAssistants.size()).isEqualTo(results);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
 		"1",
 		"3"
 	})

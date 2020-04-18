@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,21 +26,31 @@ public class WishedBookServiceTests {
 	@Autowired
 	private UserService	userService;
 	
-	@Test
-	void shouldAddToWishList() throws DataAccessException, ReadOrWishedBookException {
-		Book book=bookService.findBookById(2);
-		User user=userService.findUserByUsername("admin1");
+	@ParameterizedTest
+	@CsvSource({
+		"2,admin1,3",
+		"4,vet1,3",
+		"10,owner1,1"
+	})
+	void shouldAddToWishList(Integer bookId,String username,Integer expectedNumBooks) throws DataAccessException, ReadOrWishedBookException {
+		Book book=bookService.findBookById(bookId);
+		User user=userService.findUserByUsername(username);
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
 		sut.save(wishedBook);
-		Assertions.assertThat(sut.findBooksIdByUser("admin1").size()).isEqualTo(3);
+		Assertions.assertThat(sut.findBooksIdByUser(user.getUsername()).size()).isEqualTo(expectedNumBooks);
 	}
 	
-	@Test
-	void shouldNotAddReadBook() {
-		Book book=bookService.findBookById(3);
-		User user=userService.findUserByUsername("vet1");
+	@ParameterizedTest
+	@CsvSource({
+		"3,vet1",
+		"5,owner1",
+		"8,admin1"
+	})
+	void shouldNotAddReadBook(Integer bookId,String username) {
+		Book book=bookService.findBookById(bookId);
+		User user=userService.findUserByUsername(username);
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
@@ -50,10 +62,15 @@ public class WishedBookServiceTests {
 		}
 	}
 	
-	@Test
-	void shouldNotAddWishedBook() {
-		Book book=bookService.findBookById(1);
-		User user=userService.findUserByUsername("admin1");
+	@ParameterizedTest
+	@CsvSource({
+		"3,admin1",
+		"4,admin1",
+		"10,vet1"
+	})
+	void shouldNotAddWishedBook(Integer bookId,String username) {
+		Book book=bookService.findBookById(bookId);
+		User user=userService.findUserByUsername(username);
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
@@ -65,10 +82,15 @@ public class WishedBookServiceTests {
 		}
 	}
 	
-	@Test
-	void shouldDeleteFromWishList() {
-		sut.deleteByBookId(4);
-		Collection<Integer> books=sut.findBooksIdByUser("admin1");
-		Assertions.assertThat(books.size()).isEqualTo(1);
+	@ParameterizedTest
+	@CsvSource({
+		"4,admin1,1",
+		"3,admin1,1",
+		"10,vet1,1"
+	})
+	void shouldDeleteFromWishList(Integer bookId,String username,Integer expectedNumBooks) {
+		sut.deleteByBookId(bookId);
+		Collection<Integer> books=sut.findBooksIdByUser(username);
+		Assertions.assertThat(books.size()).isEqualTo(expectedNumBooks);
 	}
 }

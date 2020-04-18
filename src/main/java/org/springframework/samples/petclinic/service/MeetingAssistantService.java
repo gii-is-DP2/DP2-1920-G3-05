@@ -34,6 +34,11 @@ public class MeetingAssistantService {
 		return this.meetingAssistantRepository.getAssistantsMeeting(meetingId);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<MeetingAssistant> getAssistantsOfMeeting(final int meetingId) throws DataAccessException {
+		return this.meetingAssistantRepository.getAssistantsOfMeeting(meetingId);
+	}
+	
 	@Transactional(readOnly= true)
 	public List<Meeting> getMeetingUser (String userId){
 		return this.meetingAssistantRepository.getMeetingUser(userId);

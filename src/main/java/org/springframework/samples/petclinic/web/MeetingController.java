@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,7 +17,6 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.MeetingAssistantService;
 import org.springframework.samples.petclinic.service.MeetingService;
-import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.CantInscribeMeetingException;
 import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookMeetingException;
@@ -122,12 +122,16 @@ public class MeetingController {
 		Optional<Integer> meetingAssistantId = this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(meetingId, userdetails.getUsername());
 		ModelAndView mav = new ModelAndView("meetings/meetingDetails");
 		Boolean CanInscribe = this.meetingAssistantService.canInscribe(meetingId, userdetails.getUsername(), meeting.getBook().getId());
+		List<MeetingAssistant> assistants=this.meetingAssistantService.getAssistantsOfMeeting(meetingId);
+		Integer remainingSeats=meeting.getCapacity()-assistants.size();
         mav.addObject("canInscribe", CanInscribe);
 		mav.addObject("meeting", meeting);
 		if (meetingAssistantId.isPresent()) {
 			modelMap.put("suscribed", true);
 
 		}
+		modelMap.addAttribute("assistants", assistants);
+		modelMap.addAttribute("remainingSeats", remainingSeats);
 		return mav;
 	}
 

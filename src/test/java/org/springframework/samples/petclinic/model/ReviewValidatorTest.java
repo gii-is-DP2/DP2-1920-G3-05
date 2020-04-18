@@ -17,11 +17,9 @@ public class ReviewValidatorTest {
 
     @Test
     void shouldNoValidateTitleEmpty() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Review review = new Review();
+        Review review = this.create();
         review.setTitle("");
-        review.setRaiting(3);
-        review.setOpinion("Opinion");
+
 
         ReviewValidator reviewValidator = createValidator();
         Errors errors = new BeanPropertyBindingResult(review, "review");
@@ -33,10 +31,8 @@ public class ReviewValidatorTest {
 
     @Test
     void shouldNoValidateRatingEmpty() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Review review = new Review();
-        review.setTitle("Title");
-        review.setOpinion("Opinion");
+        Review review = this.create();
+        review.setRaiting(null);
 
         ReviewValidator reviewValidator = createValidator();
         Errors errors = new BeanPropertyBindingResult(review, "review");
@@ -48,11 +44,8 @@ public class ReviewValidatorTest {
 
     @Test
     void shouldNoValidateRatingNotInRange() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Review review = new Review();
-        review.setTitle("Title");
+        Review review = this.create();
         review.setRaiting(6);
-        review.setOpinion("Opinion");
 
         ReviewValidator reviewValidator = createValidator();
         Errors errors = new BeanPropertyBindingResult(review, "review");
@@ -64,10 +57,7 @@ public class ReviewValidatorTest {
 
     @Test
     void shouldNoValidateOpinionEmpty() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Review review = new Review();
-        review.setTitle("Title");
-        review.setRaiting(3);
+        Review review = this.create();
         review.setOpinion("");
 
         ReviewValidator reviewValidator = createValidator();
@@ -80,16 +70,22 @@ public class ReviewValidatorTest {
 
      @Test
      void shouldValidate() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Review review = new Review();
-        review.setTitle("Title");
-        review.setRaiting(3);
-        review.setOpinion("Opinion");
+        Review review = this.create();
 
         ReviewValidator reviewValidator = createValidator();
         Errors errors = new BeanPropertyBindingResult(review, "review");
         reviewValidator.validate(review, errors);
         Assertions.assertThat(errors.getAllErrors()).isEmpty();
 
+     }
+     
+     private Review create() {
+    	 LocaleContextHolder.setLocale(Locale.ENGLISH);
+         Review review = new Review();
+         review.setTitle("Title");
+         review.setRaiting(3);
+         review.setOpinion("Opinion");
+         
+         return review;
      }
 }

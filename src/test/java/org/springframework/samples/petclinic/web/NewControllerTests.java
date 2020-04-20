@@ -1,8 +1,12 @@
 
 package org.springframework.samples.petclinic.web;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -46,6 +50,12 @@ public class NewControllerTests {
 
 	@MockBean
 	private BookService			bookService;
+	
+	
+	private New					new1;
+	
+	private New					new2;
+	
 
 
 	@BeforeEach
@@ -73,6 +83,22 @@ public class NewControllerTests {
 		neew2.setImg("https://T_1276982291_248063_1440x600.jpg");
 		neew2.setRedactor("Test redactor 2");
 		neew2.setTags("Test tags 2");
+		
+		
+		New new1 = new New();
+		new1.setHead("Prueba");
+		new1.setFecha(LocalDate.of(2019, 11, 12));
+		new1.setBody("Esto es una prueba");
+		new1.setImg("https://www.nombreviento.com/");
+		new1.setRedactor("Juan");
+		new1.setTags("#prueba");
+		New new2 = new New();
+		new2.setHead("Prueba1");
+		new2.setFecha(LocalDate.of(2019, 12, 12));
+		new2.setBody("Esto es una prueba 2");
+		new2.setImg("https://www.nombreviento4.com/");
+		new2.setRedactor("Pepe");
+		new2.setTags("#prueb");
 
 		Mockito.when(this.newService.getNewById(NewControllerTests.TEST_NEW_ID)).thenReturn(neew);
 		Mockito.when(this.newService.getBooksFromNews(NewControllerTests.TEST_NEW_ID_3)).thenReturn(new ArrayList<Book>());
@@ -112,79 +138,122 @@ public class NewControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/{newId}", NewControllerTests.TEST_NEW_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("new"))
-			.andExpect(MockMvcResultMatchers.model().attribute("new", Matchers.hasProperty("name", Matchers.is("Test title")))).andExpect(MockMvcResultMatchers.model().attribute("new", Matchers.hasProperty("body", Matchers.is("Test body"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("new", Matchers.hasProperty("redactor", Matchers.is("Test redactor")))).andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/{newId}", NewControllerTests.TEST_NEW_ID))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("new"))
+		.andExpect(MockMvcResultMatchers.model().attribute("new", Matchers.hasProperty("name", Matchers.is("Test title"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("new", Matchers.hasProperty("body", Matchers.is("Test body"))))
+		.andExpect(MockMvcResultMatchers.model().attribute("new", Matchers.hasProperty("redactor", Matchers.is("Test redactor"))))
+		.andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testSaveNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/{newId}", NewControllerTests.TEST_NEW_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Edited name").param("body", "Edited body").param("redactor", "Edited redactor")
-			.param("fecha", "2010/05/12").param("head", "Edited head").param("img", "https://1276982291_248063_1440x600.jpg")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/news"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/{newId}", NewControllerTests.TEST_NEW_ID)
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Edited name")
+				.param("body", "Edited body")
+				.param("redactor", "Edited redactor")
+				.param("fecha", "2010/05/12")
+				.param("head", "Edited head")
+				.param("img", "https://1276982291_248063_1440x600.jpg"))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.redirectedUrl("/news"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testSaveNewWithErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/{newId}", NewControllerTests.TEST_NEW_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "").param("fecha", "2050/05/07").param("img", "aa"))
-			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("new")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "fecha")).andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/{newId}", NewControllerTests.TEST_NEW_ID)
+				.with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "")
+				.param("fecha", "2050/05/07").param("img", "aa"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("new"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "fecha"))
+			.andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreateNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/create")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("new"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("addNew")).andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/create"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("new"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("addNew"))
+		.andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testCreateNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/create").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Edited name").param("body", "Edited body").param("redactor", "Edited redactor").param("fecha", "2010/05/12")
-			.param("head", "Edited head").param("img", "https://1276982291_248063_1440x600.jpg")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/create")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("name", "Edited name")
+				.param("body", "Edited body")
+				.param("redactor", "Edited redactor")
+				.param("fecha", "2010/05/12")
+				.param("head", "Edited head")
+				.param("img", "https://1276982291_248063_1440x600.jpg"))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testCreateNewWithErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/create").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "").param("fecha", "2050/05/07").param("img", "aa")).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("new")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "fecha")).andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/admin/news/create")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("name", "").param("fecha", "2050/05/07")
+				.param("img", "aa")).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("new"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "name"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("new", "fecha"))
+			.andExpect(MockMvcResultMatchers.view().name("news/createOrUpdateNewForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/delete/{newId}", NewControllerTests.TEST_NEW_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/news"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/delete/{newId}", NewControllerTests.TEST_NEW_ID))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.redirectedUrl("/news"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testBooksNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/{newId}", NewControllerTests.TEST_NEW_ID)).andExpect(MockMvcResultMatchers.model().attributeExists("booksIncludes"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("booksNotIncludes")).andExpect(MockMvcResultMatchers.view().name("news/bookList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/{newId}", NewControllerTests.TEST_NEW_ID))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("booksIncludes"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("booksNotIncludes"))
+			.andExpect(MockMvcResultMatchers.view().name("news/bookList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testBooksNewSave() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/save/{newId}", NewControllerTests.TEST_NEW_ID_2)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/news"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/save/{newId}", NewControllerTests.TEST_NEW_ID_2))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.redirectedUrl("/news"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testBooksNewSaveEmpty() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/save/{newId}", NewControllerTests.TEST_NEW_ID_3)).andExpect(MockMvcResultMatchers.model().attributeExists("booksIncludes"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("booksNotIncludes")).andExpect(MockMvcResultMatchers.model().attributeExists("booksNotEmpty")).andExpect(MockMvcResultMatchers.view().name("news/bookList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/save/{newId}", NewControllerTests.TEST_NEW_ID_3))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("booksIncludes"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("booksNotIncludes"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("booksNotEmpty"))
+		.andExpect(MockMvcResultMatchers.view().name("news/bookList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteBooksFromNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/delete/{newId}/{bookId}", NewControllerTests.TEST_NEW_ID_2, NewControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/admin/news/books/" + NewControllerTests.TEST_NEW_ID_2));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/delete/{newId}/{bookId}", NewControllerTests.TEST_NEW_ID_2, NewControllerTests.TEST_BOOK_ID))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.redirectedUrl("/admin/news/books/" + NewControllerTests.TEST_NEW_ID_2));
 	}
 
 	@WithMockUser(value = "spring")
@@ -197,8 +266,57 @@ public class NewControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testSaveBooksInNew() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/add/{newId}/{bookId}", NewControllerTests.TEST_NEW_ID, NewControllerTests.TEST_BOOK_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/admin/news/books/" + NewControllerTests.TEST_NEW_ID));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/admin/news/books/add/{newId}/{bookId}", NewControllerTests.TEST_NEW_ID, NewControllerTests.TEST_BOOK_ID))
+		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.redirectedUrl("/admin/news/books/" + NewControllerTests.TEST_NEW_ID));
 	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowNewBookReviewHtml() throws Exception {
+		List<New> ids = new ArrayList<>();
+		ids.add(this.new1);
+		ids.add(this.new2);
+		Mockito.when(this.newService.getNewsBookReview("spring")).thenReturn((Collection<New>)ids);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/news/newsbookreview"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("news"))
+		.andExpect(MockMvcResultMatchers.model().attribute("AllNews", Matchers.is(true)))
+		.andExpect(MockMvcResultMatchers.view().name("news/newList"));
+	}
+	@WithMockUser(value = "spring", authorities = "ROLE_ANONYMOUS")
+	@Test
+	void testShowNewAnonymousHtml() throws Exception {
+
+		Mockito.when(this.newService.getNewsBookReview("spring")).thenReturn(new ArrayList<>());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/news"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowNewWithoutReviewHtml() throws Exception {
+
+		Mockito.when(this.newService.getNewsBookReview("spring")).thenReturn(new ArrayList<>());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/news"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowNewsWithReviewtHtml() throws Exception {
+		List<New> ids = new ArrayList<>();
+		ids.add(this.new1);
+		ids.add(this.new2);
+		Mockito.when(this.newService.getNewsBookReview("spring")).thenReturn((Collection<New>)ids);
+		Mockito.when(this.newService.getNewsBookReview2("spring")).thenReturn((Collection<New>)ids);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.model().attributeExists("news"))
+		.andExpect(MockMvcResultMatchers.model().attribute("AllNews", Matchers.is(true)))
+		.andExpect(MockMvcResultMatchers.view().name("news/newList"));
+	}
+
 
 }

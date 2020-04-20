@@ -32,7 +32,7 @@ public class AdminControllerE2ETest {
     @WithMockUser(username = "admin1", authorities = {"admin"})
 	@Test
 	void testverifyUser() throws Exception{
-        this.mockMvc.perform(get("/admin/users/{userId}/verify",2).with(csrf()))
+        this.mockMvc.perform(get("/admin/users/{userId}/verify",3).with(csrf()))
                     .andExpect(status().is3xxRedirection())
 	                .andExpect(redirectedUrl("/admin/listUsers"));
     }
@@ -40,7 +40,7 @@ public class AdminControllerE2ETest {
     @WithMockUser(username = "reader1", authorities = {"reader"})
 	@Test
 	void testverifyUserImNotAdmin() throws Exception{
-        this.mockMvc.perform(get("/admin/users/{userId}/verify",2).with(csrf()))
+        this.mockMvc.perform(get("/admin/users/{userId}/verify",3).with(csrf()))
                     .andExpect(status().is4xxClientError());
     }
     

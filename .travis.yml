@@ -2,7 +2,7 @@ dist: trusty
 language: java
 jdk: oraclejdk8
 addons:
-  firefox: latest-esr
+  firefox: "56.0"
 before_install:
   - sudo apt-get install xvfb
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz

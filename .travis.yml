@@ -13,4 +13,5 @@ before_install:
   - sleep 5 # give xvfb some time to start
 script: 
   - mvn -P AcceptanceTests install
+  - mvn install
 

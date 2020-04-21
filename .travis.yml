@@ -2,7 +2,7 @@ dist: trusty
 language: java
 jdk: oraclejdk8
 addons:
-  firefox: "45.4.0esr"
+  firefox: latest-esr
 before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
   - mkdir geckodriver

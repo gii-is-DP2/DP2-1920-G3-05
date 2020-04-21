@@ -7,8 +7,7 @@ before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.26.0-linux64.tar.gz -C geckodriver
-  - export webdriver.gecko.driver=$PWD/geckodriver
+  - env webdriver.gecko.driver=$PWD/geckodriver command
 script: 
   - mvn -P AcceptanceTests install
-  - mvn install
 

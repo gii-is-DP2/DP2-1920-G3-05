@@ -3,6 +3,7 @@ language: java
 jdk: oraclejdk8
 services:
   - mysql
-before_install:
-    - sudo mysql -e 'CREATE DATABASE bookland;'
-    - sudo mysql -e 'USE bookland;'
+before_script:
+    - sudo mysql -u root -e 'CREATE DATABASE bookland;'
+    - sudo mysql -u root -e "CREATE USER 'bookland_user'@'localhost' IDENTIFIED BY 'bookland';"
+    - sudo mysql -u root -e "GRANT ALL ON bookland.* TO 'bookland_user'@'localhost';"

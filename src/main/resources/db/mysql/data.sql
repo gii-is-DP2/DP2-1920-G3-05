@@ -11,6 +11,9 @@ INSERT INTO authorities VALUES ('vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('reader1','reader',TRUE);
 INSERT INTO authorities VALUES ('reader1','reader');
 
+INSERT INTO users(username,password,enabled) VALUES ('reader2','reader',TRUE);
+INSERT INTO authorities VALUES ('reader2','reader');
+
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023',TRUE, 'admin1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749',FALSE, 'owner1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763',TRUE, 'vet1');
@@ -133,6 +136,8 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(18,8, 'reader1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(19,9, 'reader1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(20,10, 'reader1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(21,11, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(22,1, 'reader2');
+
 
 INSERT INTO wished_book (book_id, user_username) VALUES(3, 'admin1');
 INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');

@@ -7,3 +7,4 @@ before_script:
     - sudo mysql -u root -e 'CREATE DATABASE bookland;'
     - sudo mysql -u root -e "CREATE USER 'bookland_user'@'localhost' IDENTIFIED BY 'bookland';"
     - sudo mysql -u root -e "GRANT ALL ON bookland.* TO 'bookland_user'@'localhost';"
+script: mvn test -Dspring.profiles.active=mysql

@@ -145,7 +145,14 @@ INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunio
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-05-20 19:30', '2020-05-20 21:00', 20, 10);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (5,'Reunion prueba aforo','Nowhere', '2020-03-15 16:30', '2020-03-15 21:00', 2, 8);
-
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (6,'Club de lectura','Circulo joven de Los Palacios', '2020-03-20 19:30', '2020-03-20 21:00', 30, 13);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (7,'Club de lectura','A1.13', '2020-03-10 12:00', '2020-03-10 14:00', 50, 9);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (8,'Libro','Biblioteca', '2020-03-07 19:30', '2020-03-07 21:00', 20, 13);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (9,'Club de lectura','Biblioteca', '2020-03-21 19:30', '2020-03-21 21:00', 20, 14);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (10,'Club de lectura','Circulo joven de Los Palacios', '2020-03-16 19:30', '2020-03-16 21:00', 30, 6);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (11,'Club de lectura','A1.13', '2020-03-20 12:00', '2020-03-20 14:00', 50, 4);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (12,'Libro','Biblioteca', '2020-03-16 19:30', '2020-03-16 21:00', 20, 5);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (13,'Hijo del taliano','Biblioteca', '2020-03-20 19:30', '2020-03-20 21:00', 20, 12);
 
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');
@@ -155,6 +162,14 @@ INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (5, 3, 'admi
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (6, 3, 'owner1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (7, 5, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (8, 5, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (9, 10, 'vet1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (10, 10, 'reader1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (11, 12, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (13, 13, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (14, 11, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (15, 11, 'reader1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (16, 7, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (17, 7, 'reader1');
 
 
 INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );

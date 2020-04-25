@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.bdd.integration.DB;
+package org.springframework.samples.petclinic.integration.DB;
 
 import java.time.LocalDate;
 import java.util.Collection;

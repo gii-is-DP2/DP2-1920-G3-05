@@ -10,15 +10,15 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.util.EntityUtils;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.context.annotation.ComponentScan;
 
+@ActiveProfiles("mysql")
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
 public class BookQueriesIntegrationTest {

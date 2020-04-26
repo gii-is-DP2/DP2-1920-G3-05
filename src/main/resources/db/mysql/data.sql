@@ -11,6 +11,9 @@ INSERT INTO authorities VALUES ('vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('reader1','reader',TRUE);
 INSERT INTO authorities VALUES ('reader1','reader');
 
+INSERT INTO users(username,password,enabled) VALUES ('reader2','reader',TRUE);
+INSERT INTO authorities VALUES ('reader2','reader');
+
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023',TRUE, 'admin1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749',FALSE, 'owner1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763',TRUE, 'vet1');
@@ -111,6 +114,7 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (12, 'Reina Roja', 'Juan Gomez-Jurado', 4, 9788466664417 , 568, 'Antonia Scott es una mujer muy especial. Tiene un don que es al mismo tiempo una maldición: una extraordinaria inteligencia. Gracias a ella ha salvado decenas de vidas, pero también lo ha perdido todo.', 'S.A. EDICIONES B','2018-05-14',TRUE,'https://imagessl7.casadellibro.com/a/l/t5/17/9788466664417.jpg','reader1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (13, 'Loba negra', 'Juan Gomez-Jurado', 4, 9788466666497 , 552, 'Antonia Scott no tiene miedo a nada. Solo a sí misma.NUNCA FUE. Pero hay alguien más peligroso que ella. Alguien que podría vencerla. TAN DIFÍCIL', 'S.A. EDICIONES B','2018-05-14',TRUE,'https://imagessl7.casadellibro.com/a/l/t5/97/9788466666497.jpg','reader1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (14, 'La musica del silencio', 'Patrick Rothfuss', 1, 9788401343575 , 160, 'Auri es uno de los personajes más populares y rodeados de misterio que aparecen en El nombre del viento y El temor de un hombre sabio. Hasta ahora la conocíamos a través de Kvothe. La música del silencio nos permitirá ver el mundo a través de Auri y nos dará la oportunidad de aprender lo que hasta ahora únicamente sabía ella', 'Plaza y Janes','2014-01-11',TRUE,'https://images-na.ssl-images-amazon.com/images/I/51MVAYGJsqL._SX324_BO1,204,203,200_.jpg','reader1');
+INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (15, 'Libro sin ninguna relacion', 'Vacio', 1, 9788401376443 , 160, 'Vacio', 'Vacio','2014-01-11',TRUE,'https://www.example.com','reader1');
 
 INSERT INTO read_book (id,book_id, user_username) VALUES(1,3, 'vet1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(2,2, 'vet1');
@@ -133,6 +137,8 @@ INSERT INTO read_book (id,book_id, user_username) VALUES(18,8, 'reader1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(19,9, 'reader1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(20,10, 'reader1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(21,11, 'reader1');
+INSERT INTO read_book (id,book_id, user_username) VALUES(22,1, 'reader2');
+
 
 INSERT INTO wished_book (book_id, user_username) VALUES(3, 'admin1');
 INSERT INTO wished_book (book_id, user_username) VALUES(4, 'admin1');
@@ -145,7 +151,14 @@ INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunio
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-05-20 19:30', '2020-05-20 21:00', 20, 10);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (5,'Reunion prueba aforo','Nowhere', '2020-03-15 16:30', '2020-03-15 21:00', 2, 8);
-
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (6,'Club de lectura','Circulo joven de Los Palacios', '2020-03-20 19:30', '2020-03-20 21:00', 30, 13);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (7,'Club de lectura','A1.13', '2020-03-10 12:00', '2020-03-10 14:00', 50, 9);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (8,'Libro','Biblioteca', '2020-03-07 19:30', '2020-03-07 21:00', 20, 13);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (9,'Club de lectura','Biblioteca', '2020-03-21 19:30', '2020-03-21 21:00', 20, 14);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (10,'Club de lectura','Circulo joven de Los Palacios', '2020-03-16 19:30', '2020-03-16 21:00', 30, 6);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (11,'Club de lectura','A1.13', '2020-03-20 12:00', '2020-03-20 14:00', 50, 4);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (12,'Libro','Biblioteca', '2020-03-16 19:30', '2020-03-16 21:00', 20, 5);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (13,'Hijo del taliano','Biblioteca', '2020-03-20 19:30', '2020-03-20 21:00', 20, 12);
 
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');
@@ -155,6 +168,14 @@ INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (5, 3, 'admi
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (6, 3, 'owner1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (7, 5, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (8, 5, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (9, 10, 'vet1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (10, 10, 'reader1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (11, 12, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (13, 13, 'owner1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (14, 11, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (15, 11, 'reader1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (16, 7, 'admin1');
+INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (17, 7, 'reader1');
 
 
 INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );

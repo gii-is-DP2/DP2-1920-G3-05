@@ -1,7 +1,7 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ public interface SpringDataMeetingAssistantRepository extends MeetingAssistantRe
 	@Transactional
 	@Query("SELECT meetingAssistant.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.meeting.id = ?1")
 	List<Integer> getAssistantsMeeting(int meetingId);
-	
+
 	@Override
 	@Transactional
 	@Query("SELECT meetingAssistant FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.meeting.id = ?1")
@@ -32,34 +32,33 @@ public interface SpringDataMeetingAssistantRepository extends MeetingAssistantRe
 	@Modifying
 	@Query("DELETE FROM MeetingAssistant WHERE id = ?1")
 	void deleteAssistantById(int assistantId);
-	
+
 	@Override
 	@Query("SELECT DISTINCT m from Meeting m WHERE m.id in (SELECT meetingAssistant.meeting.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.user.username = ?1 )")
-	List<Meeting> getMeetingUser (String userId);
-	
+	List<Meeting> getMeetingUser(String userId);
+
 	@Override
 	@Transactional(readOnly = true)
 	@Query("SELECT meetingAssistant.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.meeting.id = ?1 AND meetingAssistant.user.username=?2")
 	Optional<Integer> findMeetingAssistantByUsernameAndMeetingId(int meetingId, String username) throws DataAccessException;
-	
-	@Override
-	@Transactional
-	@Query("SELECT COUNT(*) FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(NOW())-1) AND YEAR(meetingAs.meeting.start) = (YEAR(NOW()))) ")
-	Integer numberOfMeetingsAssistant() throws DataAccessException;
-	
-	@Override
-	@Transactional
-	@Query("SELECT meetingAs.meeting.book.genre,COUNT(*) FROM MeetingAssistant meetingAs WHERE(MONTH(meetingAs.meeting.start) = (MONTH(NOW())-1) AND YEAR(meetingAs.meeting.start) = (YEAR(NOW()))) group by meetingAs.meeting.book.genre")
-	Object[] assistantByGenre() throws DataAccessException;
-	
 
 	@Override
 	@Transactional
-	@Query("SELECT meetingAs.meeting.name,meetingAs.meeting.book.title,meetingAs.meeting.place,DAY(meetingAs.meeting.start),COUNT(*) FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(NOW())-1) AND YEAR(meetingAs.meeting.start) = (YEAR(NOW()))) group by meetingAs.meeting")
-	Object[] assistantByMeeting() throws DataAccessException;
-	
+	@Query("SELECT COUNT(*) FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) ")
+	Integer numberOfMeetingsAssistant(LocalDateTime time) throws DataAccessException;
+
 	@Override
 	@Transactional
-	@Query("SELECT DISTINCT meetingAs.user FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(NOW())-1) AND YEAR(meetingAs.meeting.start) = (YEAR(NOW())))")
-	List<User> usersAssisted() throws DataAccessException;
+	@Query("SELECT meetingAs.meeting.book.genre,COUNT(*) FROM MeetingAssistant meetingAs WHERE(MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) group by meetingAs.meeting.book.genre")
+	Object[][] assistantByGenre(LocalDateTime time) throws DataAccessException;
+
+	@Override
+	@Transactional
+	@Query("SELECT meetingAs.meeting.name,meetingAs.meeting.book.title,meetingAs.meeting.place,DAY(meetingAs.meeting.start),COUNT(*) FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) group by meetingAs.meeting")
+	Object[] assistantByMeeting(LocalDateTime time) throws DataAccessException;
+
+	@Override
+	@Transactional
+	@Query("SELECT DISTINCT meetingAs.user FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1)))")
+	List<User> usersAssisted(LocalDateTime time) throws DataAccessException;
 }

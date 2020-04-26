@@ -21,7 +21,6 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class BookServiceTests {

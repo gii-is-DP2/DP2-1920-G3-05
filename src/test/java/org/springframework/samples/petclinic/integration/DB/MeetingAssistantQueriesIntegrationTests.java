@@ -76,7 +76,9 @@ public class MeetingAssistantQueriesIntegrationTests {
 	}
 	@ParameterizedTest
 	@CsvSource({
-		"1,Romance,2", "2, Fiction, 4", "3, Historical, 1"
+		"1,Romance,2", 
+		"2, Fiction, 4", 
+		"3, Historical, 1"
 	})
 	public void GetAssitantsbyGenre(final Integer numbObject, final String nameGenre, final Long numeroAsistentes) {
 		LocalDateTime time = LocalDateTime.of(2020, 04, 23, 19, 55);

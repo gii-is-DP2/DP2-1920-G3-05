@@ -58,7 +58,8 @@ public class MeetingQueriesIntegrationTests {
 	}
 	@ParameterizedTest
 	@CsvSource({
-		"2020-04-23T19:47:30.107,9", "2020-06-23T19:47:30.107,1"
+		"2020-04-23T19:47:30.107,9",
+		"2020-06-23T19:47:30.107,1"
 	})
 	public void GetNumberOfMeetings(final LocalDateTime time, final Integer numberMeetingsExpected) {
 
@@ -67,7 +68,9 @@ public class MeetingQueriesIntegrationTests {
 	}
 	@ParameterizedTest
 	@CsvSource({
-		"1,20,3", "3,7,1", "4,21,1"
+		"1,20,3",
+		"3,7,1", 
+		"4,21,1"
 	})
 	public void GetNumberOfMeetingsbyDay(final Integer numbObject, final Integer day, final Long numberMeetingsExpected) {
 		LocalDateTime time = LocalDateTime.of(2020, 04, 23, 19, 55);

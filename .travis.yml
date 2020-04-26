@@ -21,8 +21,8 @@ script:
   - mvn -P AcceptanceTests install > /tmp/UIlog.txt
   - mvn install > /tmp/tests.txt
 after_failure:
-  - cat /tmp/UIlog.txt
-  - cat /tmp/tests.txt
+  - tail /tmp/UIlog.txt
+  - tail /tmp/tests.txt
 after_success:
   - tail /tmp/UIlog.txt
   - tail /tmp/tests.txt

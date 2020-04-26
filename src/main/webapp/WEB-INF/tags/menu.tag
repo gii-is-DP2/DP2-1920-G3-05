@@ -58,7 +58,11 @@
 					<span>Meetings</span>
 				</petclinic:menuItem>
 
-		
+				<petclinic:menuItem active="${name eq 'IT Section'}" url="/itBooks/find"
+					title="IT Section">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>IT Section</span>
+				</petclinic:menuItem>
 
 			</ul>
 

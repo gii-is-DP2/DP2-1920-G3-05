@@ -22,7 +22,7 @@ script:
   - mvn install > /tmp/tests.txt
 after_failure:
   - tail /tmp/UIlog.txt
-  - tail /tmp/tests.txt
+  - tail -n 3000 /tmp/tests.txt 
 after_success:
   - tail /tmp/UIlog.txt
   - tail /tmp/tests.txt

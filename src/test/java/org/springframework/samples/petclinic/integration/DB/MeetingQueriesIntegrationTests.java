@@ -68,18 +68,18 @@ public class MeetingQueriesIntegrationTests {
 	}
 	@ParameterizedTest
 	@CsvSource({
-		"1,20,3",
-		"3,7,1", 
-		"4,21,1"
+		"20,3",
+		"7,1", 
+		"21,1"
 	})
-	public void GetNumberOfMeetingsbyDay(final Integer numbObject, final Integer day, final Long numberMeetingsExpected) {
+	public void GetNumberOfMeetingsbyDay(final Integer day, final Long numberMeetingsExpected) {
 		LocalDateTime time = LocalDateTime.of(2020, 04, 23, 19, 55);
-		Object[] meetingsbyDay = this.sut.meetingsByDay(time);
-		Object[] aux = (Object[]) meetingsbyDay[numbObject];
-
-		Assertions.assertThat(aux[0]).isEqualTo(day);
-		Assertions.assertThat(aux[1]).isEqualTo(numberMeetingsExpected);
-
+		Object[][] meetingsbyDay = this.sut.meetingsByDay(time);
+		for(Object[] o: meetingsbyDay) {
+			if(o[0].equals(day)) {
+				Assertions.assertThat(o[1].equals(numberMeetingsExpected));
+			}
+		}
 	}
 
 }

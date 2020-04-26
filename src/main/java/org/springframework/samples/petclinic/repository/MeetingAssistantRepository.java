@@ -40,7 +40,7 @@ public interface MeetingAssistantRepository {
 	Integer numberOfMeetingsAssistant(LocalDateTime time) throws DataAccessException;
 
 	@Transactional
-	Object[] assistantByGenre(LocalDateTime time) throws DataAccessException;
+	Object[][] assistantByGenre(LocalDateTime time) throws DataAccessException;
 
 	@Transactional
 	Object[] assistantByMeeting(LocalDateTime time) throws DataAccessException;

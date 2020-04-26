@@ -40,6 +40,6 @@ public interface SpringDataMeetingRepository extends CrudRepository<Meeting, Int
 	@Override
 	@Transactional
 	@Query("SELECT DAY(meeting.start),COUNT(*) FROM Meeting meeting WHERE (MONTH(meeting.start) = (MONTH(?1)-1) AND YEAR(meeting.start) = (YEAR(?1)))  group by DAY(meeting.start)")
-	Object[] meetingsByDay(LocalDateTime time) throws DataAccessException;
+	Object[][] meetingsByDay(LocalDateTime time) throws DataAccessException;
 
 }

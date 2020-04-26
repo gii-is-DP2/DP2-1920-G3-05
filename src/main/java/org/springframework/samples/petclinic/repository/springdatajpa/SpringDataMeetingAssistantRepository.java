@@ -50,7 +50,7 @@ public interface SpringDataMeetingAssistantRepository extends MeetingAssistantRe
 	@Override
 	@Transactional
 	@Query("SELECT meetingAs.meeting.book.genre,COUNT(*) FROM MeetingAssistant meetingAs WHERE(MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) group by meetingAs.meeting.book.genre")
-	Object[] assistantByGenre(LocalDateTime time) throws DataAccessException;
+	Object[][] assistantByGenre(LocalDateTime time) throws DataAccessException;
 
 	@Override
 	@Transactional

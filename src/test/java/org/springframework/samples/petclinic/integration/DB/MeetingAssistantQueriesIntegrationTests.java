@@ -76,18 +76,18 @@ public class MeetingAssistantQueriesIntegrationTests {
 	}
 	@ParameterizedTest
 	@CsvSource({
-		"1,Romance,2", 
-		"2, Fiction, 4", 
-		"3, Historical, 1"
+		"Romance,2", 
+		"Fiction, 4", 
+		"Historical, 1"
 	})
-	public void GetAssitantsbyGenre(final Integer numbObject, final String nameGenre, final Long numeroAsistentes) {
+	public void GetAssitantsbyGenre(final String nameGenre, final Long numeroAsistentes) {
 		LocalDateTime time = LocalDateTime.of(2020, 04, 23, 19, 55);
-		Object[] AssitantsByGenre = this.sut.assistantByGenre(time);
-		Object[] aux = (Object[]) AssitantsByGenre[numbObject];
-
-		Assertions.assertThat(aux[0].toString()).isEqualTo(nameGenre);
-		Assertions.assertThat(aux[1]).isEqualTo(numeroAsistentes);
-
+		Object[][] AssitantsByGenre = this.sut.assistantByGenre(time);
+		for(Object[] o: AssitantsByGenre) {
+			if(o[0].equals(nameGenre)){
+				Assertions.assertThat(o[1].equals(numeroAsistentes));
+			}
+		}
 	}
 	@ParameterizedTest
 	@CsvSource({

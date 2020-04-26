@@ -39,6 +39,6 @@ public interface MeetingRepository {
 	Integer numberOfMeetings(LocalDateTime time) throws DataAccessException;
 
 	@Transactional
-	Object[] meetingsByDay(LocalDateTime time) throws DataAccessException;
+	Object[][] meetingsByDay(LocalDateTime time) throws DataAccessException;
 
 }

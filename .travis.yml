@@ -19,6 +19,10 @@ before_script:
     - sudo mysql -u root -e "GRANT ALL ON bookland.* TO 'bookland_user'@'localhost';"
 script: 
   - mvn -P AcceptanceTests install > /tmp/UIlog.txt
-  - mvn install
+  - mvn install > /tmp/tests.txt
 after_failure:
   - cat /tmp/UIlog.txt
+  - cat /tmp/tests.txt
+after_success:
+  - tail /tmp/UIlog.txt
+  - tail /tmp/tests.txt

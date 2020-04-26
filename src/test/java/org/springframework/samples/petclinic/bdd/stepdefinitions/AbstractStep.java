@@ -15,7 +15,9 @@ public class AbstractStep {
 	
 	public WebDriver getDriver() {
 		if(driver==null) {
-			System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+			if(System.getenv("webdriver.gecko.driver")!=null){
+				System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+			}
 			driver = new FirefoxDriver();		    
 			driver.manage().deleteAllCookies();
 		    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

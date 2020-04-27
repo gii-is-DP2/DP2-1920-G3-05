@@ -21,9 +21,7 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
 import org.springframework.samples.petclinic.service.exceptions.CantShowNewReviewException;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("mysql")
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)public class NewServiceTest {
 

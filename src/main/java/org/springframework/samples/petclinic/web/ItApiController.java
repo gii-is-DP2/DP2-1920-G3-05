@@ -8,7 +8,7 @@ import org.springframework.samples.petclinic.model.ItApiSearch;
 import org.springframework.samples.petclinic.model.ItBook;
 import org.springframework.samples.petclinic.model.ItBookDetails;
 import org.springframework.samples.petclinic.service.ItApiService;
-import org.springframework.stereotype.Component;
+import org.springframework.samples.petclinic.service.exceptions.BadIsbnException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +40,13 @@ public class ItApiController {
 
     @GetMapping("/itBooks/details/{isbn}")
     public String getDetails(final Map<String, Object> model, @PathVariable final String isbn) {
-        ItBookDetails itBookDetails = this.service.getDetailsItBook(isbn);
-        model.put("itBook", itBookDetails);
-        return "itBooks/details";
+        try {
+            ItBookDetails itBookDetails = this.service.getDetailsItBook(isbn);
+            model.put("itBook", itBookDetails);
+            return "itBooks/details";
+        } catch (BadIsbnException e) {
+            return "redirect:/oups";
+        }
     }
 
 }

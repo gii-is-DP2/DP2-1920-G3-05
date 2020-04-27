@@ -22,10 +22,12 @@ import org.springframework.samples.petclinic.configuration.SecurityConfiguration
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.MeetingAssistant;
+import org.springframework.samples.petclinic.model.Quote;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.MeetingAssistantService;
 import org.springframework.samples.petclinic.service.MeetingService;
+import org.springframework.samples.petclinic.service.QuoteService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.CantInscribeMeetingException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -48,13 +50,7 @@ public class MeetingControllerTests {
 	private static final int TEST_BOOK_ID = 1;
 
 	private static final int TEST_MEETING_ID = 2;
-
-	private static final int TEST_MEETINGASSISTANT_ID = 1;
-
-	private static final int TEST_MEETINGASSISTANT_ID2 = 2;
-
-	private static final int TEST_BOOK_ID2 = 2;
-
+	
 	private static final int TEST_MEETING_ASSISTANT_ID = 2;
 
 	private static final int TEST_MEETING_ID2 = 3;
@@ -76,6 +72,9 @@ public class MeetingControllerTests {
 
 	@MockBean
 	private UserService userService;
+
+	@MockBean
+	private QuoteService				quoteService;
 
 	private Meeting meeting;
 
@@ -108,7 +107,8 @@ public class MeetingControllerTests {
 
 		when(localDateTimeFormatter.parse(eq("2020-10-10T17:00"), any(Locale.class))).thenReturn(begin);
 		when(localDateTimeFormatter.parse(eq("2020-10-10T19:00"), any(Locale.class))).thenReturn(end);
-
+		when(quoteService.getRandomQuote()).thenReturn(new Quote());
+		
 		User user = new User();
 		user.setEnabled(true);
 		user.setUsername("spring");
@@ -149,7 +149,7 @@ public class MeetingControllerTests {
 	@Test
 	void testInitFindForm() throws Exception {
 		this.mockMvc.perform(get("/meetings/find")).andExpect(status().isOk())
-				.andExpect(model().attributeExists("meeting")).andExpect(view().name("meetings/findMeetings"));
+				.andExpect(model().attributeExists("meeting")).andExpect(model().attributeExists("quote")).andExpect(view().name("meetings/findMeetings"));
 	}
 
 	@WithMockUser(value = "spring")

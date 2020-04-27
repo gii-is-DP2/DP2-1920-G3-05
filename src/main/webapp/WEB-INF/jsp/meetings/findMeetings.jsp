@@ -6,6 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <petclinic:layout pageName="meetings">
 
@@ -28,5 +29,16 @@
                 <button type="submit" class="btn btn-default">Find Meeting</button>
             </div>
         </div>
-    </form:form>	
+    </form:form>
+    <br><br>
+    <div class="card" align="center">
+  <div class="card-body">
+    <blockquote class="blockquote mb-0">
+      <p><c:out value="${quote.content}"></c:out></p>
+      <footer class="blockquote-footer">
+        <cite><c:out value="${quote.author}"></c:out></cite>
+      </footer>
+    </blockquote>
+  </div>
+  </div>	
 </petclinic:layout>

@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.MeetingAssistant;
+import org.springframework.samples.petclinic.model.Quote;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.MeetingAssistantService;
 import org.springframework.samples.petclinic.service.MeetingService;
+import org.springframework.samples.petclinic.service.QuoteService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.CantInscribeMeetingException;
 import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookMeetingException;
@@ -44,20 +46,25 @@ public class MeetingController {
     
     private UserService	 userService;
     
+    private QuoteService quoteService;
+    
 
 
     @Autowired
     public MeetingController(MeetingService meetingService, BookService bookService, 
-    		MeetingAssistantService meetingAssistantService, UserService userService){
+    		MeetingAssistantService meetingAssistantService, UserService userService,QuoteService quoteService){
         this.meetingService = meetingService;
         this.bookService = bookService;
         this.meetingAssistantService= meetingAssistantService;
         this.userService = userService;
+        this.quoteService = quoteService;
     }
 
     @GetMapping(value = "/meetings/find")
 	public String initFindForm(final Map<String, Object> model) {
 		model.put("meeting", new Meeting());
+		Quote quote = this.quoteService.getRandomQuote();
+		model.put("quote",quote);
 		return "meetings/findMeetings";
     }
 
@@ -108,11 +115,11 @@ public class MeetingController {
         return mav;
     }*/
 
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("book");
-		dataBinder.setValidator(new MeetingValidator());
-	}
+//	@InitBinder
+//	public void setAllowedFields(final WebDataBinder dataBinder) {
+//		dataBinder.setDisallowedFields("book");
+//		dataBinder.setValidator(new MeetingValidator());
+//	}
     
 	@GetMapping(value = "/meetings/{meetingId}")
 	public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId, final ModelMap modelMap) {

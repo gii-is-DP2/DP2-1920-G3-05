@@ -31,6 +31,7 @@
 		<spring-format.version>0.0.19</spring-format.version>
 		<selenium.version>3.141.59</selenium.version>
 		<cucumber.version>5.5.0</cucumber.version>
+		<rest-assured.version>4.2.0</rest-assured.version>
 	</properties>
 
 	<dependencies>
@@ -201,6 +202,16 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+<groupId>io.rest-assured</groupId>
+
+<artifactId>rest-assured</artifactId>
+
+<version>${rest-assured.version}</version>
+
+<scope>test</scope>
+
+</dependency>
 	</dependencies>
 
 	<build>

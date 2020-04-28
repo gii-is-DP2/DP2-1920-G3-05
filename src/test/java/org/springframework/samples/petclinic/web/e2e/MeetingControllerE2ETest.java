@@ -50,7 +50,7 @@ public class MeetingControllerE2ETest {
 	@Test
 	void testInitFindForm() throws Exception {
 		this.mockMvc.perform(get("/meetings/find")).andExpect(status().isOk())
-				.andExpect(model().attributeExists("meeting")).andExpect(view().name("meetings/findMeetings"));
+				.andExpect(model().attributeExists("meeting")).andExpect(model().attributeExists("quote")).andExpect(view().name("meetings/findMeetings"));
 	}
 	@WithMockUser(username="admin1",authorities= {"admin"})
 	@Test

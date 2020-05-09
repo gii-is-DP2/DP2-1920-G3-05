@@ -39,7 +39,7 @@
 				review</a>
 		</c:if>
 		<c:if test="${canDeleteReview}">
-			<a class="btn btn-default"
+			<a class="btn btn-default" id="Delete review"
 				href='<spring:url value="/books/${review.book.id}/reviews/${review.id}/delete" htmlEscape="true"/>'>Delete
 				review</a>
 		</c:if>

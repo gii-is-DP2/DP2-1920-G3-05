@@ -26,10 +26,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
+import org.springframework.samples.petclinic.model.Poem;
 import org.springframework.samples.petclinic.model.ReadBook;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
 import org.springframework.samples.petclinic.service.BookService;
+import org.springframework.samples.petclinic.service.PoemService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.ReviewService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -37,7 +39,6 @@ import org.springframework.samples.petclinic.service.WishedBookService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBookException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -70,14 +71,17 @@ public class BookController {
 
 	private WishedBookService	wishedBookService;
 
+	private PoemService			poemService;
+
 
 	@Autowired
-	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService) {
+	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService, final PoemService poemService) {
 		this.bookService = bookService;
 		this.userService = userService;
 		this.readBookService = readBookService;
 		this.wishedBookService = wishedBookService;
 		this.reviewService = reviewService;
+		this.poemService = poemService;
 
 	}
 
@@ -94,6 +98,8 @@ public class BookController {
 	@GetMapping(value = "/books/find")
 	public String initFindForm(final Map<String, Object> model) {
 		model.put("book", new Book());
+		Poem poem = this.poemService.getRandomPoem();
+		model.put("poem", poem);
 		return "books/findBooks";
 	}
 
@@ -109,7 +115,7 @@ public class BookController {
 			modelMap.put("emptyy", true);
 			return "books/recomendationList";
 		}
-		modelMap.put("notEmpty", true);
+
 		for (Integer i : ids) {
 			Book book = this.bookService.findBookById(i);
 			selections.add(book);
@@ -119,11 +125,16 @@ public class BookController {
 		String genreName = BookController.maxGenre(genres);
 		List<Book> recomendations = (List<Book>) this.bookService.findBookByTitleAuthorGenreISBN(genreName);
 		recomendations.removeAll(selections);
+		if (recomendations.isEmpty()) {
+			modelMap.put("NoMore", true);
+			modelMap.put("genreName", genreName.toLowerCase());
+			return "books/recomendationList";
+		}
+		modelMap.put("notEmpty", true);
 		modelMap.put("selections", recomendations);
 
 		return "books/recomendationList";
 	}
-
 	@GetMapping(value = "/books")
 	public String processFindForm(Book book, final BindingResult result, final Map<String, Object> model) {
 
@@ -163,23 +174,31 @@ public class BookController {
 
 		return "books/booksList";
 	}
-	@PostMapping("/books/readBooks/{bookId}")
-	public String anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
+	@GetMapping("/books/readBooks/{bookId}")
+	public ModelAndView anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 
 		Book book = this.bookService.findBookById(bookId);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
 		User user = this.userService.findUserByUsername(userdetails.getUsername());
 		ReadBook readBook = new ReadBook();
-		readBook.setBook(book);
-		readBook.setUser(user);
-		this.readBookService.save(readBook);
-		this.wishedBookService.deleteByBookId(bookId);
 
-		return "redirect:/books";
+		if (!this.readBookService.esReadBook(bookId, user.getUsername())) {
+			readBook.setBook(book);
+			readBook.setUser(user);
+			this.readBookService.save(readBook);
+			this.wishedBookService.deleteByBookId(bookId);
+		} else {
+			modelMap.addAttribute("errorReadBook", "you have already read the book!");
+			return this.showBook(bookId, modelMap);
+
+		}
+
+		return this.showBook(bookId, modelMap);
 	}
+
 	@GetMapping("/books/{bookId}")
-	public ModelAndView showBook(@PathVariable("bookId") final int bookId) {
+	public ModelAndView showBook(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
 		Boolean propiedad = false;
 		Boolean noEsReadBook = false;
 		Boolean notWishedBook = false;
@@ -222,7 +241,7 @@ public class BookController {
 		User u = new User();
 		u = this.userService.findUserByUsername(userDetail.getUsername());
 		book.setUser(u);
-		
+
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
 			return "books/bookAdd";
@@ -301,9 +320,9 @@ public class BookController {
 
 	@GetMapping("/admin/books/{bookId}/verify")
 	public String verifyBook(@PathVariable("bookId") final int bookId) {
-	    	this.bookService.verifyBook(bookId);
-			return "redirect:/books/" + bookId;
-		
+		this.bookService.verifyBook(bookId);
+		return "redirect:/books/" + bookId;
+
 	}
 
 	/*
@@ -374,11 +393,11 @@ public class BookController {
 		}
 		return genre;
 	}
-	
+
 	@GetMapping("/books/topRead")
 	public String topLibrosLeidos(final ModelMap modelMap) {
 		List<Book> selections = new ArrayList<>();
-		List<Integer> ids=this.readBookService.topReadBooks();
+		List<Integer> ids = this.readBookService.topReadBooks();
 		for (Integer i : ids) {
 			selections.add(this.bookService.findBookById(i));
 
@@ -387,5 +406,19 @@ public class BookController {
 
 		return "books/booksList";
 	}
-	
+
+	@GetMapping("/books/topRaited")
+	public String topLibrosMejorValorados(final ModelMap modelMap) {
+		List<Book> selections = new ArrayList<>();
+		List<Integer> ids = this.reviewService.topRaitedBooks();
+		List<Double> raiting = new ArrayList<>();
+		for (Integer i : ids) {
+			selections.add(this.bookService.findBookById(i));
+			raiting.add(this.reviewService.getRaitingBooks(i) * 20);
+		}
+		modelMap.put("raiting", raiting);
+		modelMap.put("selections", selections);
+		return "books/topRaitedBooks";
+	}
+
 }

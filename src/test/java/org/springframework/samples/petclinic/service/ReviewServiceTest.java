@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,102 +32,115 @@ public class ReviewServiceTest {
 	@Autowired
 	private UserService userService;
 
-	@Test
-	void shouldFindReviewsIdByBookId() {
-		int bookId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1,3",
+		"2,1",
+		"7,0"
+	})
+	void shouldFindReviewsIdByBookId(int bookId, int results) {
 		List<Integer> reviewsId = this.sut.getReviewsIdFromBook(bookId);
-		Assertions.assertThat(reviewsId.size()).isEqualTo(3);
-		Assertions.assertThat(reviewsId).contains(1,2,3);
-		
-		bookId = 2;
-		reviewsId = this.sut.getReviewsIdFromBook(bookId);
-		Assertions.assertThat(reviewsId.size()).isEqualTo(1);
-		Assertions.assertThat(reviewsId).contains(4);
-
-		bookId = 7;
-		reviewsId = this.sut.getReviewsIdFromBook(bookId);
-		Assertions.assertThat(reviewsId).isEmpty();
+		Assertions.assertThat(reviewsId.size()).isEqualTo(results);
 	}
 
-	@Test
-	void shouldFindReviewsByBookId() {
-		int bookId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"1,3",
+		"2,1",
+		"7,0"
+	})
+	void shouldFindReviewsByBookId(int bookId, int results) {
 		List<Review> reviews = this.sut.getReviewsFromBook(bookId);
-		Assertions.assertThat(reviews.size()).isEqualTo(3);
-		
-		bookId = 2;
-		reviews = this.sut.getReviewsFromBook(bookId);
-		Assertions.assertThat(reviews.size()).isEqualTo(1);
-
-		bookId = 7;
-		reviews = this.sut.getReviewsFromBook(bookId);
-		Assertions.assertThat(reviews).isEmpty();
+		Assertions.assertThat(reviews.size()).isEqualTo(results);
 	}
 	
-	@Test
-	void isAlreadyReviewed() {
-		int bookId = 1;
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"1,admin1",
+		"3,vet1",
+		"1,owner1"
+	})
+	void isAlreadyReviewed(int bookId, String username) {
 		Boolean alreadyReviewed = this.sut.alreadyReviewedBook(bookId, username);
 		Assertions.assertThat(alreadyReviewed).isTrue();
 	}
 	
-	@Test
-	void isNotAlreadyReviewed() {
-		int bookId = 7;
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"3,owner1",
+		"2,vet1",
+		"2,admin1"
+	})
+	void isNotAlreadyReviewed(int bookId, String username) {
 		Boolean alreadyReviewed = this.sut.alreadyReviewedBook(bookId, username);
 		Assertions.assertThat(alreadyReviewed).isFalse();
 	}
 	
-	@Test
-	void reviewIsMine() {
-		int reviewId = 1;
-		String username = "owner1";
+	@ParameterizedTest
+	@CsvSource({
+		"1,owner1",
+		"2,admin1",
+		"3,vet1"
+	})
+	void reviewIsMine(int reviewId, String username) {
 		Boolean isMine = this.sut.reviewIsMine(reviewId, username);
 		Assertions.assertThat(isMine).isTrue();
 	}
 	
-	@Test
-	void reviewIsNotMine() {
-		int reviewId = 1;
-		String username = "admin1";		
+	@ParameterizedTest
+	@CsvSource({
+		"2,owner1",
+		"1,admin1",
+		"1,vet1"
+	})
+	void reviewIsNotMine(int reviewId, String username) {	
 		Boolean isMine = this.sut.reviewIsMine(reviewId, username);
 		Assertions.assertThat(isMine).isFalse();
 	}
 	
-	@Test
-	void canWriteReview() {
-		int bookId = 2;
-		//El usuario vet1 tiene el libro 2 como leido y ademas no ha escrito una review del mismo luego si podra
-		String username = "vet1";
+	@ParameterizedTest
+	@CsvSource({
+		"2,vet1",
+		"4,owner1",
+		"11,admin1"
+	})
+	void canWriteReview(int bookId, String username) {
 		Boolean canWriteReview = this.sut.canWriteReview(bookId, username);
 		Assertions.assertThat(canWriteReview).isTrue();
 		
 	}
 	
-	@Test 
-	void cantWriteReviewBecauseBookIsNotRead() {
-		int bookId = 2;
-		//El user admin1 no se ha leido el libro con id 7
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"2,admin1",
+		"4,vet1",
+		"3,owner1"
+	})
+	void cantWriteReviewBecauseBookIsNotRead(int bookId, String username) {
 		Boolean canWriteReview = this.sut.canWriteReview(bookId, username);
 		Assertions.assertThat(canWriteReview).isFalse();
 	}
 	
-	@Test 
-	void cantWriteReviewBecauseAlreadyReviewedBook() {
-		int bookId = 1;
-		//El user admin1 ya ha hecho una review del libro con id 1
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"1,admin1",
+		"4,vet1",
+		"1,owner1"
+	}) 
+	void cantWriteReviewBecauseAlreadyReviewedBook(int bookId, String username) {
 		Boolean canWriteReview = this.sut.canWriteReview(bookId, username);
 		Assertions.assertThat(canWriteReview).isFalse();
 	}
 
-	@Test
-	void userWithNoReadBookWritesReview() {
-		User user = this.userService.findUserByUsername("owner1");
-		Book book = this.bookService.findBookById(8); //owner1 no Ha leido el libro con id 8
+	@ParameterizedTest
+	@CsvSource({
+		"2,admin1",
+		"4,vet1",
+		"3,owner1"
+	})
+	void userWithNoReadBookWritesReview(int bookId, String username) {
+		User user = this.userService.findUserByUsername(username);
+		Book book = this.bookService.findBookById(bookId); 
 		String title = "Test review";
 		Integer rating = 3;
 		String opinion = "Good";
@@ -137,13 +151,17 @@ public class ReviewServiceTest {
 		review.setTitle(title);
 		review.setUser(user);
 
-		assertThrows(CantWriteReviewException.class, ()-> this.sut.writeReview(review, user.getUsername()));
+		assertThrows(CantWriteReviewException.class, ()-> this.sut.writeReview(review, username));
 	}
 
-	@Test
-	void userWithBookReviewedWritesAnotherReview() {
-		User user = this.userService.findUserByUsername("admin1");
-		Book book = this.bookService.findBookById(1); //admin1 ya Ha escrito una review del libto con id 1
+	@ParameterizedTest
+	@CsvSource({
+		"1,admin1",
+		"4,vet1",
+		"1,owner1"
+	}) 	void userWithBookReviewedWritesAnotherReview(int bookId, String username) {
+		User user = this.userService.findUserByUsername(username);
+		Book book = this.bookService.findBookById(bookId);
 		String title = "Test review";
 		Integer rating = 3;
 		String opinion = "Test opinion";
@@ -154,13 +172,18 @@ public class ReviewServiceTest {
 		review.setTitle(title);
 		review.setUser(user);
 
-		assertThrows(CantWriteReviewException.class, ()-> this.sut.writeReview(review, user.getUsername()));
+		assertThrows(CantWriteReviewException.class, ()-> this.sut.writeReview(review, username));
 	}
 
-	@Test
-	void userWritesReviewCorrectly() {
-		User user = this.userService.findUserByUsername("owner1");
-		Book book = this.bookService.findBookById(4); //Ha leido el 4 y no ha hecho review de el
+	@ParameterizedTest
+	@CsvSource({
+		"2,vet1,8",
+		"4,owner1,9",
+		"11,admin1,10"
+	})
+	void userWritesReviewCorrectly(int bookId, String username, int futureId) {
+		User user = this.userService.findUserByUsername(username);
+		Book book = this.bookService.findBookById(bookId); 
 		String title = "Test review";
 		Integer rating = 3;
 		String opinion = "Good";
@@ -172,11 +195,11 @@ public class ReviewServiceTest {
 		review.setUser(user);
 
 		try{
-			this.sut.writeReview(review, user.getUsername());
+			this.sut.writeReview(review, username);
 		}catch (CantWriteReviewException e){}
 
-		//Le toca la id 8 
-		Review savedReview = this.sut.findReviewById(8);
+		int id = review.getId();
+		Review savedReview = this.sut.findReviewById(id);
 		Assertions.assertThat(savedReview.getOpinion()).isEqualTo(opinion);
 		Assertions.assertThat(savedReview.getRaiting()).isEqualTo(rating);
 		Assertions.assertThat(savedReview.getTitle()).isEqualTo(title);
@@ -184,9 +207,14 @@ public class ReviewServiceTest {
 		Assertions.assertThat(savedReview.getUser()).isEqualTo(user);
 	}
 
-	@Test
-	void userEditHisReview(){
-		Review reviewToEdit = this.sut.findReviewById(1);
+	@ParameterizedTest
+	@CsvSource({
+		"1,owner1",
+		"2,admin1",
+		"3,vet1"
+	})
+	void userEditHisReview(int reviewId, String username){
+		Review reviewToEdit = this.sut.findReviewById(reviewId);
 		String newTitle = "Edited title";
 		String newOpinion = "Edited opinion";
 		Integer newRating = 5;
@@ -194,47 +222,75 @@ public class ReviewServiceTest {
 		reviewToEdit.setTitle(newTitle);
 		reviewToEdit.setRaiting(newRating);
 		try{
-			this.sut.editReview(reviewToEdit, reviewToEdit.getUser().getUsername());
+			this.sut.editReview(reviewToEdit, username);
 		}catch(CantEditReviewException e){}
-		Review editedReview = this.sut.findReviewById(1);
+		Review editedReview = this.sut.findReviewById(reviewId);
 		Assertions.assertThat(editedReview.getTitle()).isEqualTo(newTitle);
 		Assertions.assertThat(editedReview.getOpinion()).isEqualTo(newOpinion);
 		Assertions.assertThat(editedReview.getRaiting()).isEqualTo(newRating);
 	}
 
-	@Test
-	void userCantEditOthersReview() {
-		final Review review = this.sut.findReviewById(1);
-		String username = "vet1"; //La review le pertenece a owner1
+	@ParameterizedTest
+	@CsvSource({
+		"2,owner1",
+		"1,admin1",
+		"1,vet1"
+	})
+	void userCantEditOthersReview(int reviewId, String username) {
+		final Review review = this.sut.findReviewById(reviewId);
 		assertThrows(CantEditReviewException.class, ()-> this.sut.editReview(review, username));
 	}
 
-	@Test
-	void shouldDeleteMyReview() { 
-		int reviewId = 1;
-		String username = "owner1";
-		try {
-		this.sut.deleteReviewById(reviewId, username);
-		}catch (Exception e) {}
-		Boolean existsReview = this.sut.existsReviewById(reviewId);
-		Assertions.assertThat(existsReview).isFalse();
-	}
-	
-	@Test
-	void AdminShouldDeleteAnyReview() { 
-		int reviewId = 7;
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"1,owner1",
+		"2,admin1",
+		"3,vet1"
+	})
+	void shouldDeleteMyReview(int reviewId, String username) { 
 		try {
 			this.sut.deleteReviewById(reviewId, username);
 		}catch (Exception e) {}
-		Boolean existsReview = this.sut.existsReviewById(reviewId);
-		Assertions.assertThat(existsReview).isFalse();
+			Boolean existsReview = this.sut.existsReviewById(reviewId);
+			Assertions.assertThat(existsReview).isFalse();
 	}
 	
-	@Test
-	void shouldNotDeleteOthersReview() { 
-		int reviewId = 4;
-		String username = "vet1";
+	@ParameterizedTest
+	@CsvSource({
+		"1,admin1",
+		"3,admin1",
+		"4,admin1"
+	})
+	void AdminShouldDeleteAnyReview(int reviewId, String username) { 
+		try {
+			this.sut.deleteReviewById(reviewId, username);
+		}catch (Exception e) {}
+			Boolean existsReview = this.sut.existsReviewById(reviewId);
+			Assertions.assertThat(existsReview).isFalse();
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"3,owner1",
+		"1,vet1"
+	})
+	void shouldNotDeleteOthersReview(int reviewId, String username) { 
 		assertThrows(CantDeleteReviewException.class, ()-> this.sut.deleteReviewById(reviewId, username));
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"4,9,13","3,12,7","8,2,10"})
+	void shouldGetTopRaitedBooks(int bookId1, int bookId2, int bookId3) { 
+		List<Integer> topRaited = this.sut.topRaitedBooks();
+		Assertions.assertThat(topRaited).contains(bookId1,bookId2);
+		Assertions.assertThat(topRaited).doesNotContain(bookId3);
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"2,5.0","11,4.0","6,3.5"})
+	void shouldGetRaitingBooks(int bookId, double raiting) { 
+		Assertions.assertThat(this.sut.getRaitingBooks(bookId)).isEqualTo(raiting);
 	}
 }

@@ -27,15 +27,8 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateNameEmpty(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
+        Meeting meeting = this.create();
         meeting.setName("");
-        meeting.setPlace("Library");
-        meeting.setStart(begin);
-        meeting.setEnd(end);
-        meeting.setCapacity(50);
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -47,15 +40,8 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateNameLess3Characters(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
+    	Meeting meeting = this.create();
         meeting.setName("A");
-        meeting.setPlace("Library");
-        meeting.setStart(begin);
-        meeting.setEnd(end);
-        meeting.setCapacity(50);
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -67,15 +53,9 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidatePlaceEmpty(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-        meeting.setName("Meeting");
+        Meeting meeting = this.create();
         meeting.setPlace("");
-        meeting.setStart(begin);
-        meeting.setEnd(end);
-        meeting.setCapacity(50);
+
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -87,14 +67,8 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateCapacityNull(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
-        meeting.setStart(begin);
-        meeting.setEnd(end);
+        Meeting meeting = this.create();
+        meeting.setCapacity(null);
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -106,14 +80,7 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateCapacityLessThan5(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
-        meeting.setStart(begin);
-        meeting.setEnd(end);
+        Meeting meeting = this.create();
         meeting.setCapacity(2);
 
         MeetingValidator validator = createValidator();
@@ -126,13 +93,8 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateStartNull(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
-        meeting.setEnd(end);
-        meeting.setCapacity(5);
+        Meeting meeting = this.create();
+        meeting.setStart(null);
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -144,13 +106,8 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateEndNull(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
-        LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
-        meeting.setStart(begin);
-        meeting.setCapacity(5);
+    	Meeting meeting = this.create();
+    	meeting.setEnd(null);
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -162,15 +119,12 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidateEndBeforeStart(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
+        Meeting meeting = this.create();
         LocalDateTime end = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
         LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
+       
         meeting.setStart(begin);
         meeting.setEnd(end);
-        meeting.setCapacity(5);
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -182,15 +136,12 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidate3DaysAdvanced(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
+        Meeting meeting = this.create();
         LocalDateTime begin = LocalDateTime.of(2020, 03, 04, 17, 00, 00);
         LocalDateTime end = LocalDateTime.of(2020, 03, 04, 19, 00, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
         meeting.setStart(begin);
         meeting.setEnd(end);
-        meeting.setCapacity(5);
+
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -202,15 +153,13 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldNoValidate1HourDuration(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Meeting meeting = new Meeting();
+        Meeting meeting = this.create();
         LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
         LocalDateTime end = LocalDateTime.of(2020, 10, 10, 17, 30, 00);
-        meeting.setName("Meeting");
-        meeting.setPlace("Library");
+
         meeting.setStart(begin);
         meeting.setEnd(end);
-        meeting.setCapacity(5);
+
 
         MeetingValidator validator = createValidator();
         Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
@@ -222,7 +171,15 @@ public class MeetingValidatorTests {
 
     @Test
     void shouldValidate(){
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
+        Meeting meeting = this.create();
+        MeetingValidator validator = createValidator();
+        Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
+        validator.validate(meeting, errors);
+        Assertions.assertThat(errors.getErrorCount()).isEqualTo(0);
+
+    }
+    private Meeting create() {
+    	LocaleContextHolder.setLocale(Locale.ENGLISH);
         Meeting meeting = new Meeting();
         LocalDateTime begin = LocalDateTime.of(2020, 10, 10, 17, 00, 00);
         LocalDateTime end = LocalDateTime.of(2020, 10, 10, 19, 00, 00);
@@ -231,12 +188,8 @@ public class MeetingValidatorTests {
         meeting.setStart(begin);
         meeting.setEnd(end);
         meeting.setCapacity(50);
-
-        MeetingValidator validator = createValidator();
-        Errors errors = new BeanPropertyBindingResult(meeting, "meeting");
-        validator.validate(meeting, errors);
-        Assertions.assertThat(errors.getErrorCount()).isEqualTo(0);
-
+        return meeting;
+    	
     }
     
 }

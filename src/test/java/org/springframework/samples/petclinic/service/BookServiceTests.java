@@ -7,9 +7,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,7 +21,6 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedISBNException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class BookServiceTests {
@@ -48,48 +48,22 @@ class BookServiceTests {
 	private BookInNewService bookInNewsService;
 
 
-	@Test
-	void shouldFindBooksByTitle() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("harry");
-		Assertions.assertThat(books.size()).isEqualTo(2);
+	@ParameterizedTest
+	@CsvSource({
+		"harry,2","Julia,2","Novel,1","9788466345347,1","el,4","harrry,0"
+	})
+	void shouldFindBooksByTitleAuthorGenre(String title,int size) {
+		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN(title);
+		Assertions.assertThat(books.size()).isEqualTo(size);
 	}
 
-	@Test
-	void shouldFindBooksByAuthor() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("Julia");
-		Assertions.assertThat(books.size()).isEqualTo(2);
-
-	}
-
-	@Test
-	void shouldFindBooksByGenre() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("Novel");
-		Assertions.assertThat(books.size()).isEqualTo(1);
-	}
-
-	@Test
-	void shouldFindBooksByISBN() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("9788466345347");
-		Assertions.assertThat(books.size()).isEqualTo(1);
-	}
-
-	@Test
-	void shouldFindBooksByTitleAuthorGenre() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("el");
-		Assertions.assertThat(books.size()).isEqualTo(3);
-	}
-
-	@Test
-	void shouldNotFindBooksByTitleAuthorGenre() {
-		Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN("harrry");
-		Assertions.assertThat(books.isEmpty()).isTrue();
-	}
-
-	@Test
-	@Transactional
-	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin() throws DataAccessException, DuplicatedISBNException {
-		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
-		User user = this.userService.findUserByUsername("admin1");
+	@ParameterizedTest
+	@CsvSource({
+		"prueba,admin1,13"
+	})
+	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
+		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
 
 		Book book = new Book();
@@ -106,18 +80,20 @@ class BookServiceTests {
 
 		this.sut.save(book);
 		
-
-		Assertions.assertThat(book.getId()).isNotNull();
+		//Le toca el id 13
+		Assertions.assertThat(futureBookId).isNotNull();
 		Assertions.assertThat(book.getVerified()).isTrue();
 		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 
 	}
-	@Test
-	@Transactional
-	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin() throws DataAccessException, DuplicatedISBNException {
-		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
-		User user = this.userService.findUserByUsername("owner1");
+	@ParameterizedTest
+	@CsvSource({
+		"prueba,owner1,14"
+	})
+	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
+		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
 
 		Book book = new Book();
@@ -135,17 +111,19 @@ class BookServiceTests {
 		this.sut.save(book);
 		
 
-		Assertions.assertThat(book.getId()).isNotNull();
+		Assertions.assertThat(futureBookId).isNotNull();
 		Assertions.assertThat(book.getVerified()).isFalse();
 		list = this.sut.findBookByTitleAuthorGenreISBN("prueba");
 		Assertions.assertThat(list.size()).isEqualTo(count + 1);
 
 	}
 
-	@Test
-	@Transactional
-	public void shouldThrowExceptionInsertingBooksWithTheSameISBN() {
-		User user = this.userService.findUserByUsername("admin1");
+	@ParameterizedTest
+	@CsvSource({
+		"admin1"
+	})
+	public void shouldThrowExceptionInsertingBooksWithTheSameISBN(String username) {
+		User user = this.userService.findUserByUsername(username);
 
 		Book book = new Book();
 		book.setTitle("prueba");
@@ -164,7 +142,7 @@ class BookServiceTests {
 			this.sut.save(book);
 
 		} catch (DuplicatedISBNException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		Book bookSameISBN = new Book();
@@ -182,7 +160,6 @@ class BookServiceTests {
 			this.sut.save(bookSameISBN);
 
 		} catch (DuplicatedISBNException e) {
-			// TODO Auto-generated catch block
 			//Assertions.assertThat(e.getCause());
 					assertThrows(DuplicatedISBNException.class, () -> {
 						this.sut.save(bookSameISBN);
@@ -190,42 +167,51 @@ class BookServiceTests {
 		}
 	}
 
-	@Test
-	@Transactional
-	public void shouldUpdateBookName() throws Exception {
-		Book book3 = this.sut.findBookById(3);
-		String oldTitle = book3.getTitle();
+	@ParameterizedTest
+	@CsvSource({
+		"1", "2", "3"
+	})
+	public void shouldUpdateBookName(final int bookId) throws Exception {
+		Book book = this.sut.findBookById(bookId);
+		String oldTitle = book.getTitle();
 
 		String newTitle = oldTitle + "X";
-		book3.setTitle(newTitle);
-		this.sut.save(book3);
+		book.setTitle(newTitle);
+		this.sut.save(book);
 
-		book3 = this.sut.findBookById(3);
-		Assertions.assertThat(book3.getTitle()).isEqualTo(newTitle);
+		book = this.sut.findBookById(bookId);
+		Assertions.assertThat(book.getTitle()).isEqualTo(newTitle);
 
 	}
-	@Test
-	void shouldFindAllGenres() {
+	@ParameterizedTest
+	@CsvSource({
+		"1, Fantasy",
+		"4, Contemporary"
+	})
+	void shouldFindAllGenres(int genreId, String name) {
 		Collection<Genre> bookGenre = this.sut.findGenre();
 
-		Genre genre1 = EntityUtils.getById(bookGenre, Genre.class, 1);
-		Assertions.assertThat(genre1.getName()).isEqualTo("Fantasy");
-		Genre genre4 = EntityUtils.getById(bookGenre, Genre.class, 4);
-		Assertions.assertThat(genre4.getName()).isEqualTo("Contemporary");
-	}
-	@Test
-	@Transactional
-	public void shouldFindGenre() throws Exception {
-		Genre genre3 = this.sut.findGenreByName("Romance");
-
-		Assertions.assertThat("Romance").isEqualTo(genre3.getName());
+		Genre genre1 = EntityUtils.getById(bookGenre, Genre.class, genreId);
+		Assertions.assertThat(genre1.getName()).isEqualTo(name);
 
 	}
 	
-	@Test
-	void adminCanDeleteBookWithNoRelations() {
-		int bookId = 6;
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"Romance", "Fiction", "Horror"
+	})
+	public void shouldFindGenre(String genre) throws Exception {
+		Genre genre3 = this.sut.findGenreByName(genre);
+
+		Assertions.assertThat(genre).isEqualTo(genre3.getName());
+
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"6,admin1"
+	})
+	void adminCanDeleteBookWithNoRelations(int bookId, String username) {
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Assertions.assertThat(existsBook).isTrue();
 		
@@ -235,26 +221,26 @@ class BookServiceTests {
 		Assertions.assertThat(existsBook).isFalse();		
 	}
 	
-	@Test
-	void adminCanDeleteBookAndNew() {
-		int bookId = 11;
-		int newId = 2; //Como solo hay 1 libro se borrara la noticia tambien
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"11,2,admin1",
+		"1,3,admin1"
+	})
+	void adminCanDeleteBookAndNew(int bookId, int newId, String username) {
 		this.sut.deleteById(bookId, username);
-		
 		Boolean existsBook = this.sut.existsBookById(bookId);
 		Boolean existsNew = this.newService.existsNewById(newId); 
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsNew).isFalse();
 	}
 	
-	@Test
-	void adminCanDeleteBookButNoNew() {
-		int bookId = 2;
-		int newId = 1; //Como solo hay 2 libros no se borrara la noticia tambien
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"2,1,admin1",
+		"4,4,admin1",
+		"6,5,admin1"
+	})
+	void adminCanDeleteBookButNoNew(int bookId, int newId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -266,12 +252,13 @@ class BookServiceTests {
 		Assertions.assertThat(booksInNewIds).hasSize(1).doesNotContain(bookId);
 	}
 	
-	@Test
-	void adminCanDeleteBookWithMeeting() {
-		int bookId = 10;
-		int meetingId = 4;
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"10,4,admin1",
+		"2,3,admin1",
+		"1,2,admin1"
+	})
+	void adminCanDeleteBookWithMeeting(int bookId, int meetingId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -280,12 +267,13 @@ class BookServiceTests {
 		Assertions.assertThat(existsMeeting).isFalse();
 	}
 	
-	@Test
-	void adminCanDeleteBookWithReview() {
-		int bookId = 4;
-		int reviewId = 6;
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"4,6,admin1",
+		"3,5,admin1",
+		"5,7,admin1"
+	})
+	void adminCanDeleteBookWithReview(int bookId, int reviewId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -294,7 +282,12 @@ class BookServiceTests {
 		Assertions.assertThat(existsReview).isFalse();
 	}
 	
-	@Test
+	@ParameterizedTest
+	@CsvSource({
+		"8,5,admin1",
+		"10,6,admin1",
+		"7,4,admin1"
+	})
 	void adminCanDeleteBookWithPublication() {
 		int bookId = 8;
 		int publicationId = 5;
@@ -308,18 +301,11 @@ class BookServiceTests {
 		Assertions.assertThat(existsPublication).isFalse();
 	}
 	
-	@Test
-	void adminCanDeleteBookWithEverything() {
-		int bookId = 1;
-		int newId = 3; //Solo un libro --> se borra noticia
-		int reviewId1 = 1;
-		int reviewId2 = 2;
-		int reviewId3 = 3;
-		int publicationId1 = 1;
-		int publicationId2 = 2;
-		int meetingId = 2;
-		String username = "admin1";
-
+	@ParameterizedTest
+	@CsvSource({
+		"1,3,1,2,3,1,2,2,admin1"
+	})
+	void adminCanDeleteBookWithEverything(int bookId, int newId, int reviewId1, int reviewId2, int reviewId3, int publicationId1, int publicationId2, int meetingId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -388,5 +374,12 @@ class BookServiceTests {
 		Boolean canEdit = this.sut.canEditBook(bookId, username);
 		Assertions.assertThat(canEdit).isTrue();
 	}
-
+	
+	@Test
+	void shouldHaveVerifiedBooks(){
+		String username = "admin1";
+		List<Boolean> verified= this.sut.getVerifiedFromBooksByUsername(username);
+		Assertions.assertThat(verified).allMatch(i->i==true);
+	}
+	
 }

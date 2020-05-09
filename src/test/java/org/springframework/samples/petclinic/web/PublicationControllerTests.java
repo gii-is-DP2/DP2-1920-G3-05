@@ -1,5 +1,4 @@
 package org.springframework.samples.petclinic.web;
-import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -10,12 +9,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Book;
-import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BookService;
-import org.springframework.samples.petclinic.service.MeetingService;
 import org.springframework.samples.petclinic.service.PublicationService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -24,21 +21,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
@@ -55,10 +43,7 @@ class PublicationControllerTests {
 	private MockMvc		mockMvc;
 	
 	private User		user;
-	
-	@Autowired
-	private PublicationController  publicationController;
-	
+		
 	@MockBean
 	private PublicationService publicationService;
 
@@ -156,8 +141,8 @@ class PublicationControllerTests {
 		 .andExpect(status().isOk())
 		 .andExpect(model().attributeExists("publication"))
 		 .andExpect(view().name("publications/publicationAdd"));
-
 	 }
+
 	 @WithMockUser(value = "spring")
 	  @Test
 	  void testAddPublicationNoReadBook() throws Exception {
@@ -237,6 +222,7 @@ class PublicationControllerTests {
 		 		.andExpect(status().is3xxRedirection())
 		 		.andExpect(view().name("redirect:/publications/" + TEST_PUBLICATION_ID));  
 	 }  
+
 	 @WithMockUser(value = "spring")
 	 @Test
 	 void testUpdateMyPublicationWithErrors() throws Exception{
@@ -255,7 +241,7 @@ class PublicationControllerTests {
 	 
 	 @WithMockUser(value = "spring")
 	 @Test
-	 void testUpdateOtherPublication() throws Exception{
+	 void testUpdateOthersPublication() throws Exception{
 		 mockMvc.perform(post("/publications/update/{publicationId}", TEST_PUBLICATION_ID2)
 				 .with(csrf())
 				 .param("title", "Edited title")
@@ -265,22 +251,20 @@ class PublicationControllerTests {
 		 		.andExpect(view().name("redirect:/oups"));
 	 }  
 	 
-	    @WithMockUser(value = "spring")
-	    @Test
-	    void testDeletePublication() throws Exception{
-	        mockMvc.perform(get("/books/{bookId}/delete/{publicationId}", TEST_BOOK_ID, TEST_PUBLICATION_ID))
-	                .andExpect(status().is3xxRedirection())
-	                .andExpect(redirectedUrl("/books/" + TEST_BOOK_ID));
-	    }
+	@WithMockUser(value = "spring")
+	@Test
+	void testDeletePublication() throws Exception{
+	    mockMvc.perform(get("/books/{bookId}/delete/{publicationId}", TEST_BOOK_ID, TEST_PUBLICATION_ID))
+	            .andExpect(status().is3xxRedirection())
+	            .andExpect(redirectedUrl("/books/" + TEST_BOOK_ID));
+	}
 
-	    @WithMockUser(value = "spring")
-	    @Test
-	    void testDeleteOthersPublication() throws Exception{
-	        mockMvc.perform(get("/books/{bookId}/delete/{publicationId}", TEST_BOOK_ID, TEST_PUBLICATION_ID2))
-	                .andExpect(status().is3xxRedirection())
-	                .andExpect(redirectedUrl("/oups"));
-	    }
+	@WithMockUser(value = "spring")
+	@Test
+	void testDeleteOthersPublication() throws Exception{
+	    mockMvc.perform(get("/books/{bookId}/delete/{publicationId}", TEST_BOOK_ID, TEST_PUBLICATION_ID2))
+	            .andExpect(status().is3xxRedirection())
+	            .andExpect(redirectedUrl("/oups"));
+	}
 	 
-
-	
 }

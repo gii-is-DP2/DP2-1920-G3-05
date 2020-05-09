@@ -75,7 +75,8 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario administrador y el libro *Muerte en el Nilo* que tiene asociado 3 reviews y 2 publicaciones, cuando el administrador intenta borrar *Muerte en el Nilo* y lo confirma, entonces tanto las reviews, como las publicaciones como el libro quedan eliminados del sistema | Dado el usuario estgantri y el libro *Africanus, el hijo del consul*, cuando estgantri intenta borrar *Africanus, el hijo del consul*, entonces el sistema le indcica que no dispone de los permisos necesarios ya que sólo el administrador puede eliminar libros|
+|Dado el usuario administrador y el libro *Muerte en el Nilo* que tiene asociado 3 reviews y 2 publicaciones, cuando el administrador intenta borrar *Muerte en el Nilo* y lo confirma, entonces tanto las reviews, como las publicaciones como el libro quedan eliminados del sistema | Dado el usuario administrador y el libro *Muerte en el Nilo* que tiene asociado 3 reviews y 2 publicaciones, cuando el administrador intenta borrar *Muerte en el Nilo* y no lo confirma, entonces el libro no se borra|
+|| Dado el usuario estgantri y el libro *Africanus, el hijo del consul*, cuando estgantri intenta borrar *Africanus, el hijo del consul*, entonces el sistema le indcica que no dispone de los permisos necesarios ya que sólo el administrador puede eliminar libros|
 
 
 - **HU-04**: Verificar libro  
@@ -86,8 +87,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario administrador y el libro *Los pilares de la tierra* no verificado, cuando el administrador intenta verificarlo, entonces *Los pilares de la tierra* queda como verificado en el sistema|Dado el usuario javgarcer y el libro *Los pilares de la tierra* no verificado, cuando javgarcer intenta verificarlo, entonces el sistema le indica que no dispone de los permisos sufcientes|
-||Dado el usuario administrador y el libro *Fortunata y Jacinta* verificado, cuando el administrador intenta verificarlo, entonces el sistema le indica que ya está verificado|
+|Dado el usuario administrador y el libro *Los pilares de la tierra* no verificado, cuando el administrador intenta verificarlo, entonces *Los pilares de la tierra* queda como verificado en el sistema|Dado el usuario administrador y el libro *Fortunata y Jacinta* verificado, cuando el administrador intenta verificarlo, entonces el sistema le indica que ya está verificado|
 
 - **HU-05**: Gestionar noticias  
   
@@ -179,7 +179,8 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El nombre del viento*, cuando ferromrio selecciona buscar por título de libro e introduce *El nombre del viento*, entonces el sistema le mostrará un listado con esa única reunión|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El temor de un hombre sabio*, cuando ferromrio selecciona buscar por título de libro e introduce *El temor de un hombre sabio*, entonces el sistema le indicará que no dispone de ninguna reunión que se adecúe a la búsqueda|
+|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El nombre del viento*, cuando ferromrio selecciona buscar por título de libro e introduce *El nombre del viento*, entonces el sistema le mostrará los detalles de esa reunión|Dado el usuario ferromrio y que hay una reunión en el sistema del libro *El temor de un hombre sabio*, cuando ferromrio selecciona buscar por título de libro e introduce *El temor de un hombre sabio*, entonces el sistema le indicará que no dispone de ninguna reunión que se adecúe a la búsqueda|
+|Dado el usuario ferromrio y que hay varias reuniones en el sistema del libro *El temor de un hombre sabio*, cuando ferromrio selecciona buscar por título de libro e introduce *El temor de un hombre sabio*, entonces el sistema le mostrará un listado con esaas reunines||
 
 - **HU-12**: Filtrar libros por atributos  
   
@@ -200,7 +201,7 @@ Las entidades que se verán involucradas en la aplicación web son:
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado el usuario estgantri y el libro *Yo, Julia* que no tiene marcado como leído, cuando le da a marcar como leído, entonces el libro *Yo, Julia* se añade a su colección de libros leídos|Dado el usuario estgantri y el libro *La piedra filosofal* que ya tiene marcado como leído, cuando le da a marcar como leído de nuevo, entonces el sistema le indica que ya lo tiene en su colección de libros leídos|
+|Dado el usuario estgantri y el libro *Yo, Julia* que no tiene marcado como leído, cuando le da a marcar como leído, entonces el libro *Yo, Julia* se añade a su colección de libros leídos|Dado el usuario estgantri y el libro *La piedra filosofal* que ya tiene marcado como leído, cuando intenta añadirlo por URL, entonces el sistema le indica que ya lo tiene en su colección de libros leídos|
 |Dado el usuario estgantri y el libro *El príncipe mestizo* que tiene marcado como libro a leer, cuando le da a marcar como leído, entonces el libro *El príncipe mestizo* se añade a su colección de libros leídos y se retira de la colección de libros a leer||
 
 - **HU-14**: Colección de libros a leer en el perfil  
@@ -252,7 +253,7 @@ Dado el usuario estgantri y el libro *Las reliquias de la muerte* que no tiene m
 
 |Escenario positivo|Escenario negativo|
 |-|-|
-|Dado que hay usuarios en el sistema que han realizado alguna review, cuando el usuario ferrommio solicita ver los libros mejor valorados, entonces el sistema le muesrta un top basado en los libros con media más alta de sus review|Dado que no se ha hecho ninguna review a ningún libro, cuando el usuario javgarcer solicita ver los libros mejor valorados, entonces el sistema le indica que no se puede mostrar porque aún no hay datos suficientes en la aplicación|
+|Dado que hay usuarios en el sistema que han realizado alguna review, cuando el usuario ferrommio solicita ver los libros mejor valorados, entonces el sistema le muestra un top basado en los libros con media más alta de sus review|Dado que no se ha hecho ninguna review a ningún libro, cuando el usuario javgarcer solicita ver los libros mejor valorados, entonces el sistema le indica que no se puede mostrar porque aún no hay datos suficientes en la aplicación|
 
 - **HU-19**: Información sobre las reuniones
   
@@ -274,11 +275,32 @@ Dado el usuario estgantri y el libro *Las reliquias de la muerte* que no tiene m
 |-|-|
 |Dado el usuario administrador y el usuario fraperbar no verificado, cuando el administrador verifica a fraperbar, entonces todos sus libros que no estuvieran verificados se verifican y a partir de ese momento los libros que fraperbar añada se marcarán como verificados directamente|Dado el usuario administrador y el usuario ferromrio ya verificado, cuando el administrador intenta verificaa a ferromrio, el sistema le indica que ya está verificado|
 
+- **HU-21**: Cambiar información personal
+  
+  **Como** usuario   
+  **Quiero** poder modificar mis datos personales 
+  **Para** corregir posibles errores o cambiar información si lo considero necesario 
+
+|Escenario positivo|Escenario negativo|
+|-|-|
+|Dado el usuario fraperbar, cuando consulta su información personal si realiza cambios en la misma y envía los cambios, entonces su información personal quedará modificada en la página|Dado el usuario fraperbar, cuando consulta su información personal si realiza cambios en eñ nombre de usuario, entonces no se permitirán dichos cambios ya que el nombre de usuario no se puede modificar|
+
+- **HU-22**: Sección IT
+  
+  **Como** administrador   
+  **Quiero** que haya una sección sobre informática  
+  **Para** que los usuario busquen temas relacionado con el mundo de la IT y le aparezcan libros de dicho tema
+
+|Escenario positivo|Escenario negativo|
+|-|-|
+|Dado el usario javgarcer, cuando realiza una búsqueda en la sección IT con el parámetro de búsqueda "Java", entonces se realizará una consulta a un servicio REST y se mostrarán los libros que devuelva|Dado el usario javgarcer, cuando realiza una búsqueda en la sección IT con un parámetro de búsqueda tal que la API no devuelve libros, entonces se indicará que no se han encontrado resultados|
+|Dado el usario javgarcer, que ya ha realizado una consulta en la sección IT y se le ha mostrado un listado con libros, cuando hace click en uno de ellos, entonves el sistema le mostrará más información del mismo||
+
 ## Planificación Sprint 2
 
 En la asignatura se recomienda enfocar la implementación mediante la programación en pareja.  
   
-  Si embargo en nuestro grupo somos impares y creemos que dicha metodología nos resultaría tediosa necesitaríamos emplear más tiempo y además necesitarían reunirse las parejas.
+  Si embargo en nuestro grupo somos impares y creemos que dicha metodología nos resultaría tediosa, necesitaríamos emplear más tiempo y además necesitarían reunirse las parejas.
     
 Por tanto, proponemos realizar un círculo en el que cada miembro del equipo se encargue de revisar el trabajo realizado por otros una vez que lo haya subido a la rama correspondiente del repositorio antes de relizar los *merges*.
   

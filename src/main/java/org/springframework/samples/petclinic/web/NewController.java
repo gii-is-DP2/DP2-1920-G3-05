@@ -23,11 +23,13 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.NewService;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
+import org.springframework.samples.petclinic.service.exceptions.CantShowNewReviewException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,18 +54,19 @@ public class NewController {
 	}
 
 	@GetMapping(value = "/")
-	public String welcome(final Map<String, Object> model) {
+	public String welcome(final Map<String, Object> model) throws DataAccessException, CantShowNewReviewException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String authorities = auth.getAuthorities().toString();
 		if (authorities.contains("ROLE_ANONYMOUS")) {
 			return "redirect:/news";
 		} else {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			Collection<New> results = this.newService.getNewsBookReview(userDetail.getUsername());
+			Collection<New> results2 = this.newService.getNewsBookReview2(userDetail.getUsername());
 			//Collection<New> results = this.newService.getAllNews();
-			if (results.isEmpty()) {
+			if (results2.isEmpty()) {
 				return "redirect:/news";
 			}
+			Collection<New> results = this.newService.getNewsBookReview(userDetail.getUsername());
 			model.put("AllNews", true);
 			model.put("news", results);
 			return "news/newList";
@@ -75,8 +78,16 @@ public class NewController {
 	public String allNews(final Map<String, Object> model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String authorities = auth.getAuthorities().toString();
+		
 		if (!authorities.contains("ROLE_ANONYMOUS")) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			model.put("NewsRec", true);
+			Boolean canShow = this.newService.canShowNewsBookReview(userDetail.getUsername());
+			if(canShow==false) {
+				model.put("canShowNewsBookReview", false);
+			}else {
+				model.put("canShowNewsBookReview", true);
+			}
 
 		}
 		Collection<New> results = this.newService.getAllNews();
@@ -88,7 +99,13 @@ public class NewController {
 	public String newBookReview(final Map<String, Object> model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		Collection<New> results = this.newService.getNewsBookReview(userdetails.getUsername());
+		Collection<New> results = null;
+		try {
+			results = this.newService.getNewsBookReview(userdetails.getUsername());
+		} catch (CantShowNewReviewException e) {
+			// TODO Auto-generated catch block
+			return "redirect:/oups";
+		}
 		model.put("AllNews", true);
 		model.put("news", results);
 		return "news/newList";

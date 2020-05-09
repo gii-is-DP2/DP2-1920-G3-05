@@ -1,3 +1,28 @@
 dist: trusty
 language: java
 jdk: oraclejdk8
+addons:
+  firefox: "56.0"
+before_install:
+  - sudo apt-get install xvfb > /dev/null
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz > /dev/null
+  - sudo tar -xzf geckodriver-v0.19.0-linux64.tar.gz -C /usr/bin > /dev/null
+  - sudo chmod a+x /usr/bin/geckodriver > /dev/null
+  - export DISPLAY=:99.0 > /dev/null
+  - sh -e /etc/init.d/xvfb start > /dev/null
+  - sleep 5 # give xvfb some time to start
+services:
+  - mysql
+before_script:
+    - sudo mysql -u root -e 'CREATE DATABASE bookland;' 
+    - sudo mysql -u root -e "CREATE USER 'bookland_user'@'localhost' IDENTIFIED BY 'bookland';"
+    - sudo mysql -u root -e "GRANT ALL ON bookland.* TO 'bookland_user'@'localhost';"
+script: 
+  - mvn -P AcceptanceTests install > /tmp/UIlog.txt
+  - mvn install > /tmp/tests.txt
+after_failure:
+  - tail -n 1000 /tmp/UIlog.txt
+  - tail -n 1000 /tmp/tests.txt 
+after_success:
+  - tail -n 500 /tmp/UIlog.txt
+  - tail -n 500 /tmp/tests.txt

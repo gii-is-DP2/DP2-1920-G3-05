@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.repository.NewRepository;
 import org.springframework.samples.petclinic.service.exceptions.CantDeleteBookInNewException;
+import org.springframework.samples.petclinic.service.exceptions.CantShowNewReviewException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class NewService {
 
 	@Autowired
 	private BookService			bookService;
+	
 
 
 	@Transactional(readOnly = true)
@@ -63,10 +65,20 @@ public class NewService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Collection<New> getNewsBookReview(final String userId) throws DataAccessException {
+	public Collection<New> getNewsBookReview(final String userId) throws DataAccessException, CantShowNewReviewException {
+		Boolean CanShowNews = this.canShowNewsBookReview(userId); 
+		if(CanShowNews == true) {
+			return this.newRepo.getNewsBookReview(userId);
+		}else {
+			throw new CantShowNewReviewException();
+		}
+		
+	}
+	@Transactional(readOnly = true)
+	public Collection<New> getNewsBookReview2(final String userId) throws DataAccessException, CantShowNewReviewException {
 		return this.newRepo.getNewsBookReview(userId);
 	}
-
+	
 	@Transactional(readOnly = true)
 	public Collection<Book> getBooksFromNews(final int newId) {
 		return this.bookInNewService.getBooksInNew(newId);
@@ -112,6 +124,14 @@ public class NewService {
 			this.bookInNewService.deleteBookInNew(newId, bookId);
 		} else {
 			throw new CantDeleteBookInNewException();
+		}
+	}
+	public Boolean canShowNewsBookReview (String username) {
+		Boolean canShow = this.newRepo.getNewsBookReview(username).isEmpty();
+		if(canShow) {
+			return false;
+		}else {
+			return true;
 		}
 	}
 }

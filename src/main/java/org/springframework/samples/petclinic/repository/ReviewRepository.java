@@ -33,4 +33,9 @@ public interface ReviewRepository {
 	@Transactional
 	Review getReviewByBookIdAndUsername(int bookId, String username) throws DataAccessException;
 
+	@Transactional
+	List<Integer> getTopRaitedBooks() throws DataAccessException;
+	
+	@Transactional
+	Double getRaitingBooks(int bookId) throws DataAccessException;
 }

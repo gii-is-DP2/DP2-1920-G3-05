@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
 import java.util.Locale;
 
 import org.assertj.core.api.Assertions;
@@ -17,11 +16,9 @@ class PublicationValidatorTests {
 	
 	@Test
 	void shouldNoValidateTitleEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Publication publication = new Publication();
+		Publication publication = this.create();
 		publication.setTitle(" ");
-		publication.setDescription("Esto es una prueba");
-		publication.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
+	
 		
 		PublicationValidator publicationValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(publication, "publication");
@@ -33,11 +30,9 @@ class PublicationValidatorTests {
 	
 	@Test
 	void shouldNoValidateDescriptionEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Publication publication = new Publication();
-		publication.setTitle("titulo");
+		Publication publication = this.create();
 		publication.setDescription(" ");
-		publication.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
+
 		
 		PublicationValidator publicationValidator = createValidator();
 		Errors errors = new BeanPropertyBindingResult(publication, "publication");
@@ -49,10 +44,7 @@ class PublicationValidatorTests {
 	
 	@Test
 	void shouldNoValidateImageURLEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Publication publication = new Publication();
-		publication.setTitle("titulo");
-		publication.setDescription("descripcion");
+		Publication publication = this.create();
 		publication.setImage(" ");
 		
 		PublicationValidator publicationValidator = createValidator();
@@ -65,10 +57,7 @@ class PublicationValidatorTests {
 	
 	@Test
 	void shouldNoValidateImageURL() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Publication publication = new Publication();
-		publication.setTitle("titulo");
-		publication.setDescription("descripcion");
+		Publication publication = this.create();
 		publication.setImage("//pictures.abebooks.com/isbn/9780575081406-es.jpg");
 		
 		PublicationValidator publicationValidator = createValidator();
@@ -77,6 +66,16 @@ class PublicationValidatorTests {
 		Assertions.assertThat(errors.getErrorCount()).isEqualTo(1);
 		Assertions.assertThat(errors.hasFieldErrors("image")).isTrue();
 		Assertions.assertThat(errors.getAllErrors().get(0).getCode()).isEqualTo("Enter a valid URL");   
+	}
+	
+	private Publication create() {
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		Publication publication = new Publication();
+		publication.setTitle("Titulo");
+		publication.setDescription("Esto es una prueba");
+		publication.setImage("https://pictures.abebooks.com/isbn/9780575081406-es.jpg");
+		
+		return publication;
 	}
 
 }

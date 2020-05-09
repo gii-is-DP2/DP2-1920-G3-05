@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,13 +28,19 @@ public class ReadBookServiceTests {
 	private BookService		bs;
 
 
-	@Test
-	void shouldGetBooksIdsByUsername() {
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"vet1, 2, 3, 6",
+		"owner1, 1, 4, 5",
+		"admin1, 8, 9, 10"
+	})
+	void shouldGetBooksIdsByUsername(final String arg) {
+		String[] objetos = arg.split("\\s*,\\s*");
+		List<Integer> booksIds = this.rbs.findBooksIdByUser(objetos[0]);
 		List<Integer> ids = new ArrayList<Integer>();
-		List<Integer> booksIds = this.rbs.findBooksIdByUser("vet1");
-		ids.add(2);
-		ids.add(3);
-		ids.add(6);
+		ids.add(Integer.parseInt(objetos[1]));
+		ids.add(Integer.parseInt(objetos[2]));
+		ids.add(Integer.parseInt(objetos[3]));
 		Assertions.assertThat(booksIds).containsAll(ids);
 	}
 
@@ -49,7 +57,7 @@ public class ReadBookServiceTests {
 		Assertions.assertThat(this.rbs.findBooksIdByUser("vet1")).contains(1);
 
 	}
-	
+
 	@Test
 	void shouldGetTopReadBooks() {
 		List<Integer> ids = new ArrayList<Integer>();
@@ -59,35 +67,35 @@ public class ReadBookServiceTests {
 		ids.add(6);
 		Assertions.assertThat(booksIds).containsAll(ids);
 	}
-	
+
 	@Test
 	void shoulReadBook() {
-		int bookId = 1; 
+		int bookId = 1;
 		String username = "owner1";
 		Boolean ownerReadBook = this.rbs.esReadBook(bookId, username);
 		Assertions.assertThat(ownerReadBook).isTrue();
 	}
-	
+
 	@Test
 	void shouldChangeTopReadBooks() {
-		List<Integer> booksIds = this.rbs.topReadBooks();
-		Book book = this.bs.findBookById(4);
+		Book book = this.bs.findBookById(10);
 		User user = this.us.findUserByUsername("vet1");
 		ReadBook readBook = new ReadBook();
 		readBook.setBook(book);
 		readBook.setUser(user);
 		this.rbs.save(readBook);
+		List<Integer> booksIds = this.rbs.topReadBooks();
 		Assertions.assertThat(booksIds).contains(10);
 	}
-	
+
 	@Test
 	void shoulNotReadBook() {
-		int bookId = 2; 
+		int bookId = 2;
 		String username = "admin1";
 		Boolean adminReadBook = this.rbs.esReadBook(bookId, username);
 		Assertions.assertThat(adminReadBook).isFalse();
 	}
-	
+
 	@Test
 	void shouldDeleteReadBooksByBookId() {
 		int bookId = 1;

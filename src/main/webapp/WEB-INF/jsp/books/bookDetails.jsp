@@ -9,8 +9,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <petclinic:layout pageName="books">
-
-	<h2>Book Information</h2>
+<div style="color:red">	<c:out value="${errorReadBook}"></c:out></div>
+	<h2 id="bookDetail">Book Information</h2>
 
 	<table class="table table-striped">
 		<tr>
@@ -24,7 +24,7 @@
 		</tr>
 		<tr>
 			<th>Author</th>
-			<td><c:out value="${book.author}" /></td>
+			<td id="authorBook"><c:out value="${book.author}" /></td>
 		</tr>
 		<tr>
 			<th>Genre</th>
@@ -53,7 +53,7 @@
 		</tr>
 		<tr>
 			<th>Verified</th>
-			<td><c:if test="${book.verified}">
+			<td id="verified"><c:if test="${book.verified}">
 					<c:out value="Yes" />
 					<sec:authorize access="hasAuthority('admin')">
 						<a class="btn btn-default"
@@ -84,8 +84,7 @@
 	<sec:authorize access="hasAuthority('admin')">
 		<a class="btn btn-default"
 			href='<spring:url value="/admin/books/delete/${book.id}" htmlEscape="true"/>'
-			onclick="return confirm('Are you sure you want to delete this book?');">Delete
-			Book</a>
+			onclick="return confirm('Are you sure you want to delete this book?');" id="deleteBook">Delete Book</a>
 		<c:if test="${book.verified}">
 		<a class="btn btn-default"
 			href='<spring:url value="/admin/books/${book.id}/meetings/new" htmlEscape="true"/>'>
@@ -98,12 +97,9 @@
 	</sec:authorize>
 
 	<c:if test="${noEsReadBook}">
-		<form:form modelAttribute="book" class="form-horizontal"
-			action="/books/readBooks/${book.id}">
-			<button class="btn btn-default" type="submit">
-				<fmt:message key="addReadBook" />
-			</button>
-		</form:form>
+
+			<a class="btn btn-default"
+				href='<spring:url value="/books/readBooks/${book.id}" htmlEscape="true"/>'>Add to read books</a>
 	</c:if>
 
 	<c:choose>
@@ -121,7 +117,7 @@
 
 
 	<c:if test="${hasAnyReview}">
-		<a class="btn btn-default"
+		<a class="btn btn-default" id="Go to the reviews"
 			href='<spring:url value="/books/${book.id}/reviews" htmlEscape="true"/>'>Go
 			to the reviews</a>
 	</c:if>

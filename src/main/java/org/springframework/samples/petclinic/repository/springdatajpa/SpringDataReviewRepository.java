@@ -34,4 +34,14 @@ public interface SpringDataReviewRepository extends CrudRepository<Review, Integ
 	@Query("SELECT review FROM Review review WHERE review.book.id = ?1 AND review.user.username = ?2")
 	Review getReviewByBookIdAndUsername(int bookId, String username) throws DataAccessException;
 
+	@Override
+	@Transactional
+	@Query("SELECT AVG(review.raiting) FROM Review review WHERE review.book.id = ?1")
+	Double getRaitingBooks(int bookId);
+	
+	@Override
+	@Transactional
+	@Query(value="SELECT book_id FROM Reviews GROUP BY book_id ORDER BY (AVG(raiting*20)) DESC Limit 0,10", nativeQuery=true)
+	List<Integer> getTopRaitedBooks();
+	
 }

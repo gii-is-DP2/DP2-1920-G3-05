@@ -7,6 +7,7 @@
 
 <petclinic:layout pageName="recomendationss">
     <c:if test="${emptyy}"> <h2>You need to have at least 1 book marked as read</h2></c:if>
+    <c:if test="${NoMore}"> <h2>your most read genre is <c:out value="${genreName}"/> but you have read all our books of this genre </h2></c:if>
     <c:if test="${notEmpty}">
     <h2>Recomendations</h2>
 

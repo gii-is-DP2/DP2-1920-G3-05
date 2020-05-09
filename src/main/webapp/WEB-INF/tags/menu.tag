@@ -8,30 +8,25 @@
 	description="Name of the active menu: home, owners, vets or error"%>
 
 <nav class="navbar navbar-default" role="navigation">
-	<div class="container">
-		<div class="navbar-header">
-			<a class="navbar-brand"
-				href="<spring:url value="/" htmlEscape="true" />"><span></span></a>
-			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target="#main-navbar">
-				<span class="sr-only"><os-p>Toggle navigation</os-p></span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-		</div>
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 			
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
-					title="home page">
+					title="Home page">
 					<span class="glyphicon glyphicon-home navbar-left" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'books'}" url="/books/find"
-					title="find books">
+					title="Find books">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Search</span>
+					<span id="findBook">Search</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'topRaited'}" url="/books/topRaited"
+					title="Top raited books">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span id="topRaited">Top raited books</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'readBooks'}" url="/books/readBooks"
@@ -57,13 +52,17 @@
 					<span>Top read books</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings"
+				<petclinic:menuItem active="${name eq 'meetings'}" url="/meetings/find"
 					title="Meetings">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Meetings</span>
 				</petclinic:menuItem>
 
-		
+				<petclinic:menuItem active="${name eq 'IT Section'}" url="/itBooks/find"
+					title="IT Section">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>IT Section</span>
+				</petclinic:menuItem>
 
 			</ul>
 
@@ -154,13 +153,33 @@
 									</div>
 								</div>
 							</li>
-
+							<sec:authorize access="hasAuthority('admin')">
+							<li> 
+								<div class="navbar-login navbar-login-admin">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="/admin/listUsers" class="btn btn-primary btn-block">List users</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li> 
+								<div class="navbar-login navbar-login-admin">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="/admin/meetingDashboard" class="btn btn-primary btn-block">Meeting dashboard</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							</sec:authorize>
 						</ul></li>
 				</sec:authorize>
 			</ul>
 		</div>
 
-
-
-	</div>
 </nav>

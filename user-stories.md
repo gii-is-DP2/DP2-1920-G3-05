@@ -275,11 +275,32 @@ Dado el usuario estgantri y el libro *Las reliquias de la muerte* que no tiene m
 |-|-|
 |Dado el usuario administrador y el usuario fraperbar no verificado, cuando el administrador verifica a fraperbar, entonces todos sus libros que no estuvieran verificados se verifican y a partir de ese momento los libros que fraperbar añada se marcarán como verificados directamente|Dado el usuario administrador y el usuario ferromrio ya verificado, cuando el administrador intenta verificaa a ferromrio, el sistema le indica que ya está verificado|
 
+- **HU-21**: Cambiar información personal
+  
+  **Como** usuario   
+  **Quiero** poder modificar mis datos personales 
+  **Para** corregir posibles errores o cambiar información si lo considero necesario 
+
+|Escenario positivo|Escenario negativo|
+|-|-|
+|Dado el usuario fraperbar, cuando consulta su información personal si realiza cambios en la misma y envía los cambios, entonces su información personal quedará modificada en la página|Dado el usuario fraperbar, cuando consulta su información personal si realiza cambios en eñ nombre de usuario, entonces no se permitirán dichos cambios ya que el nombre de usuario no se puede modificar|
+
+- **HU-22**: Sección IT
+  
+  **Como** administrador   
+  **Quiero** que haya una sección sobre informática  
+  **Para** que los usuario busquen temas relacionado con el mundo de la IT y le aparezcan libros de dicho tema
+
+|Escenario positivo|Escenario negativo|
+|-|-|
+|Dado el usario javgarcer, cuando realiza una búsqueda en la sección IT con el parámetro de búsqueda "Java", entonces se realizará una consulta a un servicio REST y se mostrarán los libros que devuelva|Dado el usario javgarcer, cuando realiza una búsqueda en la sección IT con un parámetro de búsqueda tal que la API no devuelve libros, entonces se indicará que no se han encontrado resultados|
+|Dado el usario javgarcer, que ya ha realizado una consulta en la sección IT y se le ha mostrado un listado con libros, cuando hace click en uno de ellos, entonves el sistema le mostrará más información del mismo||
+
 ## Planificación Sprint 2
 
 En la asignatura se recomienda enfocar la implementación mediante la programación en pareja.  
   
-  Si embargo en nuestro grupo somos impares y creemos que dicha metodología nos resultaría tediosa necesitaríamos emplear más tiempo y además necesitarían reunirse las parejas.
+  Si embargo en nuestro grupo somos impares y creemos que dicha metodología nos resultaría tediosa, necesitaríamos emplear más tiempo y además necesitarían reunirse las parejas.
     
 Por tanto, proponemos realizar un círculo en el que cada miembro del equipo se encargue de revisar el trabajo realizado por otros una vez que lo haya subido a la rama correspondiente del repositorio antes de relizar los *merges*.
   

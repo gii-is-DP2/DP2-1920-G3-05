@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
@@ -91,16 +92,9 @@ public class MeetingServiceTest {
 		meeting.setCapacity(20);
 		try{
 			this.sut.addMeeting(meeting);
-		}catch(NotVerifiedBookMeetingException e){
-
-		}
-		Meeting saved = this.sut.findMeetingById(futureMeetingId);
-		Assertions.assertThat(saved.getName()).isEqualTo(meeting.getName());
-		Assertions.assertThat(saved.getPlace()).isEqualTo(meeting.getPlace());
-		Assertions.assertThat(saved.getStart()).isEqualTo(meeting.getStart());
-		Assertions.assertThat(saved.getEnd()).isEqualTo(meeting.getEnd());
-		Assertions.assertThat(saved.getCapacity()).isEqualTo(meeting.getCapacity());
-		Assertions.assertThat(saved.getBook().getId()).isEqualTo(bookId);
+			Collection<Meeting> meetings = this.sut.findMeetingsByNamePlaceBookTile("name");
+			Assertions.assertThat(meetings).hasSize(1);
+		}catch(NotVerifiedBookMeetingException e){}	
 	}
 
 	@ParameterizedTest

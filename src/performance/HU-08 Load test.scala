@@ -36,6 +36,8 @@ class TwoScenarios extends Simulation {
 		"Origin" -> "http://www.dp2.com",
 		"Upgrade-Insecure-Requests" -> "1")
 
+	val csvFeeder = csv("CreateMeetingLoadFeeder.csv").circular
+
 	object Home {
 		val home = exec(http("HOME")
 			.get("/"))
@@ -79,20 +81,21 @@ class TwoScenarios extends Simulation {
 	}
 
 	object CreateMeetingSuccessfully {
-		val createMeetingSuccessfully = exec(http("CreateMeetingForm")
+		val createMeetingSuccessfully =exec(http("CreateMeetingForm")
 			.get("/admin/books/1/meetings/new")
 			.headers(headers_0)
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
 		.pause(26)
+		.feed(csvFeeder)
 		.exec(http("CreatedMeetingSuccessfully")
 			.post("/admin/books/1/meetings/new")
 			.headers(headers_3)
 			.formParam("bookId", "1")
-			.formParam("name", "Meeting 1")
-			.formParam("place", "Seville")
-			.formParam("start", "2100-10-10T10:00")
-			.formParam("end", "2100-10-10T12:00")
-			.formParam("capacity", "30")
+			.formParam("name", "${name}")
+			.formParam("place", "${place}")
+			.formParam("start", "${start}")
+			.formParam("end", "${end}")
+			.formParam("capacity", "${capacity}")
 			.formParam("_csrf", "${stoken}"))
 		.pause(16)
 	}
@@ -131,7 +134,7 @@ class TwoScenarios extends Simulation {
 												CreateMeetingLessThanOneHourDuration.createMeetingLessThanOneHourDuration)
 
 	setUp(scn1.inject(rampUsers(90) during (100 seconds)),
-		  scn2.inject(rampUsers(90) during (100 seconds)))
+		  scn2.inject(rampUsers(90) during (100  seconds)))
 		.protocols(httpProtocol)
 		.assertions(
         global.responseTime.max.lt(5000),    

@@ -75,11 +75,11 @@ public class MeetingServiceTest {
 
 	@ParameterizedTest
 	@CsvSource({
-		"1,14",
-		"2,15",
-		"4,16"
+		"1",
+		"2",
+		"4"
 	})
-	void shouldAddMeeting(int bookId, int futureMeetingId) {
+	void shouldAddMeeting(int bookId) {
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2100,10,10,16,00,00);

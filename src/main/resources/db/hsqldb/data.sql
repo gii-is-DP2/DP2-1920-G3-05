@@ -131,6 +131,7 @@ INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (10,'Club 
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (11,'Club de lectura','A1.13', '2020-03-20 12:00', '2020-03-20 14:00', 50, 4);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (12,'Libro','Biblioteca', '2020-03-16 19:30', '2020-03-16 21:00', 20, 5);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (13,'Hijo del taliano','Biblioteca', '2020-03-20 19:30', '2020-03-20 21:00', 20, 12);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (14,'Club de lectura','Biblioteca Tolkien', '2020-09-20 19:30', '2020-09-20 21:00', 4000, 7);
 
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');

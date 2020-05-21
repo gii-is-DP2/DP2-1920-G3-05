@@ -98,7 +98,7 @@ public class DeleteBookStepDefinitions extends AbstractStep {
     }
 
     private int countBooks() {
-        WebElement booksTable =getDriver().findElement(By.xpath("//table[1]"));
+        WebElement booksTable =getDriver().findElement(By.xpath("//table[@id='booksTable']"));
         List<WebElement> books = booksTable.findElements(By.tagName("tr"));
         return books.size();
 

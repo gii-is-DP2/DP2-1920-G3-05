@@ -121,7 +121,7 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);
-INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-05-20 19:30', '2020-05-20 21:00', 20, 10);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2120-05-20 19:30', '2120-05-20 21:00', 20, 10);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (5,'Reunion prueba aforo','Nowhere', '2020-03-15 16:30', '2020-03-15 21:00', 2, 8);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (6,'Club de lectura','Circulo joven de Los Palacios', '2020-03-20 19:30', '2020-03-20 21:00', 30, 13);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (7,'Club de lectura','A1.13', '2020-03-10 12:00', '2020-03-10 14:00', 50, 9);

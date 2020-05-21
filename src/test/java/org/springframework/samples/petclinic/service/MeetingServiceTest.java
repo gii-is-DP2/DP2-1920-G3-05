@@ -33,7 +33,7 @@ public class MeetingServiceTest {
 	@ParameterizedTest
 	@CsvSource({
 		"1,1",
-		"7,1",
+		"7,2",
 		"3,0"
 	})
 	void shouldGetMeetingsIdsFromBookId(int bookId, int results) {

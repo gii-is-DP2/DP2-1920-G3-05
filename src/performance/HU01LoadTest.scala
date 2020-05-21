@@ -1,4 +1,3 @@
-package deleteBook
 
 import scala.concurrent.duration._
 
@@ -6,7 +5,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class intento3 extends Simulation {
+class HU01LoadTest extends Simulation {
 
 	val httpProtocol = http
 		.baseUrl("http://www.dp2.com")
@@ -16,11 +15,6 @@ class intento3 extends Simulation {
 		.acceptLanguageHeader("es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3")
 		.upgradeInsecureRequestsHeader("1")
 		.userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0")
-
-	val headers_0 = Map(
-		"Accept-Encoding" -> "gzip, deflate",
-		"Accept-Language" -> "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3",
-		"Upgrade-Insecure-Requests" -> "1")
 
 	val headers_2 = Map("Origin" -> "http://www.dp2.com")
 
@@ -63,7 +57,7 @@ class intento3 extends Simulation {
 		val addBookSuccess = exec(http("AddBook")
 			.get("/books/add")
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
-		.pause(10)
+		.pause(83)
 		.feed(csvFeeder)
 		.exec(http("AddBookGoodData")
 			.post("/books/save")
@@ -84,7 +78,7 @@ class intento3 extends Simulation {
 		val addBookUnsuccess = exec(http("AddBook")
 			.get("/books/add")
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
-		.pause(10)
+		.pause(83)
 		.exec(http("AddBookBadData")
 			.post("/books/save")
 			.headers(headers_2)
@@ -102,22 +96,13 @@ class intento3 extends Simulation {
 
 	}
 
-	val csvDeleteFeeder = csv("DeleteBookFeeder.csv").circular
-
-	object DeleteBookAdmin {
-		val deleteBookAdmin = feed(csvDeleteFeeder).exec(http("DeleteBookAdmin")
-			.get("/admin/books/delete/${book_id}")
-			.headers(headers_0))
-		.pause(33)
-	}
 
 
 	val AddGoodBookScenario = scenario("AddBookSuccesfully").exec(Home.home,
 											Login.login,
 											FindBooksForm.findBooksForm,
 											AddBooksForm.addBooksForm,
-											AddBookSuccessfull.addBookSuccess,
-											DeleteBookAdmin.deleteBookAdmin)
+											AddBookSuccessfull.addBookSuccess)
 
 	val AddBadBookScenario = scenario("AddBookunsuccesfully").exec(Home.home,
 											Login.login,
@@ -135,4 +120,5 @@ class intento3 extends Simulation {
      )
 
 
+		
 }

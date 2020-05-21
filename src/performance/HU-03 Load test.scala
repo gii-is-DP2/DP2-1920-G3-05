@@ -29,9 +29,9 @@ class DeleteBookScenarios extends Simulation {
 		"Origin" -> "http://www.dp2.com",
 		"Upgrade-Insecure-Requests" -> "1")
 
-	val csvFeeder = csv("AddBookISBNStress.csv").circular
+	val csvFeeder = csv("AddBookISBNFeeder.csv").circular
 
-	val csvDeleteFeeder = csv("DeleteBookFeederStress.csv").circular
+	val csvDeleteFeeder = csv("DeleteBookFeeder.csv").circular
 
 	object Home {
 		val home = exec(http("Home")
@@ -148,6 +148,12 @@ class DeleteBookScenarios extends Simulation {
 													BookShow.bookShow,
 													DeleteBookNoAdmin.deleteBookNoAdmin)
 
-	setUp(deleteBookScenarioAdmin.inject(rampUsers(5000) during (10 seconds)),deleteBookScenarioNoAdmin.inject(rampUsers(5000) during (10 seconds)))
-	.protocols(httpProtocol)
+    setUp(deleteBookScenarioAdmin.inject(rampUsers(33) during (100 seconds)),
+    deleteBookScenarioNoAdmin.inject(rampUsers(33) during (10 seconds)))
+    .protocols(httpProtocol)
+    .assertions(
+        global.responseTime.max.lt(5000),    
+        global.responseTime.mean.lt(1000),
+        global.successfulRequests.percent.gt(95)
+     )
 }

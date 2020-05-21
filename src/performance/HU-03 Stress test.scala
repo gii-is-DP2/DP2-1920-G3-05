@@ -116,6 +116,5 @@ class DeleteBookScenarios extends Simulation {
 													BookShow.bookShow,
 													DeleteBookNoAdmin.deleteBookNoAdmin)
 
-	setUp(deleteBookScenarioAdmin.inject(rampUsers(15000) during (10 seconds)),
-			deleteBookScenarioNoAdmin.inject(rampUsers(15000) during (10 seconds))).protocols(httpProtocol)
+	setUp(deleteBookScenarioNoAdmin.inject(rampUsers(10000) during (10 seconds))).protocols(httpProtocol)
 }

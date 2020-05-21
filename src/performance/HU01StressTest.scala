@@ -15,9 +15,14 @@ class HU01StressTest extends Simulation {
 		.upgradeInsecureRequestsHeader("1")
 		.userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0")
 
+	val headers_0 = Map(
+		"Accept-Encoding" -> "gzip, deflate",
+		"Accept-Language" -> "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3",
+		"Upgrade-Insecure-Requests" -> "1")
+
 	val headers_2 = Map("Origin" -> "http://www.dp2.com")
 
-	val csvFeeder = csv("AddBookISBNStress.csv").circular
+	val csvFeeder = csv("AddBookISBNFeeder.csv").circular
 
 	object Home {
 		val home = exec(http("Home")
@@ -56,7 +61,7 @@ class HU01StressTest extends Simulation {
 		val addBookSuccess = exec(http("AddBook")
 			.get("/books/add")
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
-		.pause(83)
+		.pause(10)
 		.feed(csvFeeder)
 		.exec(http("AddBookGoodData")
 			.post("/books/save")
@@ -77,7 +82,7 @@ class HU01StressTest extends Simulation {
 		val addBookUnsuccess = exec(http("AddBook")
 			.get("/books/add")
 			.check(css("input[name=_csrf]", "value").saveAs("stoken")))
-		.pause(83)
+		.pause(10)
 		.exec(http("AddBookBadData")
 			.post("/books/save")
 			.headers(headers_2)
@@ -95,23 +100,32 @@ class HU01StressTest extends Simulation {
 
 	}
 
+	val csvDeleteFeeder = csv("DeleteBookFeederStress.csv").circular
+
+	object DeleteBookAdmin {
+		val deleteBookAdmin = feed(csvDeleteFeeder).exec(http("DeleteBookAdmin")
+			.get("/admin/books/delete/${book_id}")
+			.headers(headers_0))
+		.pause(33)
+	}
 
 
 	val AddGoodBookScenario = scenario("AddBookSuccesfully").exec(Home.home,
 											Login.login,
 											FindBooksForm.findBooksForm,
 											AddBooksForm.addBooksForm,
-											AddBookSuccessfull.addBookSuccess)
+											AddBookSuccessfull.addBookSuccess,
+											DeleteBookAdmin.deleteBookAdmin)
 
 	val AddBadBookScenario = scenario("AddBookunsuccesfully").exec(Home.home,
 											Login.login,
+											FindBooksForm.findBooksForm,
 											AddBooksForm.addBooksForm,
 											AddBookUnsuccessfull.addBookUnsuccess) 
 
 	setUp(AddGoodBookScenario.inject(rampUsers(4000) during (10 seconds)),
 			AddBadBookScenario.inject(rampUsers(4000) during (10 seconds)))
 		.protocols(httpProtocol)
-		
      
 
 

@@ -23,7 +23,7 @@ public class DeleteBookStepDefinitions extends AbstractStep {
     @LocalServerPort
     private int port;
     
-    @Given("I am logged withh username {string} and password {string}")
+    @Given("I am logged with username {string} and password {string}")
     public void IdoLogginAsAdmin(String username, String paasword) throws Exception {
         loginAs(username, paasword, port);
     }

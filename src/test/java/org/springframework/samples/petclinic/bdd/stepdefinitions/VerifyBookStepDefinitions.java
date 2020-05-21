@@ -18,13 +18,6 @@ public class VerifyBookStepDefinitions extends AbstractStep {
 
     private boolean acceptNextAlert = true;
 
-    @LocalServerPort
-    private int port;
-    @Given("I am logged with bookname {string} and password {string}")
-    public void IdoLogginAsAdmin(String bookname, String paasword) throws Exception {
-        loginAs(bookname, paasword, port);
-    }
-
     @When("I try to verify a book")
     public void Iverifybook() throws Exception{
         listbooks();

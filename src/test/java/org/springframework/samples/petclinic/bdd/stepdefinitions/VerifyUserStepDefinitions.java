@@ -18,13 +18,6 @@ public class VerifyUserStepDefinitions extends AbstractStep {
 
     private boolean acceptNextAlert = true;
 
-    @LocalServerPort
-    private int port;
-    @Given("I am logged with username {string} and password {string}")
-    public void IdoLogginAsAdmin(String username, String paasword) throws Exception {
-        loginAs(username, paasword, port);
-    }
-
     @When("I try to verify an user")
     public void IverifyUser() throws Exception{
         listUsers();

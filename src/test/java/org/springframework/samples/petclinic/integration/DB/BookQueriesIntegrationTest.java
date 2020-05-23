@@ -28,7 +28,12 @@ public class BookQueriesIntegrationTest {
 
     @ParameterizedTest
 	@CsvSource({
-		"harry,2","Julia,2","Novel,1","9788466345347,1","el,5","harrry,0"
+		"harry,2",
+		"Julia,2",
+		"Novel,1",
+		"9788466345347,1",
+		"el,5",
+		"harrry,0"
 	})
     public void shouldFindBooksByTitleAuthorGenre(String title,int size) {
         Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN(title);

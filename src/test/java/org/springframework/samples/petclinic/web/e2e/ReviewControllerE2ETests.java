@@ -132,7 +132,7 @@ public class ReviewControllerE2ETests {
                 .andExpect(model().attributeExists("review"))
                 .andExpect(model().attribute("review", hasProperty("title", is("Libro agradable"))))
                 .andExpect(model().attribute("review", hasProperty("raiting", is(3))))
-                .andExpect(model().attribute("review", hasProperty("opinion", is("Es un libro fácil de leer que te hace olvidarte de tus preocupaciones"))))
+                .andExpect(model().attribute("review", hasProperty("opinion", is("Es un libro facil de leer que te hace olvidarte de tus preocupaciones"))))
                 .andExpect(model().attributeExists("isMine"))
                 .andExpect(model().attributeExists("canDeleteReview"))
                 .andExpect(view().name("reviews/reviewDetails"));

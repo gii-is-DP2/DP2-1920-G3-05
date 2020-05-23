@@ -28,7 +28,9 @@ public class MeetingQueriesIntegrationTests {
 
 	@ParameterizedTest
 	@CsvSource({
-		"1, 1", "7, 1", "3, 0"
+		"1, 2", 
+		"7, 1", 
+		"3, 0"
 	})
 	public void shouldGetMeetingsFromBook(final int bookId, final int numMeetings) {
 		List<Integer> meetingIds = this.sut.getMeetingsFromBook(bookId);

@@ -121,7 +121,7 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (1,'Primera reunion','Circulo joven de Los Palacios', '2020-10-20 19:30', '2020-10-20 21:00', 30, 7);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (2,'Reunion club de lectura ETSII','A1.13', '2020-06-30 12:00', '2020-06-30 14:00', 50, 1);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (3,'Libro forum','Biblioteca ETSII', '2020-10-20 19:30', '2020-10-20 21:00', 20, 2);
-INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2020-05-20 19:30', '2020-05-20 21:00', 20, 10);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (4,'Reunion sin asistentes','Nowhere', '2120-05-20 19:30', '2120-05-20 21:00', 20, 10);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (5,'Reunion prueba aforo','Nowhere', '2020-03-15 16:30', '2020-03-15 21:00', 2, 8);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (6,'Club de lectura','Circulo joven de Los Palacios', '2020-03-20 19:30', '2020-03-20 21:00', 30, 13);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (7,'Club de lectura','A1.13', '2020-03-10 12:00', '2020-03-10 14:00', 50, 9);
@@ -131,6 +131,7 @@ INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (10,'Club 
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (11,'Club de lectura','A1.13', '2020-03-20 12:00', '2020-03-20 14:00', 50, 4);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (12,'Libro','Biblioteca', '2020-03-16 19:30', '2020-03-16 21:00', 20, 5);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (13,'Hijo del taliano','Biblioteca', '2020-03-20 19:30', '2020-03-20 21:00', 20, 12);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (14,'Club de lectura','Biblioteca Tolkien', '2020-09-20 19:30', '2020-09-20 21:00', 4000, 7);
 
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');
@@ -200,14 +201,14 @@ INSERT INTO wished_book (book_id, user_username) VALUES(7, 'vet1');
 
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (1,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',1,'owner1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (2,2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',1,'admin1');
-INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (3,3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',1,'vet1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (3,3,'Libro agradable','Es un libro facil de leer que te hace olvidarte de tus preocupaciones',1,'vet1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (4,5,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',2,'owner1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (5,3,'Libro para pasar el rato','Es un libro corto y curioso',3,'vet1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (6,3,'Libro ameno','Es un libro interesante pero muy tipico',4,'vet1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (7,4,'Libro interesante','Es un libro magnifico innovativo que trata una tematica poco comun',5,'owner1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (8,4,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',6,'reader1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (9,3,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',6,'vet1');
-INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (10,3,'Libro agradable','Es un libro fácil de leer que te hace olvidarte de tus preocupaciones',12,'reader1');
+INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (10,3,'Libro agradable','Es un libro facil de leer que te hace olvidarte de tus preocupaciones',12,'reader1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (11,5,'Libro muy recomendable','Es un libro magnifico muy recomendable para todo el mundo, me ha encantado',8,'reader1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (12,3,'Libro para pasar el rato','Es un libro corto y curioso',9,'reader1');
 INSERT INTO reviews(id,raiting,title,opinion,book_id,user_username) VALUES (13,2,'Libro mediocre','Es un libro que no me ha aportado nada nuevo',10,'reader1');

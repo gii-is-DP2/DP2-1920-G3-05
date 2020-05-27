@@ -327,47 +327,78 @@ class BookServiceTests {
 		Assertions.assertThat(existsMeeting).isFalse();
 	}
     
-    @Test
-	void shouldVerifyBook() {
+	@ParameterizedTest
+	@CsvSource({
+		"3",
+		"6",
+		"9"
+		
+	})
+	void shouldVerifyBook(int id) {
 //		Collection<GrantedAuthority>l=AuthorityUtils.createAuthorityList("admin");
 //		org.springframework.security.core.userdetails.User user=new org.springframework.security.core.userdetails.User("admin","admin",l);
 //		this.bookService.verifyBook(6);
-		this.sut.verifyBook(3);
-		Assertions.assertThat(this.sut.findBookById(3).getVerified()).isTrue();
+		this.sut.verifyBook(id);
+		Assertions.assertThat(this.sut.findBookById(id).getVerified()).isTrue();
 		
 	}
     
-	@Test
-	void shouldNotChangeVerifiedBook() {
-		this.sut.verifyBook(1);
-		Assertions.assertThat(this.sut.findBookById(1).getVerified()).isTrue();
+	@ParameterizedTest
+	@CsvSource({
+		"1",
+		"2",
+		"4"
+		
+	})
+	void shouldNotChangeVerifiedBook(int id) {
+		this.sut.verifyBook(id);
+		Assertions.assertThat(this.sut.findBookById(id).getVerified()).isTrue();
 	}
 
-	@Test
-	void canEditCauseIsMineAndNotVerified(){
-		String username = "owner1";
-		int bookId = 3;
+	@ParameterizedTest
+	@CsvSource({
+		"owner1,3",
+		"owner1,6",
+		"vet1,9"
+		
+	})
+	void canEditCauseIsMineAndNotVerified(String username,int bookId){
 		Boolean canEdit = this.sut.canEditBook(bookId, username);
 		Assertions.assertThat(canEdit).isTrue();
 	}
 
-	@Test
-	void cantEditMyBookCauseIsVerified(){
-		String username = "owner1";
-		int bookId = 1;
+	@ParameterizedTest
+	@CsvSource({
+		"owner1,1",
+		"vet1,7",
+		"owner1,4"
+		
+	})
+	void cantEditMyBookCauseIsVerified(String username,int bookId){
 		Boolean canEdit = this.sut.canEditBook(bookId, username);
 		Assertions.assertThat(canEdit).isFalse();
 	}
 
-	@Test
-	void adminCanEditOthersUnverifiedBook(){
+	@ParameterizedTest
+	@CsvSource({
+		"3",
+		"6",
+		"9"
+		
+	})
+	void adminCanEditOthersUnverifiedBook(int bookId){
 		String username = "admin1";
-		int bookId = 3;
 		Boolean canEdit = this.sut.canEditBook(bookId, username);
 		Assertions.assertThat(canEdit).isTrue();
 	}
 
-	@Test
+	@ParameterizedTest
+	@CsvSource({
+		"1",
+		"5",
+		"4"
+		
+	})
 	void adminCanEditOthersVerifiedBook(){
 		String username = "admin1";
 		int bookId = 1;
@@ -375,7 +406,12 @@ class BookServiceTests {
 		Assertions.assertThat(canEdit).isTrue();
 	}
 	
-	@Test
+	@ParameterizedTest
+	@CsvSource({
+		"admin1",
+		"reader1"
+		
+	})
 	void shouldHaveVerifiedBooks(){
 		String username = "admin1";
 		List<Boolean> verified= this.sut.getVerifiedFromBooksByUsername(username);

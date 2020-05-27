@@ -7,6 +7,7 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -44,62 +45,85 @@ public class ReadBookServiceTests {
 		Assertions.assertThat(booksIds).containsAll(ids);
 	}
 
-	@Test
-	@Transactional
-	void shouldSaveReadBook() {
-		Book book = this.bs.findBookById(1);
-		User user = this.us.findUserByUsername("vet1");
+	@ParameterizedTest
+	@CsvSource({
+		"1,vet1",
+		"4,admin1",
+		"8,reader1"
+	})
+	void shouldSaveReadBook(int id, String username) {
+		Book book = this.bs.findBookById(id);
+		User user = this.us.findUserByUsername(username);
 		ReadBook readBook = new ReadBook();
 		readBook.setBook(book);
 		readBook.setUser(user);
 		this.rbs.save(readBook);
 
-		Assertions.assertThat(this.rbs.findBooksIdByUser("vet1")).contains(1);
+		Assertions.assertThat(this.rbs.findBooksIdByUser(username)).contains(id);
 
 	}
 
-	@Test
-	void shouldGetTopReadBooks() {
+	@ParameterizedTest
+	@CsvSource({
+		"1,2,6",
+		"11,7,10",
+		"2,9,7"
+	})
+	void shouldGetTopReadBooks(int id1, int id2, int id3) {
 		List<Integer> ids = new ArrayList<Integer>();
 		List<Integer> booksIds = this.rbs.topReadBooks();
-		ids.add(1);
-		ids.add(2);
-		ids.add(6);
+		ids.add(id1);
+		ids.add(id2);
+		ids.add(id3);
 		Assertions.assertThat(booksIds).containsAll(ids);
 	}
 
-	@Test
-	void shoulReadBook() {
-		int bookId = 1;
-		String username = "owner1";
+	@ParameterizedTest
+	@CsvSource({
+		"1,owner1",
+		"7,admin1",
+		"11,reader1"
+	})
+	void shoulReadBook(int bookId, String username) {
 		Boolean ownerReadBook = this.rbs.esReadBook(bookId, username);
 		Assertions.assertThat(ownerReadBook).isTrue();
 	}
 
-	@Test
-	void shouldChangeTopReadBooks() {
-		Book book = this.bs.findBookById(10);
-		User user = this.us.findUserByUsername("vet1");
+	@ParameterizedTest
+	@CsvSource({
+		"10,vet1",
+		"2,admin1",
+		"8,reader1"
+	})
+	void shouldChangeTopReadBooks(int id, String username) {
+		Book book = this.bs.findBookById(id);
+		User user = this.us.findUserByUsername(username);
 		ReadBook readBook = new ReadBook();
 		readBook.setBook(book);
 		readBook.setUser(user);
 		this.rbs.save(readBook);
 		List<Integer> booksIds = this.rbs.topReadBooks();
-		Assertions.assertThat(booksIds).contains(10);
+		Assertions.assertThat(booksIds).contains(id);
 	}
 
-	@Test
-	void shoulNotReadBook() {
-		int bookId = 2;
-		String username = "admin1";
+	@ParameterizedTest
+	@CsvSource({
+		"7,vet1",
+		"2,admin1",
+		"3,reader1"
+	})
+	void shoulNotReadBook(int bookId, String username) {
 		Boolean adminReadBook = this.rbs.esReadBook(bookId, username);
 		Assertions.assertThat(adminReadBook).isFalse();
 	}
 
-	@Test
-	void shouldDeleteReadBooksByBookId() {
-		int bookId = 1;
-		int readBookId = 4;
+	@ParameterizedTest
+	@CsvSource({
+		"1,4",
+		"2,2",
+		"6,3"
+	})
+	void shouldDeleteReadBooksByBookId(int bookId,int readBookId) {
 		this.rbs.deleteReadBookByBookId(bookId);
 		Boolean exitsReadBook = this.rbs.existsReadBook(readBookId);
 		Assertions.assertThat(exitsReadBook).isFalse();

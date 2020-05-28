@@ -101,10 +101,16 @@ class ReaderServiceTests {
 		Assertions.assertThat(reader2.getFirstName()).isEqualTo(firstname);
 	}
 	
-	@Test
-	void shouldVerifyReader() {
-		this.readerService.verifyUser(2);
-		Reader reader = this.readerService.findReaderByUsername("owner1");
+	@ParameterizedTest
+	@CsvSource({
+		"2,owner1",
+		"3,vet1",
+		"4,reader1"
+		
+	})
+	void shouldVerifyReader(int id, String username) {
+		this.readerService.verifyUser(id);
+		Reader reader = this.readerService.findReaderByUsername(username);
 		Assertions.assertThat(reader.getVerified()).isTrue();
 		List<Boolean> verified= this.bookService.getVerifiedFromBooksByUsername(reader.getUser().getUsername());
 		Assertions.assertThat(verified).allMatch(i->i==true);

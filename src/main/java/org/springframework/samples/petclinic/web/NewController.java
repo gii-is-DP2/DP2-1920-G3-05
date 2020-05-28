@@ -46,6 +46,23 @@ public class NewController {
 	private final NewService	newService;
 	private final BookService	bookService;
 
+	private static final String constant1= "redirect:/news";
+	
+	private static final String constant2= "news/newList";
+	
+	private static final String constant3= "newId";
+	
+	private static final String constant4= "news/createOrUpdateNewForm";
+	
+	private static final String constant5= "Publication date cannot be future";
+	
+	private static final String constant6= "redirect:/admin/news/books/";
+	
+	private static final String constant7= "booksIncludes";
+	
+	private static final String constant8= "booksNotIncludes";
+	
+	private static final String constant9= "news/bookList";
 
 	@Autowired
 	public NewController(final NewService newService, final BookService bookService) {
@@ -58,18 +75,18 @@ public class NewController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String authorities = auth.getAuthorities().toString();
 		if (authorities.contains("ROLE_ANONYMOUS")) {
-			return "redirect:/news";
+			return constant1;
 		} else {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			Collection<New> results2 = this.newService.getNewsBookReview2(userDetail.getUsername());
 			//Collection<New> results = this.newService.getAllNews();
 			if (results2.isEmpty()) {
-				return "redirect:/news";
+				return constant1;
 			}
 			Collection<New> results = this.newService.getNewsBookReview(userDetail.getUsername());
 			model.put("AllNews", true);
 			model.put("news", results);
-			return "news/newList";
+			return constant2;
 		}
 
 	}
@@ -83,7 +100,7 @@ public class NewController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			model.put("NewsRec", true);
 			Boolean canShow = this.newService.canShowNewsBookReview(userDetail.getUsername());
-			if(canShow==false) {
+			if(Boolean.FALSE.equals(canShow)) {
 				model.put("canShowNewsBookReview", false);
 			}else {
 				model.put("canShowNewsBookReview", true);
@@ -92,7 +109,7 @@ public class NewController {
 		}
 		Collection<New> results = this.newService.getAllNews();
 		model.put("news", results);
-		return "news/newList";
+		return constant2;
 	}
 	
 	@GetMapping(value = "/news/newsbookreview")
@@ -108,7 +125,7 @@ public class NewController {
 		}
 		model.put("AllNews", true);
 		model.put("news", results);
-		return "news/newList";
+		return constant2;
 		
 		
 	}
@@ -117,23 +134,23 @@ public class NewController {
 	public String showNew(@PathVariable("newId") final int newId, final Map<String, Object> model) {
 		New neew = this.newService.getNewById(newId);
 		model.put("new", neew);
-		model.put("newId", neew.getId());
-		return "news/createOrUpdateNewForm";
+		model.put(constant3, neew.getId());
+		return constant4;
 	}
 
 	@PostMapping(value = "/admin/news/{newId}")
 	public String saveNew(@PathVariable("newId") final int newId, @Valid final New neew, final BindingResult result, final ModelMap modelMap) {
-		modelMap.put("newId", neew.getId());
+		modelMap.put(constant3, neew.getId());
 		boolean errorFecha = false;
 		LocalDate now = LocalDate.now();
 		if (neew.getFecha() != null && now.isBefore(neew.getFecha())) {
-			result.rejectValue("fecha", "Publication date cannot be future", "Publication date cannot be future");
+			result.rejectValue("fecha", constant5, constant5);
 			errorFecha = true;
 		}
 		if (result.hasErrors() || errorFecha) {
 			modelMap.addAttribute("new", neew);
 			modelMap.addAttribute("hasErrors", true);
-			return "news/createOrUpdateNewForm";
+			return constant4;
 		} else {
 
 			New new0 = this.newService.getNewById(newId);
@@ -145,7 +162,7 @@ public class NewController {
 			new0.setRedactor(neew.getRedactor());
 			new0.setTags(neew.getTags());
 			this.newService.save(new0);
-			return "redirect:/news";
+			return constant1;
 		}
 
 	}
@@ -155,7 +172,7 @@ public class NewController {
 		New neew = new New();
 		model.put("new", neew);
 		model.put("addNew", true);
-		return "news/createOrUpdateNewForm";
+		return constant4;
 	}
 
 	@PostMapping(value = "/admin/news/create")
@@ -163,16 +180,16 @@ public class NewController {
 		boolean errorFecha = false;
 		LocalDate now = LocalDate.now();
 		if (neew.getFecha() != null && now.isBefore(neew.getFecha())) {
-			result.rejectValue("fecha", "Publication date cannot be future", "Publication date cannot be future");
+			result.rejectValue("fecha", constant5, constant5);
 			errorFecha = true;
 		}
 		if (result.hasErrors() || errorFecha) {
 			modelMap.addAttribute("new", neew);
 			modelMap.addAttribute("addNew", true);
-			return "news/createOrUpdateNewForm";
+			return constant4;
 		} else {
 			this.newService.save(neew);
-			return "redirect:/admin/news/books/" + neew.getId();
+			return constant6 + neew.getId();
 		}
 
 	}
@@ -180,51 +197,51 @@ public class NewController {
 	@GetMapping("/admin/news/delete/{newId}")
 	public String deleteNew(@PathVariable("newId") final int newId) {
 		this.newService.deleteById(newId);
-		return "redirect:/news";
+		return constant1;
 	}
 
 	@GetMapping("/admin/news/books/{newId}")
 	public String booksNew(@PathVariable("newId") final int newId, final Map<String, Object> model) {
 		Collection<Book> booksIncludes = this.newService.getBooksFromNews(newId);
-		model.put("booksIncludes", booksIncludes);
+		model.put(constant7, booksIncludes);
 
 		Collection<Book> booksNotIncludes = this.bookService.findAll();
 		booksNotIncludes.removeAll(booksIncludes);
-		model.put("booksNotIncludes", booksNotIncludes);
-		model.put("newId", newId);
-		return "news/bookList";
+		model.put(constant8, booksNotIncludes);
+		model.put(constant3, newId);
+		return constant9;
 	}
 
 	@GetMapping("/admin/news/books/save/{newId}")
 	public String booksNewSave(@PathVariable("newId") final int newId, final Map<String, Object> model) {
 		if (this.newService.getBooksFromNews(newId).isEmpty()) {
 			Collection<Book> booksIncludes = this.newService.getBooksFromNews(newId);
-			model.put("booksIncludes", booksIncludes);
+			model.put(constant7, booksIncludes);
 			Collection<Book> booksNotIncludes = this.bookService.findAll();
 			booksNotIncludes.removeAll(booksIncludes);
-			model.put("booksNotIncludes", booksNotIncludes);
-			model.put("newId", newId);
+			model.put(constant8, booksNotIncludes);
+			model.put(constant3, newId);
 			model.put("booksNotEmpty", true);
-			return "news/bookList";
+			return constant9;
 		}
 
-		return "redirect:/news";
+		return constant1;
 	}
 
 	@GetMapping("/admin/news/books/delete/{newId}/{bookId}")
 	public String deleteBooksFromNew(@PathVariable("newId") final int newId, @PathVariable("bookId") final int bookId, final Map<String, Object> model) {
 		try {
 			this.newService.deleteBookInNew(newId, bookId);
-			return "redirect:/admin/news/books/" + newId;
+			return constant6 + newId;
 		} catch (CantDeleteBookInNewException e) {
 			Collection<Book> booksIncludes = this.newService.getBooksFromNews(newId);
 			model.put("booksNotEmpty", true);
-			model.put("booksIncludes", booksIncludes);
+			model.put(constant7, booksIncludes);
 			Collection<Book> booksNotIncludes = this.bookService.findAll();
 			booksNotIncludes.removeAll(booksIncludes);
-			model.put("booksNotIncludes", booksNotIncludes);
-			model.put("newId", newId);
-			return "news/bookList";
+			model.put(constant8, booksNotIncludes);
+			model.put(constant3, newId);
+			return constant9;
 		}
 
 	}
@@ -232,7 +249,7 @@ public class NewController {
 	@GetMapping("/admin/news/books/add/{newId}/{bookId}")
 	public String addBooksFromNew(@PathVariable("newId") final int newId, @PathVariable("bookId") final int bookId, final Map<String, Object> model) {
 		this.newService.saveBookInNew(newId, bookId);
-		return "redirect:/admin/news/books/" + newId;
+		return constant6 + newId;
 	}
 
 }

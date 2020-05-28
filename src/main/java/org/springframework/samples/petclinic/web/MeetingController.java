@@ -48,6 +48,11 @@ public class MeetingController {
     
     private QuoteService quoteService;
     
+    private static final String constant1= "meeting";
+    
+    private static final String constant2= "redirect:/oups";
+    
+    private static final String constant3= "mensaje";
 
 
     @Autowired
@@ -62,7 +67,7 @@ public class MeetingController {
 
     @GetMapping(value = "/meetings/find")
 	public String initFindForm(final Map<String, Object> model) {
-		model.put("meeting", new Meeting());
+		model.put(constant1, new Meeting());
 		Quote quote = this.quoteService.getRandomQuote();
 		model.put("quote",quote);
 		return "meetings/findMeetings";
@@ -132,7 +137,7 @@ public class MeetingController {
 		List<MeetingAssistant> assistants=this.meetingAssistantService.getAssistantsOfMeeting(meetingId);
 		Integer remainingSeats=meeting.getCapacity()-assistants.size();
         mav.addObject("canInscribe", CanInscribe);
-		mav.addObject("meeting", meeting);
+		mav.addObject(constant1, meeting);
 		if (meetingAssistantId.isPresent()) {
 			modelMap.put("suscribed", true);
 
@@ -147,12 +152,12 @@ public class MeetingController {
 		String view = "meetings/meetingAdd";
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
-		if (book.getVerified()) {
+		if (Boolean.TRUE.equals(book.getVerified())) {
 			meeting.setBook(book);
-			modelMap.addAttribute("meeting", meeting);
+			modelMap.addAttribute(constant1, meeting);
 			return view;
 		} else {
-			return "redirect:/oups";
+			return constant2;
 		}
 	}
 
@@ -168,7 +173,7 @@ public class MeetingController {
 				this.meetingService.addMeeting(meeting);
 				return "redirect:/meetings";
 			} catch (NotVerifiedBookMeetingException e) {
-				return "redirect:/oups";
+				return constant2;
 			}
 		}
 	}
@@ -185,7 +190,7 @@ public class MeetingController {
 		try {
 			this.meetingAssistantService.save(meetingAssistant);
 		} catch (CantInscribeMeetingException e) {
-			return "redirect:/oups";
+			return constant2;
 		}
 			return "redirect:/meetings";
 	}
@@ -201,12 +206,12 @@ public class MeetingController {
 		if (meetingAssistantId.isPresent()) {
 			if (!meeting.getEnd().isBefore(LocalDateTime.now())) {
 				this.meetingAssistantService.deleteAssistantById(meetingAssistantId.get());
-				modelMap.put("mensaje", "You are successfully unsubscribed");
+				modelMap.put(constant3, "You are successfully unsubscribed");
 			} else {
-				modelMap.put("mensaje", "The meeting has already been held!");
+				modelMap.put(constant3, "The meeting has already been held!");
 			}
 		} else {
-			modelMap.put("mensaje", "You are not suscribed!");
+			modelMap.put(constant3, "You are not suscribed!");
 
 		}
 

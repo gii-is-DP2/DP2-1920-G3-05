@@ -45,7 +45,7 @@ public class ReviewService {
 	@Modifying
 	public void deleteReviewById(int reviewId, String username) throws DataAccessException, CantDeleteReviewException {
 		Boolean canDeleteReview = this.canDeleteReview(reviewId, username);
-		if(canDeleteReview) {
+		if(Boolean.TRUE.equals(canDeleteReview)) {
 			this.reviewRepo.deleteReviewById(reviewId);
 		}else {
 			throw new CantDeleteReviewException();
@@ -66,7 +66,7 @@ public class ReviewService {
 	@Modifying
 	public void writeReview(Review review, String username) throws DataAccessException, CantWriteReviewException {
 		Boolean canWriteReview = this.canWriteReview(review.getBook().getId(), username);
-		if(canWriteReview) {
+		if(Boolean.TRUE.equals(canWriteReview)) {
 			this.reviewRepo.save(review);
 		}else {
 			throw new CantWriteReviewException();
@@ -77,7 +77,7 @@ public class ReviewService {
 	@Modifying
 	public void editReview(Review review, String username) throws DataAccessException, CantEditReviewException {
 		Boolean isMine = this.reviewIsMine(review.getId(), username);
-		if(isMine) {
+		if(Boolean.TRUE.equals(isMine)) {
 			this.reviewRepo.save(review);
 		}else {
 			throw new CantEditReviewException();
@@ -107,7 +107,7 @@ public class ReviewService {
 	public Boolean canWriteReview(int bookId, String username) throws DataAccessException {
 		Boolean bookIsRead = this.readBookService.esReadBook(bookId, username);
 		Boolean alreadyReviewed = this.alreadyReviewedBook(bookId, username);
-		if(bookIsRead && !alreadyReviewed) {
+		if(Boolean.TRUE.equals(bookIsRead) && !alreadyReviewed) {
 			return true;
 		}else {
 			return false;

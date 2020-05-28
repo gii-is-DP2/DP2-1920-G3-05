@@ -72,7 +72,16 @@ public class BookController {
 	private WishedBookService	wishedBookService;
 
 	private PoemService			poemService;
+	
+	private static final String constant1= "selections";
 
+	private static final String constant2= "books/recomendationList";	
+	
+	private static final String constant3= "books/booksList";
+	
+	private static final String constant4= "books/bookAdd";
+	
+	private static final String constant5= "redirect:/books";
 
 	@Autowired
 	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService, final PoemService poemService) {
@@ -113,7 +122,7 @@ public class BookController {
 
 		if (ids.isEmpty()) {
 			modelMap.put("emptyy", true);
-			return "books/recomendationList";
+			return constant2;
 		}
 
 		for (Integer i : ids) {
@@ -128,12 +137,12 @@ public class BookController {
 		if (recomendations.isEmpty()) {
 			modelMap.put("NoMore", true);
 			modelMap.put("genreName", genreName.toLowerCase());
-			return "books/recomendationList";
+			return constant2;
 		}
 		modelMap.put("notEmpty", true);
-		modelMap.put("selections", recomendations);
+		modelMap.put(constant1, recomendations);
 
-		return "books/recomendationList";
+		return constant2;
 	}
 	@GetMapping(value = "/books")
 	public String processFindForm(Book book, final BindingResult result, final Map<String, Object> model) {
@@ -155,8 +164,8 @@ public class BookController {
 			return "redirect:/books/" + book.getId();
 		} else {
 			// multiple books found
-			model.put("selections", results);
-			return "books/booksList";
+			model.put(constant1, results);
+			return constant3;
 		}
 	}
 	@GetMapping("/books/readBooks")
@@ -170,9 +179,9 @@ public class BookController {
 			selections.add(this.bookService.findBookById(i));
 
 		}
-		modelMap.put("selections", selections);
+		modelMap.put(constant1, selections);
 
-		return "books/booksList";
+		return constant3;
 	}
 	@GetMapping("/books/readBooks/{bookId}")
 	public ModelAndView anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
@@ -183,7 +192,7 @@ public class BookController {
 		User user = this.userService.findUserByUsername(userdetails.getUsername());
 		ReadBook readBook = new ReadBook();
 
-		if (!this.readBookService.esReadBook(bookId, user.getUsername())) {
+		if (Boolean.FALSE.equals(this.readBookService.esReadBook(bookId, user.getUsername()))) {
 			readBook.setBook(book);
 			readBook.setUser(user);
 			this.readBookService.save(readBook);
@@ -229,7 +238,7 @@ public class BookController {
 
 	@GetMapping(value = "/books/add")
 	public String addBook(final ModelMap modelMap) {
-		String view = "books/bookAdd";
+		String view = constant4;
 		modelMap.addAttribute("book", new Book());
 		return view;
 	}
@@ -244,25 +253,25 @@ public class BookController {
 
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
-			return "books/bookAdd";
+			return constant4;
 		} else {
 			try {
 				this.bookService.save(book);
 			} catch (DuplicatedISBNException ex) {
 				result.rejectValue("ISBN", "duplicate", "already exists");
-				return "books/bookAdd";
+				return constant4;
 			}
 			modelMap.addAttribute("message", "Book successfully saved!");
 		}
 
-		return "redirect:/books";
+		return constant5;
 	}
 
 	@GetMapping(path = "/books/{bookId}/updateForm")
 	public String formUpdateBooks(final ModelMap modelMap, @PathVariable("bookId") final int bookId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
-		if (!this.bookService.canEditBook(bookId, userdetails.getUsername())) {
+		if (Boolean.FALSE.equals(this.bookService.canEditBook(bookId, userdetails.getUsername()))) {
 			return "redirect:/oups";
 		}
 		modelMap.addAttribute("book", this.bookService.findBookById(bookId));
@@ -315,7 +324,7 @@ public class BookController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
 		this.bookService.deleteById(bookId, userdetails.getUsername());
-		return "redirect:/books";
+		return constant5;
 	}
 
 	@GetMapping("/admin/books/{bookId}/verify")
@@ -352,9 +361,9 @@ public class BookController {
 			selections.add(this.bookService.findBookById(i));
 
 		}
-		modelMap.put("selections", selections);
+		modelMap.put(constant1, selections);
 
-		return "books/booksList";
+		return constant3;
 	}
 
 	@PostMapping("/books/wishList/{bookId}")
@@ -373,7 +382,7 @@ public class BookController {
 			return "redirect:/oups";
 		}
 
-		return "redirect:/books";
+		return constant5;
 	}
 	public static String maxGenre(final List<String> genres) {
 		String genre = genres.get(0);
@@ -402,9 +411,9 @@ public class BookController {
 			selections.add(this.bookService.findBookById(i));
 
 		}
-		modelMap.put("selections", selections);
+		modelMap.put(constant1, selections);
 
-		return "books/booksList";
+		return constant3;
 	}
 
 	@GetMapping("/books/topRaited")
@@ -417,7 +426,7 @@ public class BookController {
 			raiting.add(this.reviewService.getRaitingBooks(i) * 20);
 		}
 		modelMap.put("raiting", raiting);
-		modelMap.put("selections", selections);
+		modelMap.put(constant1, selections);
 		return "books/topRaitedBooks";
 	}
 

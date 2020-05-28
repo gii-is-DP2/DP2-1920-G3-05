@@ -67,7 +67,7 @@ public class MeetingAssistantService {
 		String username = meetingAssistant.getUser().getUsername();
 		Meeting meeting = meetingAssistant.getMeeting();
 		Boolean CanInscribe = this.canInscribe(meeting.getId(), username, meeting.getBook().getId());
-		if(CanInscribe) {
+		if(Boolean.TRUE.equals(CanInscribe)) {
 			this.meetingAssistantRepository.save(meetingAssistant);
 		}else {
 			throw new CantInscribeMeetingException();
@@ -112,7 +112,7 @@ public class MeetingAssistantService {
 			coincideComienzo =  meeting2.getStart().isBefore(meeting.getStart()) && meeting2.getEnd().isAfter(meeting.getStart()); 
 			coincideFin =	meeting2.getStart().isBefore(meeting.getEnd()) && meeting2.getEnd().isAfter(meeting.getEnd());
 			porDentro = (meeting2.getStart().isAfter(meeting.getStart()) || meeting2.getStart().isEqual(meeting.getStart())) && (meeting2.getEnd().isBefore(meeting.getEnd()) || meeting2.getEnd().isEqual(meeting.getEnd()));
-			if(porFuera || coincideComienzo || coincideFin || porDentro) {
+			if(porFuera || coincideComienzo || coincideFin || Boolean.TRUE.equals(porDentro)) {
 				break;
 			}
 			}
@@ -130,7 +130,7 @@ public class MeetingAssistantService {
 		Boolean fecha = checkFecha(username, meeting);
 		Boolean reunionFinalizada = checkReunionYaFinalizada(meeting);
 		
-		if(!esLibroLeido || aforo == true || fecha==true || reunionFinalizada==true) {
+		if(!esLibroLeido || aforo || fecha || Boolean.TRUE.equals(reunionFinalizada)) {
 			return false;
 		}else {
 			return true;

@@ -5,6 +5,7 @@ import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
+import scala.util.Random
 
 class HU10StressTest extends Simulation {
 
@@ -95,7 +96,8 @@ class HU10StressTest extends Simulation {
 	}
 		object InscribeUnsuccesfullMeeting {
 		val inscribeUnsuccesfullMeeting = exec(http("InscribeUnsuccessfully")
-			.get("/meetings/6"))
+			.get("/meetings/6/inscribe")
+			.check(status.is(404)))
 		.pause(16)
 	}
 		object ShowMeeting6 {
@@ -104,14 +106,62 @@ class HU10StressTest extends Simulation {
 		.pause(10)
 	}
 
+	val feeder = Iterator.continually(Map("username" -> (Random.alphanumeric.take(20).mkString )))
+
+	object NewUser{
+		val newUser = exec(
+		http("formNewUser")
+		.get("/users/new")
+		.headers(headers_0)
+		.check(css("input[name=_csrf]", "value").saveAs("userToken")))
+		.pause(4)
+		.feed(feeder)
+		.exec(http("createUser")
+		.post("/users/new")
+		.headers(headers_3)
+			.formParam("firstName", "admin1")
+			.formParam("lastName", "admin1")
+			.formParam("address", "adrres")
+			.formParam("city", "sevilla")
+			.formParam("telephone", "651665914")
+			.formParam("user.username", "${username}")
+			.formParam("user.password", "1234")
+			.formParam("_csrf", "${userToken}"))
+		.pause(15)
+		.exec(http("LoginNewUser")
+			.get("/login")
+			.headers(headers_0)
+			.resources(http("request_2")
+			.get("/login")
+			.headers(headers_2))
+			.check(css("input[name=_csrf]", "value").saveAs("stoken"))
+		).pause(8)
+		.exec(http("LoggedAsAdmin")
+			.post("/login")
+			.headers(headers_3)
+			.formParam("username", "${username}")
+			.formParam("password", "1234")
+			.formParam("_csrf", "${stoken}"))
+		.pause(7)
+	}
+
+
+
+	object AddReadBook {
+		val addReadBook = exec(http("addReadBook")
+			.get("/books/readBooks/1"))
+		.pause(10)
+	}
+
 	val positiveScn = scenario("UnsubscribeMeetingPositive").exec(Home.home,
-													Login.login,
+													NewUser.newUser,
+													AddReadBook.addReadBook,
 													SearchMeetings.searchMeetings,
 													MeetingsFounds.meetingsFounds,
 													GetMeeting14.getMeeting,
 													InscribeSuccesfullMeeting.inscribeSuccesfullMeeting,
-													GetMeeting14.getMeeting,
 													UnsubscribeFromMeeting14.unsubscribeFromMeeting)
+
 	val negativeScnUnsubscribe = scenario("UnsubscribeMeetingNegative").exec(Home.home,
 													Login.login,
 													SearchMeetings.searchMeetings,
@@ -128,9 +178,8 @@ class HU10StressTest extends Simulation {
 		
 
 	setUp(
-		positiveScn.inject(rampUsers(65000) during (10 seconds)),
-		negativeScnUnsubscribe.inject(rampUsers(65000) during (10 seconds)),
-		inscribeBadMeetingScenario.inject(rampUsers(65000) during (10 seconds))
+		positiveScn.inject(rampUsers(55000) during (10 seconds)),
+		negativeScnUnsubscribe.inject(rampUsers(55000) during (10 seconds)),
+		inscribeBadMeetingScenario.inject(rampUsers(55000) during (10 seconds))
 	).protocols(httpProtocol)
-
 }

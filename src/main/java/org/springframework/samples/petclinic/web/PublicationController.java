@@ -50,9 +50,9 @@ public class PublicationController {
 	@Autowired
 	private AuthoritiesService	authoritiesService;
 	
-	private static final String constant1= "redirect:/oups";
+	private static final String CONSTANT1= "redirect:/oups";
 	
-	private static final String constant2= "publication";
+	private static final String CONSTANT2= "publication";
 	
 	@Autowired
 	public PublicationController(final PublicationService publicationService, final UserService userService) {
@@ -96,12 +96,12 @@ public class PublicationController {
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esLibroLeido = this.readBookService.esReadBook(bookId, userDetail.getUsername());
 		if(Boolean.FALSE.equals(esLibroLeido)) {
-			return constant1;
+			return CONSTANT1;
 		}
 		Publication publication = new Publication();
 		Book book = this.bookService.findBookById(bookId);
 		publication.setBook(book);
-		modelMap.put(constant2, publication);
+		modelMap.put(CONSTANT2, publication);
 		return view;
 
 	}
@@ -112,7 +112,7 @@ public class PublicationController {
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esLibroLeido = this.readBookService.esReadBook(bookId, userDetail.getUsername());
 		if(Boolean.FALSE.equals(esLibroLeido)) {
-			return constant1;
+			return CONSTANT1;
 		}
 		User u = new User();
 		u = this.userService.findUserByUsername(userDetail.getUsername());
@@ -122,7 +122,7 @@ public class PublicationController {
 		
 
 		if (result.hasErrors()) {
-			modelMap.addAttribute(constant2, publication);
+			modelMap.addAttribute(CONSTANT2, publication);
 			return "publications/publicationAdd";
 		}
 			this.publicationService.save(publication);
@@ -138,10 +138,10 @@ public class PublicationController {
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esMio = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
 		if (Boolean.FALSE.equals(esMio)) {
-			return constant1;
+			return CONSTANT1;
 		}
 		Publication publication = this.publicationService.findById(publicationId);
-		modelMap.addAttribute(constant2, publication);
+		modelMap.addAttribute(CONSTANT2, publication);
 		return "publications/UpdatePublicationForm";
 	}
 
@@ -153,12 +153,12 @@ public class PublicationController {
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esMio = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
 		if (Boolean.FALSE.equals(esMio)) {
-			return constant1;
+			return CONSTANT1;
 		}
 
 		if (result.hasErrors()) {
 
-			modelMap.addAttribute(constant2, updatedPublication);
+			modelMap.addAttribute(CONSTANT2, updatedPublication);
 
 			return "publications/UpdatePublicationForm";
 		}
@@ -178,7 +178,7 @@ public class PublicationController {
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esMioOAdmin = this.publicationService.publicationMioOAdmin(publicationId, userDetail.getUsername()); ;
 		if (Boolean.FALSE.equals(esMioOAdmin)) {
-			return constant1;
+			return CONSTANT1;
 		}
 		this.publicationService.deletePublication(publicationId);
 		return "redirect:/books/" + bookId;

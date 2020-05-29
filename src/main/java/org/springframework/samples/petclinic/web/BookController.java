@@ -73,15 +73,15 @@ public class BookController {
 
 	private PoemService			poemService;
 	
-	private static final String constant1= "selections";
+	private static final String CONSTANT1= "selections";
 
-	private static final String constant2= "books/recomendationList";	
+	private static final String CONSTANT2= "books/recomendationList";	
 	
-	private static final String constant3= "books/booksList";
+	private static final String CONSTANT3= "books/booksList";
 	
-	private static final String constant4= "books/bookAdd";
+	private static final String CONSTANT4= "books/bookAdd";
 	
-	private static final String constant5= "redirect:/books";
+	private static final String CONSTANT5= "redirect:/books";
 
 	@Autowired
 	public BookController(final BookService bookService, final UserService userService, final ReadBookService readBookService, final WishedBookService wishedBookService, final ReviewService reviewService, final PoemService poemService) {
@@ -122,7 +122,7 @@ public class BookController {
 
 		if (ids.isEmpty()) {
 			modelMap.put("emptyy", true);
-			return constant2;
+			return CONSTANT2;
 		}
 
 		for (Integer i : ids) {
@@ -137,12 +137,12 @@ public class BookController {
 		if (recomendations.isEmpty()) {
 			modelMap.put("NoMore", true);
 			modelMap.put("genreName", genreName.toLowerCase());
-			return constant2;
+			return CONSTANT2;
 		}
 		modelMap.put("notEmpty", true);
-		modelMap.put(constant1, recomendations);
+		modelMap.put(CONSTANT1, recomendations);
 
-		return constant2;
+		return CONSTANT2;
 	}
 	@GetMapping(value = "/books")
 	public String processFindForm(Book book, final BindingResult result, final Map<String, Object> model) {
@@ -164,8 +164,8 @@ public class BookController {
 			return "redirect:/books/" + book.getId();
 		} else {
 			// multiple books found
-			model.put(constant1, results);
-			return constant3;
+			model.put(CONSTANT1, results);
+			return CONSTANT3;
 		}
 	}
 	@GetMapping("/books/readBooks")
@@ -179,9 +179,9 @@ public class BookController {
 			selections.add(this.bookService.findBookById(i));
 
 		}
-		modelMap.put(constant1, selections);
+		modelMap.put(CONSTANT1, selections);
 
-		return constant3;
+		return CONSTANT3;
 	}
 	@GetMapping("/books/readBooks/{bookId}")
 	public ModelAndView anadirLibrolistadoDeLibrosLeidos(@PathVariable("bookId") final int bookId, final ModelMap modelMap) {
@@ -238,7 +238,7 @@ public class BookController {
 
 	@GetMapping(value = "/books/add")
 	public String addBook(final ModelMap modelMap) {
-		String view = constant4;
+		String view = CONSTANT4;
 		modelMap.addAttribute("book", new Book());
 		return view;
 	}
@@ -253,18 +253,18 @@ public class BookController {
 
 		if (result.hasErrors()) {
 			modelMap.addAttribute("book", book);
-			return constant4;
+			return CONSTANT4;
 		} else {
 			try {
 				this.bookService.save(book);
 			} catch (DuplicatedISBNException ex) {
 				result.rejectValue("ISBN", "duplicate", "already exists");
-				return constant4;
+				return CONSTANT4;
 			}
 			modelMap.addAttribute("message", "Book successfully saved!");
 		}
 
-		return constant5;
+		return CONSTANT5;
 	}
 
 	@GetMapping(path = "/books/{bookId}/updateForm")
@@ -324,7 +324,7 @@ public class BookController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userdetails = (UserDetails) auth.getPrincipal();
 		this.bookService.deleteById(bookId, userdetails.getUsername());
-		return constant5;
+		return CONSTANT5;
 	}
 
 	@GetMapping("/admin/books/{bookId}/verify")
@@ -361,9 +361,9 @@ public class BookController {
 			selections.add(this.bookService.findBookById(i));
 
 		}
-		modelMap.put(constant1, selections);
+		modelMap.put(CONSTANT1, selections);
 
-		return constant3;
+		return CONSTANT3;
 	}
 
 	@PostMapping("/books/wishList/{bookId}")
@@ -382,7 +382,7 @@ public class BookController {
 			return "redirect:/oups";
 		}
 
-		return constant5;
+		return CONSTANT5;
 	}
 	public static String maxGenre(final List<String> genres) {
 		String genre = genres.get(0);
@@ -411,9 +411,9 @@ public class BookController {
 			selections.add(this.bookService.findBookById(i));
 
 		}
-		modelMap.put(constant1, selections);
+		modelMap.put(CONSTANT1, selections);
 
-		return constant3;
+		return CONSTANT3;
 	}
 
 	@GetMapping("/books/topRaited")
@@ -426,7 +426,7 @@ public class BookController {
 			raiting.add(this.reviewService.getRaitingBooks(i) * 20);
 		}
 		modelMap.put("raiting", raiting);
-		modelMap.put(constant1, selections);
+		modelMap.put(CONSTANT1, selections);
 		return "books/topRaitedBooks";
 	}
 

@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
 
 public class MeetingValidator implements Validator{
 
+	private static final String CONSTANT1= "Must not be empty";
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -21,27 +22,27 @@ public class MeetingValidator implements Validator{
 		Meeting meeting = (Meeting) target;
 		
 		if(Strings.isBlank(meeting.getName())) {
-			errors.rejectValue("name", "Must not be empty", "Must not be empty");
+			errors.rejectValue("name", CONSTANT1, CONSTANT1);
 		}else if(meeting.getName().length()<3) {
 			errors.rejectValue("name", "Must have at least 3 characters", "Must have at least 3 characters");
 		}
 
 		if(Strings.isBlank(meeting.getPlace())) {
-			errors.rejectValue("place", "Must not be empty", "Must not be empty");
+			errors.rejectValue("place", CONSTANT1, CONSTANT1);
 		}
 		
 		if(meeting.getCapacity() == null) {
-			errors.rejectValue("capacity", "Must not be empty", "Must not be empty");
+			errors.rejectValue("capacity", CONSTANT1, CONSTANT1);
 		}else if(meeting.getCapacity() < 5){
 			errors.rejectValue("capacity", "Must be at least 5", "Must be at least 5");
 		}
 		
 		if(meeting.getStart()==null) {
-			errors.rejectValue("start", "Must not be empty", "Must not be empty");
+			errors.rejectValue("start", CONSTANT1, CONSTANT1);
 		}
 
 		if(meeting.getEnd()==null) {
-			errors.rejectValue("end", "Must not be empty", "Must not be empty");
+			errors.rejectValue("end", CONSTANT1, CONSTANT1);
 		}
 
 		if(meeting.getStart()!=null && meeting.getEnd()!=null && meeting.getEnd().isBefore(meeting.getStart())) {

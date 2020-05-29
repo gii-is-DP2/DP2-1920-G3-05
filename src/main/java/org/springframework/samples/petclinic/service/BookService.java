@@ -199,7 +199,7 @@ public class BookService {
 				imAdmin = true;
 			}
 		}
-		if (username.equals(book.getUser().getUsername()) && !book.getVerified() || imAdmin) {
+		if (username.equals(book.getUser().getUsername()) && !book.getVerified() || Boolean.TRUE.equals(imAdmin)) {
 			res = true;
 		}
 

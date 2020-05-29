@@ -59,7 +59,7 @@ public class MeetingService {
 	@Modifying
 	public void addMeeting(final Meeting meeting) throws NotVerifiedBookMeetingException {
 		Boolean isVerifiedBook = meeting.getBook().getVerified();
-		if (isVerifiedBook) {
+		if (Boolean.TRUE.equals(isVerifiedBook)) {
 			this.meetingRepository.save(meeting);
 		} else {
 			throw new NotVerifiedBookMeetingException();

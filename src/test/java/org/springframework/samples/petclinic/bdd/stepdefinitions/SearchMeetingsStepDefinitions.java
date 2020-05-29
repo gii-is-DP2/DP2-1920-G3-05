@@ -2,7 +2,6 @@ package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import io.cucumber.java.en.Then;

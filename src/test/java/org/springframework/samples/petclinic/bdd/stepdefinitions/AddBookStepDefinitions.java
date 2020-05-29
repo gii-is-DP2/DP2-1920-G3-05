@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
-import java.text.StringCharacterIterator;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -88,7 +87,6 @@ public class AddBookStepDefinitions extends AbstractStep{
             getDriver().findElement(By.id("editorial")).clear();
             getDriver().findElement(By.id("editorial")).sendKeys(editorial);
             new Select(getDriver().findElement(By.id("genre"))).selectByVisibleText(genre);
-           // getDriver().findElement(By.xpath("//option[@value={genre}]")).click();
             getDriver().findElement(By.id("pages")).click();
             getDriver().findElement(By.id("pages")).clear();
             getDriver().findElement(By.id("pages")).sendKeys(pages);

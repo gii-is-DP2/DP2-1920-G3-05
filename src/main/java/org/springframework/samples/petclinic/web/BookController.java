@@ -247,8 +247,7 @@ public class BookController {
 	public String saveBook(@Valid final Book book, final BindingResult result, final ModelMap modelMap) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		User u = new User();
-		u = this.userService.findUserByUsername(userDetail.getUsername());
+		User u = this.userService.findUserByUsername(userDetail.getUsername());
 		book.setUser(u);
 
 		if (result.hasErrors()) {
@@ -333,22 +332,6 @@ public class BookController {
 		return "redirect:/books/" + bookId;
 
 	}
-
-	/*
-	 * private Boolean esReadBook(final Integer id) {
-	 * Boolean res = false;
-	 * Book book = this.bookService.findBookById(id);
-	 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 * UserDetails userdetails = (UserDetails) auth.getPrincipal();
-	 * List<Integer> ids = this.readBookService.findBooksIdByUser(userdetails.getUsername());
-	 * for (Integer i : ids) {
-	 * if (this.bookService.findBookById(i).getId().equals(book.getId())) {
-	 * res = true;
-	 * }
-	 * }
-	 * return res;
-	 * }
-	 */
 
 	@GetMapping("/books/wishList")
 	public String listadoDeLibrosDeseados(final ModelMap modelMap) {

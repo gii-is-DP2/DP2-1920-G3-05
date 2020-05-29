@@ -8,13 +8,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 import org.springframework.samples.petclinic.model.User;
@@ -61,7 +60,7 @@ class BookServiceTests {
 	@CsvSource({
 		"prueba,admin1,13"
 	})
-	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin(String titleBook, String username, int futureBookId) throws DuplicatedISBNException {
 		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
 		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
@@ -91,7 +90,7 @@ class BookServiceTests {
 	@CsvSource({
 		"prueba,owner1,14"
 	})
-	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin(String titleBook, String username, int futureBookId) throws DuplicatedISBNException {
 		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
 		User user = this.userService.findUserByUsername(username);
 		int count = list.size();

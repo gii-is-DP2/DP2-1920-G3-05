@@ -17,7 +17,7 @@
 package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Reader;
 import org.springframework.samples.petclinic.repository.ReaderRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedUsernameException;
@@ -64,7 +64,7 @@ public class ReaderService {
 		this.readerRepository.verifyBooksByUser(reader.getUser().getUsername());
 	}
 	@Transactional
-	public void saveReader(final Reader reader) throws DataAccessException, DuplicatedUsernameException {
+	public void saveReader(final Reader reader) throws DuplicatedUsernameException {
 		Reader readeer = this.findReaderByUsername(reader.getUser().getUsername());
 		if (readeer == null) {
 			//creando reader

@@ -4,11 +4,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Publication;
-import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.PublicationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +17,6 @@ public class PublicationService {
 
 	@Autowired
 	private PublicationRepository publicationRepository;
-	
-	@Autowired
-	private ReadBookService readBookService;
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
@@ -31,36 +27,36 @@ public class PublicationService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Collection<Publication> findAllPublicationFromBook(final int id) throws DataAccessException {
+	public Collection<Publication> findAllPublicationFromBook(final int id)  {
 		return this.publicationRepository.getAllPublicationsFromBook(id);
 	}
 
 	@Transactional(readOnly = true)
-	public Publication findById(final int id) throws DataAccessException {
+	public Publication findById(final int id)  {
 		return this.publicationRepository.findById(id);
 
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Integer> getPublicationsFromBook(int bookId) throws DataAccessException {
+	public List<Integer> getPublicationsFromBook(int bookId)  {
 		return this.publicationRepository.getPublicationsFromBook(bookId);
 	}
 	
 	@Transactional
-	public void save(final Publication publication) throws DataAccessException {
+	public void save(final Publication publication)  {
 		this.publicationRepository.save(publication);
 		
 	}
 	
 	@Transactional
 	@Modifying
-	public void deletePublication(int publicationId) throws DataAccessException {
+	public void deletePublication(int publicationId)  {
 		this.publicationRepository.deletePublication(publicationId);
 	}
 	
 	
 	@Transactional
-	public Boolean existsPublicationById(int publicationId) throws DataAccessException {
+	public Boolean existsPublicationById(int publicationId)  {
 		return this.publicationRepository.existsById(publicationId);
 	}
 

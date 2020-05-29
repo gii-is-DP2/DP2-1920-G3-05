@@ -4,30 +4,29 @@ package org.springframework.samples.petclinic.repository;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Genre;
 
 public interface BookRepository {
 
-	Book findById(int id) throws DataAccessException;
+	Book findById(int id) ;
 
-	Collection<Book> findBookByTitleAuthorGenreISBN(String title) throws DataAccessException;
+	Collection<Book> findBookByTitleAuthorGenreISBN(String title) ;
 
-	List<Genre> findGenre() throws DataAccessException;
+	List<Genre> findGenre() ;
 
-	Book save(Book book) throws DataAccessException;
+	Book save(Book book) ;
 
-	Book findByISBN(String ISBN) throws DataAccessException;
+	Book findByISBN(String ISBN) ;
 
-	Genre findGenreByName(String name) throws DataAccessException;
+	Genre findGenreByName(String name) ;
 
-	void deleteBookById(int bookId) throws DataAccessException;
+	void deleteBookById(int bookId) ;
 
-	Boolean existsById(int bookId) throws DataAccessException;
+	Boolean existsById(int bookId) ;
 
-	Collection<Book> findAll() throws DataAccessException;
+	Collection<Book> findAll() ;
 
 	void verifyBook(int bookId);
 

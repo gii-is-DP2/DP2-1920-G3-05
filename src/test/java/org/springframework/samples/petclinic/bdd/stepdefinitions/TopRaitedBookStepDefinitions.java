@@ -2,13 +2,10 @@ package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.repository.ReviewRepository;
 
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

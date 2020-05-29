@@ -19,7 +19,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -41,7 +40,7 @@ public interface SpringDataBookRepository extends BookRepository, CrudRepository
 
 	@Override
 	@Query("SELECT genre FROM Genre genre ORDER BY genre.name")
-	List<Genre> findGenre() throws DataAccessException;
+	List<Genre> findGenre();
 
 	@Override
 	@Query("Select DISTINCT b from Book b where b.ISBN = ?1")

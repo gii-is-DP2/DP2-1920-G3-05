@@ -10,45 +10,45 @@ import org.springframework.validation.Validator;
 
 public class BookValidator implements Validator {
 
-
+	private static final String constant1= "Must not be empty";
 
 	@Override
 	public void validate(final Object target, final Errors errors) {
 		Book book = (Book) target;
 		String ISBN = book.getISBN();
 
-		if (this.validateISBN(ISBN) == false) {
+		if (!this.validateISBN(ISBN)) {
 			errors.rejectValue("ISBN", "Enter a valid ISBN", "Enter a valid ISBN");
 
 		}
 
 		if (Strings.isBlank(book.getTitle())) {
-			errors.rejectValue("title", "Must not be empty", "Must not be empty");
+			errors.rejectValue("title", constant1, constant1);
 		}
 
 		if (Strings.isBlank(book.getAuthor())) {
-			errors.rejectValue("author", "Must not be empty", "Must not be empty");
+			errors.rejectValue("author", constant1, constant1);
 		}
 		if (Strings.isBlank(book.getEditorial())) {
-			errors.rejectValue("editorial", "Must not be empty", "Must not be empty");
+			errors.rejectValue("editorial", constant1, constant1);
 		}
 		if (book.getGenre() == null) {
-			errors.rejectValue("genre", "Must not be empty", "Must not be empty");
+			errors.rejectValue("genre", constant1, constant1);
 		}
 		if (book.getPages() == null) {
-			errors.rejectValue("pages", "Must not be empty", "Must not be empty");
+			errors.rejectValue("pages", constant1, constant1);
 		}else if(book.getPages() < 1) {
 			errors.rejectValue("pages", "Must be > 1", "Must be > 1");
 		}
 		if (Strings.isBlank(book.getSynopsis())) {
-			errors.rejectValue("synopsis", "Must not be empty", "Must not be empty");
+			errors.rejectValue("synopsis", constant1, constant1);
 		}
 		if (book.getPublicationDate() == null) {
-			errors.rejectValue("publicationDate", "Must not be empty", "Must not be empty");
+			errors.rejectValue("publicationDate", constant1, constant1);
 
 		}
 		if (Strings.isBlank(book.getImage())) {
-			errors.rejectValue("image", "Must not be empty", "Must not be empty");
+			errors.rejectValue("image", constant1, constant1);
 
 		}else if (this.isValid(book.getImage()) == false) {
 			errors.rejectValue("image", "Enter a valid URL", "Enter a valid URL");

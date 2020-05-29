@@ -49,6 +49,10 @@ public class UserController {
 	private static final String	VIEWS_READER_UPDATE_FORM	= "users/updateReaderForm";
 
 	private final ReaderService	readerService;
+	
+	private static final String constant1= "notEmpty";
+	
+	private static final String constant2= "Must not be empty";
 
 
 	@Autowired
@@ -73,11 +77,11 @@ public class UserController {
 		boolean userEmpty = false;
 		if (Strings.isBlank(reader.getUser().getUsername())) {
 			userEmpty = true;
-			result.rejectValue("user.username", "notEmpty", "Must not be empty");
+			result.rejectValue("user.username", constant1, constant2);
 		}
 		if (Strings.isBlank(reader.getUser().getPassword())) {
 			userEmpty = true;
-			result.rejectValue("user.password", "notEmpty", "Must not be empty");
+			result.rejectValue("user.password", constant1, constant2);
 		}
 		if (result.hasErrors() || userEmpty) {
 			return UserController.VIEWS_READER_CREATE_FORM;
@@ -107,7 +111,7 @@ public class UserController {
 		boolean userEmpty = false;
 		if (Strings.isBlank(reader.getUser().getPassword())) {
 			userEmpty = true;
-			result.rejectValue("user.password", "notEmpty", "Must not be empty");
+			result.rejectValue("user.password", constant1, constant2);
 		}
 		if (result.hasErrors() || userEmpty) {
 			return UserController.VIEWS_READER_UPDATE_FORM;

@@ -67,7 +67,7 @@ public class NewService {
 	@Transactional(readOnly = true)
 	public Collection<New> getNewsBookReview(final String userId) throws DataAccessException, CantShowNewReviewException {
 		Boolean CanShowNews = this.canShowNewsBookReview(userId); 
-		if(CanShowNews == true) {
+		if(Boolean.TRUE.equals(CanShowNews)) {
 			return this.newRepo.getNewsBookReview(userId);
 		}else {
 			throw new CantShowNewReviewException();
@@ -128,7 +128,7 @@ public class NewService {
 	}
 	public Boolean canShowNewsBookReview (String username) {
 		Boolean canShow = this.newRepo.getNewsBookReview(username).isEmpty();
-		if(canShow) {
+		if(Boolean.TRUE.equals(canShow)) {
 			return false;
 		}else {
 			return true;

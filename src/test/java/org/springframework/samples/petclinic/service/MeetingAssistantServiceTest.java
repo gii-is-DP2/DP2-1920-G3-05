@@ -23,7 +23,7 @@ import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookM
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class MeetingAssistantServiceTest {
+ class MeetingAssistantServiceTest {
 
 	@Autowired
 	private MeetingAssistantService sut;

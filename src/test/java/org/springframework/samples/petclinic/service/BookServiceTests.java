@@ -39,7 +39,7 @@ class BookServiceTests {
 	private MeetingService meetingService;
 	
 	@Autowired
-	private PublicationService publicationService;
+	private PublicationService ationService;
 	
 	@Autowired
 	private ReviewService reviewService;
@@ -61,7 +61,7 @@ class BookServiceTests {
 	@CsvSource({
 		"prueba,admin1,13"
 	})
-	public void shouldInsertBookIntoDatabaseAndGenerateIdAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+	 void shouldInsertBookIntoDatabaseAndGenerateIdAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
 		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
 		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
@@ -91,7 +91,7 @@ class BookServiceTests {
 	@CsvSource({
 		"prueba,owner1,14"
 	})
-	public void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
+	 void shouldInsertBookIntoDatabaseAndGenerateIdNoAdmin(String titleBook, String username, int futureBookId) throws DataAccessException, DuplicatedISBNException {
 		Collection<Book> list = this.sut.findBookByTitleAuthorGenreISBN(titleBook);
 		User user = this.userService.findUserByUsername(username);
 		int count = list.size();
@@ -122,7 +122,7 @@ class BookServiceTests {
 	@CsvSource({
 		"admin1"
 	})
-	public void shouldThrowExceptionInsertingBooksWithTheSameISBN(String username) {
+	 void shouldThrowExceptionInsertingBooksWithTheSameISBN(String username) {
 		User user = this.userService.findUserByUsername(username);
 
 		Book book = new Book();
@@ -171,7 +171,7 @@ class BookServiceTests {
 	@CsvSource({
 		"1", "2", "3"
 	})
-	public void shouldUpdateBookName(final int bookId) throws Exception {
+	 void shouldUpdateBookName(final int bookId) throws Exception {
 		Book book = this.sut.findBookById(bookId);
 		String oldTitle = book.getTitle();
 
@@ -200,7 +200,7 @@ class BookServiceTests {
 	@CsvSource({
 		"Romance", "Fiction", "Horror"
 	})
-	public void shouldFindGenre(String genre) throws Exception {
+	 void shouldFindGenre(String genre) throws Exception {
 		Genre genre3 = this.sut.findGenreByName(genre);
 
 		Assertions.assertThat(genre).isEqualTo(genre3.getName());
@@ -290,13 +290,13 @@ class BookServiceTests {
 	})
 	void adminCanDeleteBookWithPublication() {
 		int bookId = 8;
-		int publicationId = 5;
+		int ationId = 5;
 		String username = "admin1";
 
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
-		Boolean existsPublication = this.publicationService.existsPublicationById(publicationId);
+		Boolean existsPublication = this.ationService.existsPublicationById(ationId);
 		Assertions.assertThat(existsBook).isFalse();
 		Assertions.assertThat(existsPublication).isFalse();
 	}
@@ -305,7 +305,7 @@ class BookServiceTests {
 	@CsvSource({
 		"1,3,1,2,3,1,2,2,admin1"
 	})
-	void adminCanDeleteBookWithEverything(int bookId, int newId, int reviewId1, int reviewId2, int reviewId3, int publicationId1, int publicationId2, int meetingId, String username) {
+	void adminCanDeleteBookWithEverything(int bookId, int newId, int reviewId1, int reviewId2, int reviewId3, int ationId1, int ationId2, int meetingId, String username) {
 		this.sut.deleteById(bookId, username);
 		
 		Boolean existsBook = this.sut.existsBookById(bookId);
@@ -313,8 +313,8 @@ class BookServiceTests {
 		Boolean existsReview1 = this.reviewService.existsReviewById(reviewId1);
 		Boolean existsReview2 = this.reviewService.existsReviewById(reviewId2);
 		Boolean existsReview3 = this.reviewService.existsReviewById(reviewId3);
-		Boolean existsPublication1 = this.publicationService.existsPublicationById(publicationId1);
-		Boolean existsPublication2 = this.publicationService.existsPublicationById(publicationId2);
+		Boolean existsPublication1 = this.ationService.existsPublicationById(ationId1);
+		Boolean existsPublication2 = this.ationService.existsPublicationById(ationId2);
 		Boolean existsMeeting = this.meetingService.existsMeetingById(meetingId);
 		
 		Assertions.assertThat(existsBook).isFalse();

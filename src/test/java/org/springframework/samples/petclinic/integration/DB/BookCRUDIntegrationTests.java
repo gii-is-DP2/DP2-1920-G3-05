@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.integration.DB;
 
 import java.time.LocalDate;
@@ -22,23 +23,24 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("mysql")
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
-public class BookCRUDIntegrationTests {
-	@Autowired
-    private BookRepository sut;
-	@Autowired
-	private UserRepository userRepo;
-	@Autowired
-	private BookService bookService;
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class BookCRUDIntegrationTests {
 
-    @ParameterizedTest
+	@Autowired
+	private BookRepository	sut;
+	@Autowired
+	private UserRepository	userRepo;
+	@Autowired
+	private BookService		bookService;
+
+
+	@ParameterizedTest
 	@CsvSource({
-		"prueba,antonio,SM,9788425223280,574,Esto es una prueba,admin1,16",
-		"prueba2,pepe,Casals,9781234567897,123,Esto es otra prueba,admin1,16"
+		"prueba,antonio,SM,9788425223280,574,Esto es una prueba,admin1,16", "prueba2,pepe,Casals,9781234567897,123,Esto es otra prueba,admin1,16"
 	})
-    public void shouldCreateBook(String title,String author,String editorial,String isbn,Integer pages,String synopsis,String username,int size) {
-    	User user = this.userRepo.findByUsername(username);
-    	Book book = new Book();
+	void shouldCreateBook(final String title, final String author, final String editorial, final String isbn, final Integer pages, final String synopsis, final String username, final int size) {
+		User user = this.userRepo.findByUsername(username);
+		Book book = new Book();
 		book.setTitle(title);
 		book.setAuthor(author);
 		book.setEditorial(editorial);
@@ -51,29 +53,26 @@ public class BookCRUDIntegrationTests {
 		book.setUser(user);
 
 		this.sut.save(book);
-		Integer booksSize= this.sut.findAll().size();
+		Integer booksSize = this.sut.findAll().size();
 		Assertions.assertThat(size).isEqualTo(booksSize);
-    }
+	}
 
-    @ParameterizedTest
+	@ParameterizedTest
 	@CsvSource({
-		"1, IT",
-		"2, Harry Potter y la piedra filosofal"
+		"1, IT", "2, Harry Potter y la piedra filosofal"
 	})
-	void shouldReadBook(int id, String title) {
+	void shouldReadBook(final int id, final String title) {
 		Book book = this.sut.findById(id);
 		Assertions.assertThat(book.getTitle()).isEqualTo(title);
-    }
-    
-    
-    @ParameterizedTest
+	}
+
+	@ParameterizedTest
 	@CsvSource({
-		"14, 14",
-		"13, 14",
+		"14, 14", "13, 14",
 	})
-	void shouldDeleteBookWithRelations(Integer bookId,Integer size){
+	void shouldDeleteBookWithRelations(final Integer bookId, final Integer size) {
 		this.bookService.deleteById(bookId, "admin1"); //We call the service because it deletes all the relations
-		Integer booksSize= this.sut.findAll().size();
+		Integer booksSize = this.sut.findAll().size();
 		Assertions.assertThat(size).isEqualTo(booksSize);
 	}
 
@@ -81,9 +80,9 @@ public class BookCRUDIntegrationTests {
 	@CsvSource({
 		"15, 14",
 	})
-	void shouldDeleteBookWithoutRelations(Integer bookId,Integer size){
+	void shouldDeleteBookWithoutRelations(final Integer bookId, final Integer size) {
 		this.sut.deleteBookById(bookId); //As it has no relations we can call the repository
-		Integer booksSize= this.sut.findAll().size();
+		Integer booksSize = this.sut.findAll().size();
 		Assertions.assertThat(size).isEqualTo(booksSize);
 	}
 

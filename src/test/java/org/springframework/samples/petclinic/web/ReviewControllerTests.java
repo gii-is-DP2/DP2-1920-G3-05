@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.is;
 @WebMvcTest(controllers=ReviewController.class,
 excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 excludeAutoConfiguration= SecurityConfiguration.class)
-public class ReviewControllerTests {
+ class ReviewControllerTests {
 
     private static final int TEST_BOOK_ID = 1;
 

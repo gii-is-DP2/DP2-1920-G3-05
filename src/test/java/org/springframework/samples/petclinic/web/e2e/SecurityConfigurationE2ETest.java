@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class SecurityConfigurationE2ETest {
+ class SecurityConfigurationE2ETest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -134,16 +134,16 @@ public class SecurityConfigurationE2ETest {
     }
 	@Test
 	void testRedirectToLoginFromPublicationsNoAuthenticated() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/publications"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/ations"))
 		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 		.andExpect(redirectedUrl("http://localhost/login"));
 	}
     @WithMockUser(username = "reader1", authorities = {"reader"})
 	@Test
 	void testCanEnterInUrlPublicationsWithAuthenticated() throws Exception{
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/publications"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/ations"))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(view().name("publications/publicationList"));
+		.andExpect(view().name("ations/ationList"));
     }
 	@Test
 	void testRedirectToLoginFromReviewsNoAuthenticated() throws Exception {

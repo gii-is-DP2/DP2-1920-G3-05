@@ -13,7 +13,7 @@ import org.springframework.samples.petclinic.web.MeetingValidator;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-public class MeetingValidatorTests {
+ class MeetingValidatorTests {
     
     private MeetingValidator createValidator() {
 		return new MeetingValidator();

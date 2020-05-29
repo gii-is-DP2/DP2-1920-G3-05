@@ -23,7 +23,7 @@ import org.springframework.samples.petclinic.service.exceptions.CantShowNewRevie
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)public class NewServiceTest {
+@AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE) class NewServiceTest {
 
 	@Autowired
 	private NewService			sut;
@@ -180,7 +180,7 @@ import org.springframework.stereotype.Service;
 	@CsvSource({
 		"Name 1","Name 2"
 	})
-	public void shouldSaveNew(String name) {
+	 void shouldSaveNew(String name) {
 		New neew = new New();
 		neew.setBody("body");
 		LocalDate fecha = LocalDate.of(2019, 12, 02);

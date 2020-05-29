@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.BookInNew;
@@ -22,13 +22,13 @@ public class BookInNewService {
 
 
 	@Transactional(readOnly = true)
-	public List<Integer> getBooksInNewFromNew(final int newId) throws DataAccessException {
+	public List<Integer> getBooksInNewFromNew(final int newId)  {
 		return this.bookInNewRepository.getBooksInNewFromNew(newId);
 	}
 
 	@Transactional
 	@Modifying
-	public void deleteBookInNew(final int newId, final int bookId) throws DataAccessException {
+	public void deleteBookInNew(final int newId, final int bookId)  {
 		this.bookInNewRepository.deleteBookInNew(newId, bookId);
 	}
 

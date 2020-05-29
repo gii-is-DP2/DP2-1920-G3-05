@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
@@ -31,7 +31,7 @@ public class WishedBookServiceTests {
 		"4,vet1,3",
 		"10,owner1,1"
 	})
-	void shouldAddToWishList(Integer bookId,String username,Integer expectedNumBooks) throws DataAccessException, ReadOrWishedBookException {
+	void shouldAddToWishList(Integer bookId,String username,Integer expectedNumBooks) throws ReadOrWishedBookException {
 		Book book=bookService.findBookById(bookId);
 		User user=userService.findUserByUsername(username);
 		WishedBook wishedBook= new WishedBook();
@@ -56,7 +56,6 @@ public class WishedBookServiceTests {
 		try {
 			sut.save(wishedBook);
 		} catch (ReadOrWishedBookException e) {
-			// TODO Auto-generated catch block
 			Assertions.assertThat(e.getCause());
 		}
 	}
@@ -76,7 +75,6 @@ public class WishedBookServiceTests {
 		try {
 			sut.save(wishedBook);
 		} catch (ReadOrWishedBookException e) {
-			// TODO Auto-generated catch block
 			Assertions.assertThat(e.getCause());
 		}
 	}

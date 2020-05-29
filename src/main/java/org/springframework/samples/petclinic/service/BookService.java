@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
@@ -67,29 +67,29 @@ public class BookService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Genre> findGenre() throws DataAccessException {
+	public Collection<Genre> findGenre()  {
 		return this.bookRepository.findGenre();
 	}
 	
 	@Transactional(readOnly = true) 
-	public Genre findGenreByName(final String name) throws DataAccessException { 
+	public Genre findGenreByName(final String name)  { 
  
 		return this.bookRepository.findGenreByName(name); 
 	} 
 
 	@Transactional(readOnly = true)
-	public Collection<Book> findBookByTitleAuthorGenreISBN(final String title) throws DataAccessException {
+	public Collection<Book> findBookByTitleAuthorGenreISBN(final String title)  {
 		return this.bookRepository.findBookByTitleAuthorGenreISBN(title.toUpperCase());
 	}
 
 	@Transactional(readOnly = true)
-	public Book findBookById(final int id) throws DataAccessException {
+	public Book findBookById(final int id)  {
 		return this.bookRepository.findById(id);
 
 	}
 
 	@Transactional(rollbackFor = DuplicatedISBNException.class)
-	public void save(final Book book) throws DataAccessException, DuplicatedISBNException {
+	public void save(final Book book) throws DuplicatedISBNException {
 		Boolean imAdmin = false;
 
 
@@ -122,13 +122,13 @@ public class BookService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Boolean existsBookById(int bookId) throws DataAccessException {
+	public Boolean existsBookById(int bookId)  {
 		return this.bookRepository.existsById(bookId);
 	}
 
 	@Transactional
 	@Modifying
-	public void deleteById(final int id, String username) throws DataAccessException {
+	public void deleteById(final int id, String username)  {
 
 		// Vemos si el libro tiene asociadas reviews que haya que borrar previamente
 		List<Integer> reviewsId = this.reviewService.getReviewsIdFromBook(id);
@@ -206,7 +206,7 @@ public class BookService {
 		return res;
 	}
 	@Transactional(readOnly = true)
-	public List<Boolean> getVerifiedFromBooksByUsername(final String username) throws DataAccessException {
+	public List<Boolean> getVerifiedFromBooksByUsername(final String username)  {
 		return this.bookRepository.getVerifiedFromBooksByUsername(username);
 
 	}

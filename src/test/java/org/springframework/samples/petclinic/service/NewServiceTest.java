@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.BookInNew;
 import org.springframework.samples.petclinic.model.New;
@@ -86,7 +86,7 @@ import org.springframework.stereotype.Service;
 		"owner1",
 		"vet1"
 	})
-	void shouldGetNewBookReview(String username) throws DataAccessException, CantShowNewReviewException{
+	void shouldGetNewBookReview(String username) throws CantShowNewReviewException{
 		User user = this.userService.findUserByUsername("admin1");
 		
 		List<New> news = (List<New>) this.sut.getAllNews();
@@ -103,7 +103,7 @@ import org.springframework.stereotype.Service;
 		"owner1",
 		"vet1"
 	})
-	void shouldGetNewBookReview2(String username) throws DataAccessException, CantShowNewReviewException{
+	void shouldGetNewBookReview2(String username) throws CantShowNewReviewException{
 		User user = this.userService.findUserByUsername("admin1");
 		
 		List<New> news = (List<New>) this.sut.getAllNews();
@@ -159,7 +159,7 @@ import org.springframework.stereotype.Service;
 	@CsvSource({
 		"1,2","4,4"
 	})
-	void shouldDeleteBookInNew(int newId, int bookId) throws DataAccessException, CantDeleteBookInNewException {
+	void shouldDeleteBookInNew(int newId, int bookId) throws CantDeleteBookInNewException {
 		this.sut.deleteBookInNew(newId, bookId);
 	}
 

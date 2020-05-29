@@ -4,13 +4,12 @@ package org.springframework.samples.petclinic.service;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Reader;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedUsernameException;
@@ -39,7 +38,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"reader3,George","reader4,Betty"
 	})
-	public void shouldCreateReader(String username, String firstname) throws DataAccessException, DuplicatedUsernameException {
+	public void shouldCreateReader(String username, String firstname) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
 		User user = new User();
 		user.setUsername(username);
@@ -63,7 +62,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"admin1","reader"
 	})
-	public void shouldNotCreateReader(String username) throws DataAccessException, DuplicatedUsernameException {
+	public void shouldNotCreateReader(String username) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
 		User user = new User();
 		user.setUsername(username);
@@ -88,7 +87,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"admin1,First name","reader1, First name 2"
 	})
-	public void shouldUpdateReader(String username, String firstname) throws DataAccessException, DuplicatedUsernameException {
+	public void shouldUpdateReader(String username, String firstname) throws DuplicatedUsernameException {
 		Reader reader = this.readerService.findReaderByUsername(username);
 		reader.setAddress("address");
 		reader.setCity("city");

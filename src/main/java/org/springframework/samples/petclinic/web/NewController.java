@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package org.springframework.samples.petclinic.web;
 
@@ -23,7 +8,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
 import org.springframework.samples.petclinic.service.BookService;
@@ -54,7 +39,7 @@ public class NewController {
 	}
 
 	@GetMapping(value = "/")
-	public String welcome(final Map<String, Object> model) throws DataAccessException, CantShowNewReviewException {
+	public String welcome(final Map<String, Object> model) throws CantShowNewReviewException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String authorities = auth.getAuthorities().toString();
 		if (authorities.contains("ROLE_ANONYMOUS")) {
@@ -62,7 +47,6 @@ public class NewController {
 		} else {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			Collection<New> results2 = this.newService.getNewsBookReview2(userDetail.getUsername());
-			//Collection<New> results = this.newService.getAllNews();
 			if (results2.isEmpty()) {
 				return "redirect:/news";
 			}
@@ -83,11 +67,7 @@ public class NewController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			model.put("NewsRec", true);
 			Boolean canShow = this.newService.canShowNewsBookReview(userDetail.getUsername());
-			if(canShow==false) {
-				model.put("canShowNewsBookReview", false);
-			}else {
-				model.put("canShowNewsBookReview", true);
-			}
+				model.put("canShowNewsBookReview", canShow);
 
 		}
 		Collection<New> results = this.newService.getAllNews();
@@ -103,7 +83,6 @@ public class NewController {
 		try {
 			results = this.newService.getNewsBookReview(userdetails.getUsername());
 		} catch (CantShowNewReviewException e) {
-			// TODO Auto-generated catch block
 			return "redirect:/oups";
 		}
 		model.put("AllNews", true);

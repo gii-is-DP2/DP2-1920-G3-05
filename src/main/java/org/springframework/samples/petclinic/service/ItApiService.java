@@ -1,11 +1,8 @@
 package org.springframework.samples.petclinic.service;
 
-import java.util.Arrays;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.ItApiSearch;
 import org.springframework.samples.petclinic.model.ItBookDetails;

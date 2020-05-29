@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.integration.DB;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -11,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.repository.PublicationRepository;
 import org.springframework.samples.petclinic.repository.UserRepository;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("mysql") 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class)) 
@@ -41,7 +40,7 @@ public class PublicationsIntegrationTest {
 		"1,admin1,prueba",
 		"2,owner1,prueba2"
 	})
-	public void shouldCreatePublication(int bookId, String username, String title) throws DataAccessException {
+	public void shouldCreatePublication(int bookId, String username, String title)  {
 		User user = this.userRepository.findByUsername(username);
 		Book book = this.bookRepository.findById(bookId);
 

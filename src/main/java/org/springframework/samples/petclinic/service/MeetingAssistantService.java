@@ -2,12 +2,11 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.MeetingAssistant;
@@ -30,12 +29,12 @@ public class MeetingAssistantService {
 	private MeetingRepository			meetingRepo;
 		
 	@Transactional(readOnly = true)
-	public List<Integer> getAssistantsMeeting(final int meetingId) throws DataAccessException {
+	public List<Integer> getAssistantsMeeting(final int meetingId)  {
 		return this.meetingAssistantRepository.getAssistantsMeeting(meetingId);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<MeetingAssistant> getAssistantsOfMeeting(final int meetingId) throws DataAccessException {
+	public List<MeetingAssistant> getAssistantsOfMeeting(final int meetingId)  {
 		return this.meetingAssistantRepository.getAssistantsOfMeeting(meetingId);
 	}
 	
@@ -47,12 +46,12 @@ public class MeetingAssistantService {
 	
 	@Transactional
 	@Modifying
-	public void deleteAssistantById(final int assistantId) throws DataAccessException {
+	public void deleteAssistantById(final int assistantId)  {
 		this.meetingAssistantRepository.deleteAssistantById(assistantId);
 	}
 
 	@Transactional(readOnly = true)
-	public Boolean existsAssistantById(final int assistantId) throws DataAccessException {
+	public Boolean existsAssistantById(final int assistantId)  {
 		return this.meetingAssistantRepository.existsById(assistantId);
 	}
 	@Transactional(readOnly = true)
@@ -81,7 +80,7 @@ public class MeetingAssistantService {
 	
 	
 	
-	public Boolean checkAforo(Meeting meeting) throws DataAccessException {
+	public Boolean checkAforo(Meeting meeting)  {
 		Boolean espacioLibre = false;
 		List<Integer> integrantes = this.getAssistantsMeeting(meeting.getId());
 		Integer numeroIntegrantes = integrantes.size();
@@ -93,7 +92,7 @@ public class MeetingAssistantService {
 		
 	}
 	
-	public Boolean checkReunionYaFinalizada (Meeting meeting) throws DataAccessException{
+	public Boolean checkReunionYaFinalizada (Meeting meeting) {
 		Boolean fechaReunion = false;
 		if(meeting.getStart().isBefore(LocalDateTime.now())) {
 			fechaReunion = true;

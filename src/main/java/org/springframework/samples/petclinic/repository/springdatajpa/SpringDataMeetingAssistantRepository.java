@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -40,25 +40,25 @@ public interface SpringDataMeetingAssistantRepository extends MeetingAssistantRe
 	@Override
 	@Transactional(readOnly = true)
 	@Query("SELECT meetingAssistant.id FROM MeetingAssistant meetingAssistant WHERE meetingAssistant.meeting.id = ?1 AND meetingAssistant.user.username=?2")
-	Optional<Integer> findMeetingAssistantByUsernameAndMeetingId(int meetingId, String username) throws DataAccessException;
+	Optional<Integer> findMeetingAssistantByUsernameAndMeetingId(int meetingId, String username) ;
 
 	@Override
 	@Transactional
 	@Query("SELECT COUNT(*) FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) ")
-	Integer numberOfMeetingsAssistant(LocalDateTime time) throws DataAccessException;
+	Integer numberOfMeetingsAssistant(LocalDateTime time) ;
 
 	@Override
 	@Transactional
 	@Query("SELECT meetingAs.meeting.book.genre,COUNT(*) FROM MeetingAssistant meetingAs WHERE(MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) group by meetingAs.meeting.book.genre")
-	Object[][] assistantByGenre(LocalDateTime time) throws DataAccessException;
+	Object[][] assistantByGenre(LocalDateTime time) ;
 
 	@Override
 	@Transactional
 	@Query("SELECT meetingAs.meeting.name,meetingAs.meeting.book.title,meetingAs.meeting.place,DAY(meetingAs.meeting.start),COUNT(*) FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1))) group by meetingAs.meeting")
-	Object[] assistantByMeeting(LocalDateTime time) throws DataAccessException;
+	Object[] assistantByMeeting(LocalDateTime time) ;
 
 	@Override
 	@Transactional
 	@Query("SELECT DISTINCT meetingAs.user FROM MeetingAssistant meetingAs WHERE (MONTH(meetingAs.meeting.start) = (MONTH(?1)-1) AND YEAR(meetingAs.meeting.start) = (YEAR(?1)))")
-	List<User> usersAssisted(LocalDateTime time) throws DataAccessException;
+	List<User> usersAssisted(LocalDateTime time) ;
 }

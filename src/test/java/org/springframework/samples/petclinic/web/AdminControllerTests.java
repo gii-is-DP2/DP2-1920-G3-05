@@ -15,7 +15,6 @@ import org.springframework.samples.petclinic.configuration.SecurityConfiguration
 import org.springframework.samples.petclinic.repository.BookRepository;
 import org.springframework.samples.petclinic.repository.ReaderRepository;
 import org.springframework.samples.petclinic.service.BookService;
-import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.ReaderService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;

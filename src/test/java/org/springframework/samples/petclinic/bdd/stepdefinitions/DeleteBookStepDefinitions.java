@@ -1,11 +1,14 @@
 package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import java.util.List;
-import org.assertj.core.api.Assertions;
-import org.openqa.selenium.*;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

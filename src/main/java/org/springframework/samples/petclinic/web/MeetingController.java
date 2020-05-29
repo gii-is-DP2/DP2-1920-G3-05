@@ -98,28 +98,6 @@ public class MeetingController {
 		dataBinder.setValidator(new MeetingValidator());
 	}
 
-  /*  @GetMapping(value = "/meetings/{meetingId}")
-    public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId) {
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        Meeting meeting = this.meetingService.findMeetingById(meetingId);
-        ModelAndView mav = new ModelAndView("meetings/meetingDetails");
-        Boolean CanInscribe = this.meetingAssistantService.canInscribe(meetingId, userDetail.getUsername(), meeting.getBook().getId());
-        mav.addObject("canInscribe", CanInscribe);
-		mav.addObject("meeting", meeting);
-		Optional<Integer> meetingAssistantId = this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(meetingId, userdetails.getUsername());
-		if (meetingAssistantId.isPresent()) {
-			mav.addObject("suscribed", true);
-
-		}
-        return mav;
-    }*/
-
-//	@InitBinder
-//	public void setAllowedFields(final WebDataBinder dataBinder) {
-//		dataBinder.setDisallowedFields("book");
-//		dataBinder.setValidator(new MeetingValidator());
-//	}
     
 	@GetMapping(value = "/meetings/{meetingId}")
 	public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId, final ModelMap modelMap) {

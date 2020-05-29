@@ -10,7 +10,7 @@ import org.springframework.validation.Validator;
 
 public class BookValidator implements Validator {
 
-	private static final String constant1= "Must not be empty";
+	private static final String CONSTANT1= "Must not be empty";
 
 	@Override
 	public void validate(final Object target, final Errors errors) {
@@ -23,32 +23,32 @@ public class BookValidator implements Validator {
 		}
 
 		if (Strings.isBlank(book.getTitle())) {
-			errors.rejectValue("title", constant1, constant1);
+			errors.rejectValue("title", CONSTANT1, CONSTANT1);
 		}
 
 		if (Strings.isBlank(book.getAuthor())) {
-			errors.rejectValue("author", constant1, constant1);
+			errors.rejectValue("author", CONSTANT1, CONSTANT1);
 		}
 		if (Strings.isBlank(book.getEditorial())) {
-			errors.rejectValue("editorial", constant1, constant1);
+			errors.rejectValue("editorial", CONSTANT1, CONSTANT1);
 		}
 		if (book.getGenre() == null) {
-			errors.rejectValue("genre", constant1, constant1);
+			errors.rejectValue("genre", CONSTANT1, CONSTANT1);
 		}
 		if (book.getPages() == null) {
-			errors.rejectValue("pages", constant1, constant1);
+			errors.rejectValue("pages", CONSTANT1, CONSTANT1);
 		}else if(book.getPages() < 1) {
 			errors.rejectValue("pages", "Must be > 1", "Must be > 1");
 		}
 		if (Strings.isBlank(book.getSynopsis())) {
-			errors.rejectValue("synopsis", constant1, constant1);
+			errors.rejectValue("synopsis", CONSTANT1, CONSTANT1);
 		}
 		if (book.getPublicationDate() == null) {
-			errors.rejectValue("publicationDate", constant1, constant1);
+			errors.rejectValue("publicationDate", CONSTANT1, CONSTANT1);
 
 		}
 		if (Strings.isBlank(book.getImage())) {
-			errors.rejectValue("image", constant1, constant1);
+			errors.rejectValue("image", CONSTANT1, CONSTANT1);
 
 		}else if (this.isValid(book.getImage()) == false) {
 			errors.rejectValue("image", "Enter a valid URL", "Enter a valid URL");

@@ -7,7 +7,7 @@ import org.springframework.validation.Validator;
 
 public class ReviewValidator implements Validator{
 
-	private static final String constant1= "Must not be empty";
+	private static final String CONSTANT1= "Must not be empty";
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -19,17 +19,17 @@ public class ReviewValidator implements Validator{
 		Review review = (Review) target;
 		
 		if(Strings.isBlank(review.getTitle())) {
-			errors.rejectValue("title", constant1, constant1);
+			errors.rejectValue("title", CONSTANT1, CONSTANT1);
 		}
 		
 		if(review.getRaiting() == null) {
-			errors.rejectValue("raiting", constant1, constant1);
+			errors.rejectValue("raiting", CONSTANT1, CONSTANT1);
 		}else if(review.getRaiting() < 0 || review.getRaiting()>5){
 			errors.rejectValue("raiting", "Must be an integer from 0 to 5", "Must be an integer from 0 to 5");
 		}
 		
 		if(Strings.isBlank(review.getOpinion())) {
-			errors.rejectValue("opinion", constant1, constant1);
+			errors.rejectValue("opinion", CONSTANT1, CONSTANT1);
 		}
 	}
 

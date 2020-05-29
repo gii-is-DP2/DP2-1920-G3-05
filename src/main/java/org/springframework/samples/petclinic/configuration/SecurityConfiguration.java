@@ -30,12 +30,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 
-	private static final String adminAuth= "admin";
+	private static final String CONSTANT1= "admin";
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").anonymous().antMatchers("/users/update").authenticated().antMatchers("/admin/**").hasAnyAuthority(adminAuth)
-			.antMatchers("/owners/**").hasAnyAuthority("owner", adminAuth).antMatchers("/books/verify").hasAnyAuthority(adminAuth).antMatchers("/books/**").authenticated().antMatchers("/itBooks/**").authenticated().antMatchers("/meetings/**").authenticated().antMatchers("/publications/**").authenticated().antMatchers("/reviews/**").authenticated().antMatchers("/news/**").permitAll().antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").anonymous().antMatchers("/users/update").authenticated().antMatchers("/admin/**").hasAnyAuthority(CONSTANT1)
+			.antMatchers("/owners/**").hasAnyAuthority("owner", CONSTANT1).antMatchers("/books/verify").hasAnyAuthority(CONSTANT1).antMatchers("/books/**").authenticated().antMatchers("/itBooks/**").authenticated().antMatchers("/meetings/**").authenticated().antMatchers("/publications/**").authenticated().antMatchers("/reviews/**").authenticated().antMatchers("/news/**").permitAll().antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración

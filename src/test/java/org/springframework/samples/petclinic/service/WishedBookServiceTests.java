@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Collection;
 
 import org.assertj.core.api.Assertions;
@@ -53,11 +55,8 @@ import org.springframework.stereotype.Service;
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
-		try {
-			sut.save(wishedBook);
-		} catch (ReadOrWishedBookException e) {
-			Assertions.assertThat(e.getCause());
-		}
+
+		assertThrows(ReadOrWishedBookException.class, ()-> this.sut.save(wishedBook));
 	}
 	
 	@ParameterizedTest
@@ -72,11 +71,8 @@ import org.springframework.stereotype.Service;
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
-		try {
-			sut.save(wishedBook);
-		} catch (ReadOrWishedBookException e) {
-			Assertions.assertThat(e.getCause());
-		}
+
+		assertThrows(ReadOrWishedBookException.class, ()-> this.sut.save(wishedBook));
 	}
 	
 	@ParameterizedTest

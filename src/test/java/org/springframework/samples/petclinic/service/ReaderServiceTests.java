@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -60,7 +62,7 @@ class ReaderServiceTests {
 
 	@ParameterizedTest
 	@CsvSource({
-		"admin1","reader"
+		"admin1","reader1"
 	})
 	void shouldNotCreateReader(String username) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
@@ -75,12 +77,8 @@ class ReaderServiceTests {
 		reader.setFirstName("firstname");
 		reader.setLastName("last name");
 		reader.setTelephone("12356789");
-		try {
-			this.readerService.saveReader(reader);
-		} catch (DuplicatedUsernameException e) {
-			Assertions.assertThat(e.getCause());
-		}
-
+		
+		assertThrows(DuplicatedUsernameException.class, ()-> this.readerService.saveReader(reader));
 	}
 
 	@ParameterizedTest

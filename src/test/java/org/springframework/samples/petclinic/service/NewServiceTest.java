@@ -74,10 +74,8 @@ import org.springframework.stereotype.Service;
 		"0,5","1,4","5,1"
 	})
 	void shouldGetAllNewOrderByDate(int index, int newId) {
-
 		List<New> news = (List<New>) this.sut.getAllNews();
-
-		Assertions.assertThat(news.get(index).getId() == newId);
+		Assertions.assertThat(news.get(index).getId()).isEqualTo(newId);
 	}
 
 	@ParameterizedTest
@@ -87,14 +85,10 @@ import org.springframework.stereotype.Service;
 		"vet1"
 	})
 	void shouldGetNewBookReview(String username) throws CantShowNewReviewException{
-		User user = this.userService.findUserByUsername("admin1");
-		
 		List<New> news = (List<New>) this.sut.getAllNews();
-		List<New> newsUser = (List<New>) this.sut.getNewsBookReview(user.getUsername());
+		List<New> newsUser = (List<New>) this.sut.getNewsBookReview(username);
 
-		
-		Assertions.assertThat(news.size()>=newsUser.size());
-
+		Assertions.assertThat(news.size()>=newsUser.size()).isTrue();
 	}
 	
 	@ParameterizedTest
@@ -104,13 +98,10 @@ import org.springframework.stereotype.Service;
 		"vet1"
 	})
 	void shouldGetNewBookReview2(String username) throws CantShowNewReviewException{
-		User user = this.userService.findUserByUsername("admin1");
-		
 		List<New> news = (List<New>) this.sut.getAllNews();
-		List<New> newsUser = (List<New>) this.sut.getNewsBookReview2(user.getUsername());
+		List<New> newsUser = (List<New>) this.sut.getNewsBookReview2(username);
 
-		
-		Assertions.assertThat(news.size()>=newsUser.size());
+		Assertions.assertThat(news.size()>=newsUser.size()).isTrue();
 
 	}
 	
@@ -119,19 +110,17 @@ import org.springframework.stereotype.Service;
 		"reader2"
 	})
 	void shouldGetNewBookReviewException(String username) {
-		
 		assertThrows(CantShowNewReviewException.class, ()-> this.sut.getNewsBookReview(username));
-
-	
 	}
+
 	@ParameterizedTest
 	@CsvSource({
 		"1,2,3","4,4,5"
 	})
 	void shouldGetBooksFromNewsId(int newId, int bookId1, int bookId2) {
 		List<Book> books = (List<Book>) this.sut.getBooksFromNews(newId);
-		Assertions.assertThat(books.get(0).getId() == bookId1);
-		Assertions.assertThat(books.get(1).getId() == bookId2);
+		Assertions.assertThat(books.get(0).getId()).isEqualTo(bookId1);
+		Assertions.assertThat(books.get(1).getId()).isEqualTo(bookId2);
 	}
 
 	@ParameterizedTest
@@ -168,12 +157,7 @@ import org.springframework.stereotype.Service;
 		"2,11","3,1"
 	})
 	void shouldNotDeleteBookInNew(int newId, int bookId) {
-		try {
-			this.sut.deleteBookInNew(newId, bookId);
-
-		} catch (CantDeleteBookInNewException e) {
-			Assertions.assertThat(e.getCause());
-		}
+		assertThrows(CantDeleteBookInNewException.class, ()-> this.sut.deleteBookInNew(newId, bookId));
 	}
 
 	@ParameterizedTest

@@ -126,12 +126,9 @@ public class NewService {
 			throw new CantDeleteBookInNewException();
 		}
 	}
+
 	public Boolean canShowNewsBookReview (String username) {
 		Boolean canShow = this.newRepo.getNewsBookReview(username).isEmpty();
-		if(Boolean.TRUE.equals(canShow)) {
-			return false;
-		}else {
-			return true;
-		}
+		return !Boolean.TRUE.equals(canShow);
 	}
 }

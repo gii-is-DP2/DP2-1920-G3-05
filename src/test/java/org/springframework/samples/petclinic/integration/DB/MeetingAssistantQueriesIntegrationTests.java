@@ -83,7 +83,7 @@ class MeetingAssistantQueriesIntegrationTests {
 		Object[][] AssitantsByGenre = this.sut.assistantByGenre(time);
 		for (Object[] o : AssitantsByGenre) {
 			if (o[0].equals(nameGenre)) {
-				Assertions.assertThat(o[1].equals(numeroAsistentes));
+				Assertions.assertThat(o[1]).isEqualTo(numeroAsistentes);
 			}
 		}
 	}

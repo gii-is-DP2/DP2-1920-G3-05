@@ -3,6 +3,9 @@ language: java
 jdk: oraclejdk8
 addons:
   firefox: "56.0"
+  sonarcloud:
+    organization: "gii-is-dp2"
+
 before_install:
   - sudo apt-get install xvfb > /dev/null
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz > /dev/null
@@ -18,8 +21,7 @@ before_script:
     - sudo mysql -u root -e "CREATE USER 'bookland_user'@'localhost' IDENTIFIED BY 'bookland';"
     - sudo mysql -u root -e "GRANT ALL ON bookland.* TO 'bookland_user'@'localhost';"
 script: 
-  - mvn -P AcceptanceTests install > /tmp/UIlog.txt
-  - mvn install > /tmp/tests.txt
+  - mvn verify sonar:sonar
 after_failure:
   - tail -n 1000 /tmp/UIlog.txt
   - tail -n 1000 /tmp/tests.txt 

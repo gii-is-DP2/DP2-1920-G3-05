@@ -87,31 +87,19 @@ public class ReviewService {
 	@Transactional
 	public Boolean alreadyReviewedBook(int bookId, String username) {
 		Review review = this.reviewRepo.getReviewByBookIdAndUsername(bookId, username);
-		if(review == null) {
-			return false;
-		}else {
-			return true;
-		}
+		return review != null;
 	}
 
 	@Transactional
 	public Boolean reviewIsMine(int reviewId, String username)  {
 		Review review = this.reviewRepo.findById(reviewId);
-		if(review.getUser().getUsername().equals(username)) {
-			return true;
-		}else{
-			return false;
-		}
+		return review.getUser().getUsername().equals(username);
 	}
 
 	public Boolean canWriteReview(int bookId, String username)  {
 		Boolean bookIsRead = this.readBookService.esReadBook(bookId, username);
 		Boolean alreadyReviewed = this.alreadyReviewedBook(bookId, username);
-		if(Boolean.TRUE.equals(bookIsRead) && !alreadyReviewed) {
-			return true;
-		}else {
-			return false;
-		}
+		return Boolean.TRUE.equals(bookIsRead) && !alreadyReviewed;
 	}
 
 	public Boolean canDeleteReview(int reviewId, String username) {
@@ -125,12 +113,7 @@ public class ReviewService {
 				imAdmin = true;
 			}
 		}
-		if(isMine || imAdmin) {
-			return true;
-		}else {
-			return false;
-		}
-
+		return isMine || imAdmin;
 	}
 	
 	@Transactional

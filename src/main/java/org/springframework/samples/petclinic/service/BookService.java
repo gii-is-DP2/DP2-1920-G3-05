@@ -101,11 +101,7 @@ public class BookService {
 			}
 		}
 
-		if (imAdmin || reader.getVerified()) {
-			book.setVerified(true);
-		} else {
-			book.setVerified(false);
-		}
+		book.setVerified(imAdmin || reader.getVerified());
 
 		try{
 			String isbn = book.getISBN();

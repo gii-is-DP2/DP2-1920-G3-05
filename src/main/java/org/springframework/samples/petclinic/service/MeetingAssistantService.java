@@ -129,12 +129,7 @@ public class MeetingAssistantService {
 		Boolean fecha = checkFecha(username, meeting);
 		Boolean reunionFinalizada = checkReunionYaFinalizada(meeting);
 		
-		if(!esLibroLeido || aforo || fecha || Boolean.TRUE.equals(reunionFinalizada)) {
-			return false;
-		}else {
-			return true;
-		}
-		
+		return !(!esLibroLeido || aforo || fecha || Boolean.TRUE.equals(reunionFinalizada));
 	}
 	
 	

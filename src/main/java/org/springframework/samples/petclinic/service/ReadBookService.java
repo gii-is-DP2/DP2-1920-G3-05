@@ -31,11 +31,7 @@ public class ReadBookService {
 	@Transactional
 	public Boolean esReadBook(final int bookId, final String username) {
 		ReadBook rb = this.readBookRepository.getReadBookByBookIdAndUsername(bookId, username);
-		if(rb==null) {
-			return false;
-		}else{
-			return true;
-		}
+		return rb!=null; 
 	}
 
 	

@@ -300,11 +300,8 @@ public class BookController {
 		book.setPublicationDate(updatedBook.getPublicationDate());
 		book.setSynopsis(updatedBook.getSynopsis());
 		book.setTitle(updatedBook.getTitle());
-		if (verified.equals(true)) {
-			book.setVerified(true);
-		} else {
-			book.setVerified(false);
-		}
+
+		book.setVerified(verified);
 
 		try {
 			this.bookService.save(book);

@@ -79,7 +79,7 @@ import org.springframework.test.context.ActiveProfiles;
 		Object[][] meetingsbyDay = this.sut.meetingsByDay(time);
 		for(Object[] o: meetingsbyDay) {
 			if(o[0].equals(day)) {
-				Assertions.assertThat(o[1].equals(numberMeetingsExpected));
+				Assertions.assertThat(o[1]).isEqualTo(numberMeetingsExpected);
 			}
 		}
 	}

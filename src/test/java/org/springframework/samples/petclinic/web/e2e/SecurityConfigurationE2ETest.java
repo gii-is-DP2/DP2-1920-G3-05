@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class SecurityConfigurationE2ETest {
+ class SecurityConfigurationE2ETest {
 
 	@Autowired
 	private MockMvc mockMvc;

@@ -20,7 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @SpringBootTest(
   webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class PublicationControllerE2ETest {
+ class PublicationControllerE2ETest {
 
     private static final int TEST_BOOK_ID = 1;
 

@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(
   webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class NewControllerTestsE2E {
+class NewControllerTestsE2E {
 	
 	private static final int TEST_BOOK_ID = 1;
 	private static final int TEST_NEW_ID = 4;

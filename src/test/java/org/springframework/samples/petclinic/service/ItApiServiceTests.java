@@ -14,7 +14,7 @@ import org.springframework.samples.petclinic.service.exceptions.BadIsbnException
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class ItApiServiceTests {
+ class ItApiServiceTests {
 
     @Autowired
     private ItApiService        sut;

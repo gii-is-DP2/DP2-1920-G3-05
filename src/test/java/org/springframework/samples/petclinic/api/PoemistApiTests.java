@@ -10,11 +10,11 @@ import lombok.extern.java.Log;
 
 
 @Log
-public class PoemistApiTests {
+ class PoemistApiTests {
 	@LocalServerPort
 	private int port;
 	@Test
-	public void testgetPoemFromApi() {
+	 void testgetPoemFromApi() {
 		when()
 		.get("https://www.poemist.com/api/v1/randompoems")
 		.then().statusCode(200)

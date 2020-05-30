@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import lombok.extern.java.Log;
 @Log
-public class ITApiTests {
+ class ITApiTests {
 	@Test
-	public void testGetBookDetails() {
+	 void testGetBookDetails() {
 		when()
 		.get("https://api.itbook.store/1.0/books/9781617290459").then().statusCode(200).and()
 		.assertThat()
@@ -20,7 +20,7 @@ public class ITApiTests {
 		.body("isbn10", equalTo("1617290459"));
 	}
 	@Test
-	public void testFindBook() {
+	 void testFindBook() {
 		when()
 		.get("https://api.itbook.store/1.0/search/King").then().statusCode(200).and()
 		.assertThat()

@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("mysql") 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class)) 
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE) 
-public class ReviewsIntegrationTest {
+ class ReviewsIntegrationTest {
 	
 	@Autowired
 	private ReviewRepository reviewRepository;
@@ -35,7 +35,7 @@ public class ReviewsIntegrationTest {
 	@CsvSource({
 		"admin1,5,Test review 1","owner1,8,Test review 2"
 	})
-	public void shouldCreateReview(String username,int bookId,String title) {
+	 void shouldCreateReview(String username,int bookId,String title) {
 		User user = this.userRepository.findByUsername(username);
 		Book book = this.bookRepository.findById(bookId); 
 		Integer rating = 3;
@@ -56,7 +56,7 @@ public class ReviewsIntegrationTest {
 	@CsvSource({
 		"1,true","14,true","20,false"
 	})
-	public void shouldGetExistReviewById(int reviewId,boolean result) {
+	 void shouldGetExistReviewById(int reviewId,boolean result) {
 		Assertions.assertThat(this.reviewRepository.existsById(reviewId)).isEqualTo(result);
 	}
 	
@@ -64,7 +64,7 @@ public class ReviewsIntegrationTest {
 	@CsvSource({
 		"1,owner1,1","10,reader1,12"
 	})
-	public void shouldFindReviewById(int reviewId,String username,int bookId) {
+	 void shouldFindReviewById(int reviewId,String username,int bookId) {
 		Review review = this.reviewRepository.findById(reviewId);
 		Assertions.assertThat(review.getBook().getId()).isEqualTo(bookId);
 		Assertions.assertThat(review.getUser().getUsername()).isEqualTo(username);
@@ -74,7 +74,7 @@ public class ReviewsIntegrationTest {
 	@CsvSource({
 		"Test title update 1,6","Test title update 2,9"
 	})
-	public void shouldUpdateReview(String title,int reviewId) {
+	 void shouldUpdateReview(String title,int reviewId) {
 		Review review = this.reviewRepository.findById(reviewId);
 		review.setTitle(title);
 		this.reviewRepository.save(review);
@@ -85,7 +85,7 @@ public class ReviewsIntegrationTest {
 	@CsvSource({
 		"2","5"
 	})
-	public void shouldDeleteReviewById(int id) {
+	 void shouldDeleteReviewById(int id) {
 		this.reviewRepository.deleteReviewById(id);
 		Assertions.assertThat(this.reviewRepository.findById(id)).isNull();
 	}

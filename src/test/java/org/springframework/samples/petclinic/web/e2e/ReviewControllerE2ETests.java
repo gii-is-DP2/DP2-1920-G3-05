@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest(
   webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class ReviewControllerE2ETests {
+ class ReviewControllerE2ETests {
 
     private static final int TEST_BOOK_ID = 1;
 

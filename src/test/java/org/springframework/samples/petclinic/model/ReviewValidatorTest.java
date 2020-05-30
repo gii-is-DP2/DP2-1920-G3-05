@@ -9,7 +9,7 @@ import org.springframework.samples.petclinic.web.ReviewValidator;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-public class ReviewValidatorTest {
+ class ReviewValidatorTest {
 
     private ReviewValidator createValidator() {
         return new ReviewValidator();

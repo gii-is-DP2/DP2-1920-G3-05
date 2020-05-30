@@ -38,7 +38,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"reader3,George","reader4,Betty"
 	})
-	public void shouldCreateReader(String username, String firstname) throws DuplicatedUsernameException {
+	void shouldCreateReader(String username, String firstname) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
 		User user = new User();
 		user.setUsername(username);
@@ -62,7 +62,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"admin1","reader"
 	})
-	public void shouldNotCreateReader(String username) throws DuplicatedUsernameException {
+	void shouldNotCreateReader(String username) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
 		User user = new User();
 		user.setUsername(username);
@@ -87,7 +87,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"admin1,First name","reader1, First name 2"
 	})
-	public void shouldUpdateReader(String username, String firstname) throws DuplicatedUsernameException {
+	void shouldUpdateReader(String username, String firstname) throws DuplicatedUsernameException {
 		Reader reader = this.readerService.findReaderByUsername(username);
 		reader.setAddress("address");
 		reader.setCity("city");

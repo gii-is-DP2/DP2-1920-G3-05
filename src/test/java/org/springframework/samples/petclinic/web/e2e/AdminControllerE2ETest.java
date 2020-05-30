@@ -16,7 +16,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @SpringBootTest(
   webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class AdminControllerE2ETest {
+ class AdminControllerE2ETest {
 
     @Autowired
     private MockMvc mockMvc;

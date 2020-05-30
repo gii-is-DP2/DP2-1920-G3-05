@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(
   webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class MeetingControllerE2ETest {
+ class MeetingControllerE2ETest {
 	
 	private static final int TEST_MEETING_ID = 1;
 

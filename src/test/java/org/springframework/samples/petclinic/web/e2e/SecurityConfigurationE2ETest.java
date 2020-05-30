@@ -134,16 +134,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
     }
 	@Test
 	void testRedirectToLoginFromPublicationsNoAuthenticated() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/ations"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/publications"))
 		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 		.andExpect(redirectedUrl("http://localhost/login"));
 	}
     @WithMockUser(username = "reader1", authorities = {"reader"})
 	@Test
 	void testCanEnterInUrlPublicationsWithAuthenticated() throws Exception{
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/ations"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/books/2/publications"))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(view().name("ations/ationList"));
+		.andExpect(view().name("publications/publicationList"));
     }
 	@Test
 	void testRedirectToLoginFromReviewsNoAuthenticated() throws Exception {

@@ -126,8 +126,40 @@ public class BookService {
 	@Modifying
 	public void deleteById(final int id, String username)  {
 
-		// Vemos si el libro tiene asociadas reviews que haya que borrar previamente
-		List<Integer> reviewsId = this.reviewService.getReviewsIdFromBook(id);
+		deleteReviews(username, this.reviewService.getReviewsIdFromBook(id));
+		deleteMeetings(this.meetingService.getMeetingsIdFromBook(id));
+		deletePublications(this.publicationService.getPublicationsFromBook(id));
+		deleteNews(id, this.newService.getNewsFromBook(id));
+		this.readBookService.deleteReadBookByBookId(id);
+		this.wishedBookService.deleteByBookId(id);
+		this.bookRepository.deleteBookById(id);
+	}
+
+	private void deleteNews(final int id, List<Integer> newsId) {
+		if (newsId != null && !newsId.isEmpty()) {
+			for (Integer i : newsId) {
+				this.newService.deleteNew(i, id);
+			}
+		}
+	}
+
+	private void deletePublications(List<Integer> publicationsId) {
+		if (publicationsId != null && !publicationsId.isEmpty()) {
+			for (Integer i : publicationsId) {
+				this.publicationService.deletePublication(i);
+			}
+		}
+	}
+
+	private void deleteMeetings(List<Integer> meetingsId) {
+		if (meetingsId != null && !meetingsId.isEmpty()) {
+			for (Integer i : meetingsId) {
+				this.meetingService.deleteMeeting(i);
+			}
+		}
+	}
+
+	private void deleteReviews(String username, List<Integer> reviewsId) {
 		if (reviewsId != null && !reviewsId.isEmpty()) {
 			for (Integer i : reviewsId) {
 				try {
@@ -137,40 +169,6 @@ public class BookService {
 				}
 			}
 		}
-
-		// Vemos si hay reuniones asociadas que borrar previamente
-		List<Integer> meetingsId = this.meetingService.getMeetingsIdFromBook(id);
-		if (meetingsId != null && !meetingsId.isEmpty()) {
-			for (Integer i : meetingsId) {
-				this.meetingService.deleteMeeting(i);
-			}
-		}
-
-		// Vemos si hay publicaciones asociadas que borrar previamente
-		List<Integer> publicationsId = this.publicationService.getPublicationsFromBook(id);
-		if (publicationsId != null && !publicationsId.isEmpty()) {
-			for (Integer i : publicationsId) {
-				this.publicationService.deletePublication(i);
-			}
-		}
-
-		// Vemos si hay noticias asociadas y hay que ver si hay que borrarlas
-		List<Integer> newsId = this.newService.getNewsFromBook(id);
-		if (newsId != null && !newsId.isEmpty()) {
-			for (Integer i : newsId) {
-				this.newService.deleteNew(i, id);
-			}
-		}
-		
-		//Borramos si hay libros leidos 
-		this.readBookService.deleteReadBookByBookId(id);
-		
-		//Borramos si hay libros deseados
-		this.wishedBookService.deleteByBookId(id);
-		
-		
-		//Borramos el libro
-		this.bookRepository.deleteBookById(id);
 	}
 
 	@Transactional(readOnly = true)

@@ -121,12 +121,7 @@ public class NewController {
 	@PostMapping(value = "/admin/news/{newId}")
 	public String saveNew(@PathVariable("newId") final int newId, @Valid final New neew, final BindingResult result, final ModelMap modelMap) {
 		modelMap.put(CONSTANT3, neew.getId());
-		boolean errorFecha = false;
-		LocalDate now = LocalDate.now();
-		if (neew.getFecha() != null && now.isBefore(neew.getFecha())) {
-			result.rejectValue("fecha", CONSTANT5, CONSTANT5);
-			errorFecha = true;
-		}
+		boolean errorFecha = checkFecha(neew, result);
 		if (result.hasErrors() || errorFecha) {
 			modelMap.addAttribute("new", neew);
 			modelMap.addAttribute("hasErrors", true);
@@ -157,12 +152,7 @@ public class NewController {
 
 	@PostMapping(value = "/admin/news/create")
 	public String createNew(@Valid final New neew, final BindingResult result, final ModelMap modelMap) {
-		boolean errorFecha = false;
-		LocalDate now = LocalDate.now();
-		if (neew.getFecha() != null && now.isBefore(neew.getFecha())) {
-			result.rejectValue("fecha", CONSTANT5, CONSTANT5);
-			errorFecha = true;
-		}
+		boolean errorFecha = checkFecha(neew, result);
 		if (result.hasErrors() || errorFecha) {
 			modelMap.addAttribute("new", neew);
 			modelMap.addAttribute("addNew", true);
@@ -172,6 +162,16 @@ public class NewController {
 			return CONSTANT6 + neew.getId();
 		}
 
+	}
+
+	private boolean checkFecha(final New neew, final BindingResult result) {
+		boolean errorFecha = false;
+		LocalDate now = LocalDate.now();
+		if (neew.getFecha() != null && now.isBefore(neew.getFecha())) {
+			result.rejectValue("fecha", CONSTANT5, CONSTANT5);
+			errorFecha = true;
+		}
+		return errorFecha;
 	}
 
 	@GetMapping("/admin/news/delete/{newId}")

@@ -150,6 +150,8 @@ import org.springframework.stereotype.Service;
 	})
 	void shouldDeleteBookInNew(int newId, int bookId) throws CantDeleteBookInNewException {
 		this.sut.deleteBookInNew(newId, bookId);
+		BookInNew book = this.bookInNewService.getByNewIdBookId(newId, bookId);
+		Assertions.assertThat(book).isNull();
 	}
 
 	@ParameterizedTest

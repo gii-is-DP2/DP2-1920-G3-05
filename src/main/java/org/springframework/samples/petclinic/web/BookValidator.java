@@ -17,7 +17,7 @@ public class BookValidator implements Validator {
 		Book book = (Book) target;
 		String ISBN = book.getISBN();
 
-		if (!this.validateISBN(ISBN)) {
+		if (!BookValidator.validateISBN(ISBN)) {
 			errors.rejectValue("ISBN", "Enter a valid ISBN", "Enter a valid ISBN");
 
 		}
@@ -61,7 +61,7 @@ public class BookValidator implements Validator {
 		return Book.class.isAssignableFrom(clazz);
 	}
 
-	public boolean validateISBN(String isbn) {
+	public static boolean validateISBN(String isbn) {
 		if (isbn == null) {
 			return false;
 		}

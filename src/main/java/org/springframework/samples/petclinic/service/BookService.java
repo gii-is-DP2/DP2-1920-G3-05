@@ -171,7 +171,8 @@ public class BookService {
 		}
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional()
+	@Modifying
 	public void verifyBook(final int bookId) {
 		this.bookRepository.verifyBook(bookId);
 

@@ -86,6 +86,8 @@ public class MeetingController {
 		if (results.isEmpty()) {
 			// no meetings found
 			result.rejectValue("name", "notFound", "not found");
+			Quote quote = this.quoteService.getRandomQuote();
+			model.put("quote",quote);
 			return "meetings/findMeetings";
 		} else if (results.size() == 1) {
 			// 1 meeting found

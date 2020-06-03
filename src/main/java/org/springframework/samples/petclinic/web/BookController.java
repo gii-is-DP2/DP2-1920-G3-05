@@ -157,6 +157,8 @@ public class BookController {
 		if (results.isEmpty()) {
 			// no books found
 			result.rejectValue("title", "notFound", "not found");
+			Poem poem = this.poemService.getRandomPoem();
+			model.put("poem", poem);
 			return "books/findBooks";
 		} else if (results.size() == 1) {
 			// 1 book found

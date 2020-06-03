@@ -1,19 +1,14 @@
 package org.springframework.samples.petclinic.api;
+import static io.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.equalTo;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
-import static org.hamcrest.Matchers.*;
 
 import lombok.extern.java.Log;
 @Log
-public class ITApiTests {
+ class ITApiTests {
 	@Test
-	public void testGetBookDetails() {
+	 void testGetBookDetails() {
 		when()
 		.get("https://api.itbook.store/1.0/books/9781617290459").then().statusCode(200).and()
 		.assertThat()
@@ -25,7 +20,7 @@ public class ITApiTests {
 		.body("isbn10", equalTo("1617290459"));
 	}
 	@Test
-	public void testFindBook() {
+	 void testFindBook() {
 		when()
 		.get("https://api.itbook.store/1.0/search/King").then().statusCode(200).and()
 		.assertThat()

@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Collection;
 
 import org.assertj.core.api.Assertions;
@@ -8,7 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.WishedBook;
@@ -16,7 +18,7 @@ import org.springframework.samples.petclinic.service.exceptions.ReadOrWishedBook
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class WishedBookServiceTests {
+ class WishedBookServiceTests {
 
 	@Autowired
 	private WishedBookService	sut;
@@ -31,7 +33,7 @@ public class WishedBookServiceTests {
 		"4,vet1,3",
 		"10,owner1,1"
 	})
-	void shouldAddToWishList(Integer bookId,String username,Integer expectedNumBooks) throws DataAccessException, ReadOrWishedBookException {
+	void shouldAddToWishList(Integer bookId,String username,Integer expectedNumBooks) throws ReadOrWishedBookException {
 		Book book=bookService.findBookById(bookId);
 		User user=userService.findUserByUsername(username);
 		WishedBook wishedBook= new WishedBook();
@@ -53,12 +55,8 @@ public class WishedBookServiceTests {
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
-		try {
-			sut.save(wishedBook);
-		} catch (ReadOrWishedBookException e) {
-			// TODO Auto-generated catch block
-			Assertions.assertThat(e.getCause());
-		}
+
+		assertThrows(ReadOrWishedBookException.class, ()-> this.sut.save(wishedBook));
 	}
 	
 	@ParameterizedTest
@@ -73,12 +71,8 @@ public class WishedBookServiceTests {
 		WishedBook wishedBook= new WishedBook();
 		wishedBook.setBook(book);
 		wishedBook.setUser(user);
-		try {
-			sut.save(wishedBook);
-		} catch (ReadOrWishedBookException e) {
-			// TODO Auto-generated catch block
-			Assertions.assertThat(e.getCause());
-		}
+
+		assertThrows(ReadOrWishedBookException.class, ()-> this.sut.save(wishedBook));
 	}
 	
 	@ParameterizedTest

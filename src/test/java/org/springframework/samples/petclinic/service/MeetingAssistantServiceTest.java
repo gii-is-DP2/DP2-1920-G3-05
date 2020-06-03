@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.samples.petclinic.model.MeetingAssistant;
@@ -23,7 +23,7 @@ import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookM
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class MeetingAssistantServiceTest {
+ class MeetingAssistantServiceTest {
 
 	@Autowired
 	private MeetingAssistantService sut;
@@ -149,7 +149,7 @@ public class MeetingAssistantServiceTest {
 	@CsvSource({
 		"admin1,1"
 	})
-	void comprobarFechaWithErrorPorFuera(String username, int bookId) throws DataAccessException, NotVerifiedBookMeetingException {
+	void comprobarFechaWithErrorPorFuera(String username, int bookId) throws NotVerifiedBookMeetingException {
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2020,06,30,12,30,00);
@@ -168,7 +168,7 @@ public class MeetingAssistantServiceTest {
 	@CsvSource({
 		"admin1,1"
 	})
-	void comprobarFechaWithErrorCoincidePrincipio(String username, int bookId) throws DataAccessException, NotVerifiedBookMeetingException {
+	void comprobarFechaWithErrorCoincidePrincipio(String username, int bookId) throws NotVerifiedBookMeetingException {
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2020,06,30,12,30,00);
@@ -187,7 +187,7 @@ public class MeetingAssistantServiceTest {
 	@CsvSource({
 		"admin1,1"
 	})
-	void comprobarFechaWithErrorCoincideFin(String username, int bookId) throws DataAccessException, NotVerifiedBookMeetingException {;
+	void comprobarFechaWithErrorCoincideFin(String username, int bookId) throws NotVerifiedBookMeetingException {;
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2020,06,30,10,30,00);
@@ -206,7 +206,7 @@ public class MeetingAssistantServiceTest {
 	@CsvSource({
 		"admin1,1"
 	})
-	void comprobarFechaWithErrorPorDentro(String username, int bookId) throws DataAccessException, NotVerifiedBookMeetingException {
+	void comprobarFechaWithErrorPorDentro(String username, int bookId) throws NotVerifiedBookMeetingException {
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2020,06,30,10,30,00);
@@ -225,7 +225,7 @@ public class MeetingAssistantServiceTest {
 	@CsvSource({
 		"admin1,1"
 	})
-	void comprobarFechaWithErrorPorDentro2(String username, int bookId) throws DataAccessException, NotVerifiedBookMeetingException {
+	void comprobarFechaWithErrorPorDentro2(String username, int bookId) throws NotVerifiedBookMeetingException {
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2020,06,30,12,00,00);

@@ -34,9 +34,6 @@ public class Publication extends BaseEntity {
 	@Column(name = "description")
 	@NotEmpty
 	private String description;
-	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication")
-//	private Set<Image> images;
 
 	@Column(name = "image")
 	@URL

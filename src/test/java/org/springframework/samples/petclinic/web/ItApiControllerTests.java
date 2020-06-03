@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebMvcTest(controllers = ItApiController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-public class ItApiControllerTests {
+ class ItApiControllerTests {
 
     @Autowired
     private MockMvc         mockMvc;

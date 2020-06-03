@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.BookInNew;
 import org.springframework.samples.petclinic.model.New;
@@ -23,7 +23,7 @@ import org.springframework.samples.petclinic.service.exceptions.CantShowNewRevie
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)public class NewServiceTest {
+@AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE) class NewServiceTest {
 
 	@Autowired
 	private NewService			sut;
@@ -74,10 +74,8 @@ import org.springframework.stereotype.Service;
 		"0,5","1,4","5,1"
 	})
 	void shouldGetAllNewOrderByDate(int index, int newId) {
-
 		List<New> news = (List<New>) this.sut.getAllNews();
-
-		Assertions.assertThat(news.get(index).getId() == newId);
+		Assertions.assertThat(news.get(index).getId()).isEqualTo(newId);
 	}
 
 	@ParameterizedTest
@@ -86,15 +84,11 @@ import org.springframework.stereotype.Service;
 		"owner1",
 		"vet1"
 	})
-	void shouldGetNewBookReview(String username) throws DataAccessException, CantShowNewReviewException{
-		User user = this.userService.findUserByUsername("admin1");
-		
+	void shouldGetNewBookReview(String username) throws CantShowNewReviewException{
 		List<New> news = (List<New>) this.sut.getAllNews();
-		List<New> newsUser = (List<New>) this.sut.getNewsBookReview(user.getUsername());
+		List<New> newsUser = (List<New>) this.sut.getNewsBookReview(username);
 
-		
-		Assertions.assertThat(news.size()>=newsUser.size());
-
+		Assertions.assertThat(news.size()>=newsUser.size()).isTrue();
 	}
 	
 	@ParameterizedTest
@@ -103,14 +97,11 @@ import org.springframework.stereotype.Service;
 		"owner1",
 		"vet1"
 	})
-	void shouldGetNewBookReview2(String username) throws DataAccessException, CantShowNewReviewException{
-		User user = this.userService.findUserByUsername("admin1");
-		
+	void shouldGetNewBookReview2(String username) throws CantShowNewReviewException{
 		List<New> news = (List<New>) this.sut.getAllNews();
-		List<New> newsUser = (List<New>) this.sut.getNewsBookReview2(user.getUsername());
+		List<New> newsUser = (List<New>) this.sut.getNewsBookReview2(username);
 
-		
-		Assertions.assertThat(news.size()>=newsUser.size());
+		Assertions.assertThat(news.size()>=newsUser.size()).isTrue();
 
 	}
 	
@@ -119,19 +110,17 @@ import org.springframework.stereotype.Service;
 		"reader2"
 	})
 	void shouldGetNewBookReviewException(String username) {
-		
 		assertThrows(CantShowNewReviewException.class, ()-> this.sut.getNewsBookReview(username));
-
-	
 	}
+
 	@ParameterizedTest
 	@CsvSource({
 		"1,2,3","4,4,5"
 	})
 	void shouldGetBooksFromNewsId(int newId, int bookId1, int bookId2) {
 		List<Book> books = (List<Book>) this.sut.getBooksFromNews(newId);
-		Assertions.assertThat(books.get(0).getId() == bookId1);
-		Assertions.assertThat(books.get(1).getId() == bookId2);
+		Assertions.assertThat(books.get(0).getId()).isEqualTo(bookId1);
+		Assertions.assertThat(books.get(1).getId()).isEqualTo(bookId2);
 	}
 
 	@ParameterizedTest
@@ -159,8 +148,10 @@ import org.springframework.stereotype.Service;
 	@CsvSource({
 		"1,2","4,4"
 	})
-	void shouldDeleteBookInNew(int newId, int bookId) throws DataAccessException, CantDeleteBookInNewException {
+	void shouldDeleteBookInNew(int newId, int bookId) throws CantDeleteBookInNewException {
 		this.sut.deleteBookInNew(newId, bookId);
+		BookInNew book = this.bookInNewService.getByNewIdBookId(newId, bookId);
+		Assertions.assertThat(book).isNull();
 	}
 
 	@ParameterizedTest
@@ -168,19 +159,14 @@ import org.springframework.stereotype.Service;
 		"2,11","3,1"
 	})
 	void shouldNotDeleteBookInNew(int newId, int bookId) {
-		try {
-			this.sut.deleteBookInNew(newId, bookId);
-
-		} catch (CantDeleteBookInNewException e) {
-			Assertions.assertThat(e.getCause());
-		}
+		assertThrows(CantDeleteBookInNewException.class, ()-> this.sut.deleteBookInNew(newId, bookId));
 	}
 
 	@ParameterizedTest
 	@CsvSource({
 		"Name 1","Name 2"
 	})
-	public void shouldSaveNew(String name) {
+	 void shouldSaveNew(String name) {
 		New neew = new New();
 		neew.setBody("body");
 		LocalDate fecha = LocalDate.of(2019, 12, 02);

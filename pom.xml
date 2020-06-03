@@ -32,6 +32,12 @@
 		<selenium.version>3.141.59</selenium.version>
 		<cucumber.version>5.5.0</cucumber.version>
 		<rest-assured.version>4.2.0</rest-assured.version>
+
+		<!-- Sonar Cloud -->
+ 		 <sonar.projectKey>gii-is-DP2_DP2-1920-G3-05</sonar.projectKey>
+  		<sonar.organization>gii-is-dp2</sonar.organization>
+  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
 	</properties>
 
 	<dependencies>
@@ -321,7 +327,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M3</version>
 				<configuration>
+					<forkedProcessExitTimeoutInSeconds>180</forkedProcessExitTimeoutInSeconds>
 					<excludes>
 						<exclude>**/*UITest.java</exclude>
 						<exclude>**/*APITest.java</exclude>

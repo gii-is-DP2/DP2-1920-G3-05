@@ -16,7 +16,7 @@
 
 package org.springframework.samples.petclinic.repository;
 
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Reader;
 
 /**
@@ -32,13 +32,13 @@ import org.springframework.samples.petclinic.model.Reader;
  */
 public interface ReaderRepository {
 
-	Reader findById(int id) throws DataAccessException;
+	Reader findById(int id) ;
 
-	Reader save(Reader reader) throws DataAccessException;
+	Reader save(Reader reader) ;
 
-	Reader findReaderByUsername(String username) throws DataAccessException;
+	Reader findReaderByUsername(String username) ;
 	
-	Iterable<Reader> findAll() throws DataAccessException;
+	Iterable<Reader> findAll() ;
 	
 	void verifyUser(int userId);
 

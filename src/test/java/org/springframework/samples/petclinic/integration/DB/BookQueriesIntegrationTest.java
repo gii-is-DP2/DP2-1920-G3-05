@@ -21,16 +21,21 @@ import org.springframework.context.annotation.ComponentScan;
 @ActiveProfiles("mysql")
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
-public class BookQueriesIntegrationTest {
+ class BookQueriesIntegrationTest {
 
     @Autowired
     private BookRepository sut;
 
     @ParameterizedTest
 	@CsvSource({
-		"harry,2","Julia,2","Novel,1","9788466345347,1","el,5","harrry,0"
+		"harry,2",
+		"Julia,2",
+		"Novel,1",
+		"9788466345347,1",
+		"el,5",
+		"harrry,0"
 	})
-    public void shouldFindBooksByTitleAuthorGenre(String title,int size) {
+     void shouldFindBooksByTitleAuthorGenre(String title,int size) {
         Collection<Book> books = this.sut.findBookByTitleAuthorGenreISBN(title);
 		Assertions.assertThat(books.size()).isEqualTo(size);
     }
@@ -50,7 +55,7 @@ public class BookQueriesIntegrationTest {
 	@CsvSource({
 		"Romance", "Fiction", "Horror"
 	})
-	public void shouldFindGenre(String genre) throws Exception {
+	 void shouldFindGenre(String genre) throws Exception {
 		Genre genre3 = this.sut.findGenreByName(genre);
 		Assertions.assertThat(genre).isEqualTo(genre3.getName());
     }

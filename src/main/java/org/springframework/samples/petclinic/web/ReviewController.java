@@ -36,6 +36,12 @@ public class ReviewController {
 	private BookService bookService;
 
 	private UserService userService;
+	
+	private static final String CONSTANT1= "redirect:/oups";
+	
+	private static final String CONSTANT2= "review";
+	
+	private static final String CONSTANT3= "redirect:/reviews/";
 
 	@Autowired
 	public ReviewController(ReviewService reviewService, BookService bookService, UserService userService) {
@@ -63,10 +69,10 @@ public class ReviewController {
 		review.setUser(me);
 
 		Boolean canWriteReview = this.reviewService.canWriteReview(bookId, userDetail.getUsername());
-		if(!canWriteReview) {
-			return "redirect:/oups";
+		if(Boolean.FALSE.equals(canWriteReview)) {
+			return CONSTANT1;
 		}
-		model.put("review", review);
+		model.put(CONSTANT2, review);
 		return "reviews/reviewAddForm";
 	}
 
@@ -85,9 +91,9 @@ public class ReviewController {
 		}else {
 			try {
 				this.reviewService.writeReview(review, userDetail.getUsername());
-				return "redirect:/reviews/" + review.getId();
+				return CONSTANT3 + review.getId();
 			}catch (CantWriteReviewException e) {
-				return "redirect:/oups";
+				return CONSTANT1;
 			}
 		}
 	}
@@ -102,7 +108,7 @@ public class ReviewController {
 		} else if (reviews.size() == 1) {
 			// 1 review found
 			review = reviews.get(0);
-			return "redirect:/reviews/" + review.getId();
+			return CONSTANT3 + review.getId();
 		} else {
 			// multiple reviews found
 			model.put("reviews", reviews);
@@ -120,7 +126,7 @@ public class ReviewController {
 		Boolean canDeleteReview = this.reviewService.canDeleteReview(reviewId, userDetail.getUsername());
 
 		ModelAndView mav = new ModelAndView("reviews/reviewDetails");
-		mav.addObject("review", review);
+		mav.addObject(CONSTANT2, review);
 		mav.addObject("isMine", isMine);
 		mav.addObject("canDeleteReview", canDeleteReview);
 		return mav;
@@ -131,11 +137,11 @@ public class ReviewController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean isMine = this.reviewService.reviewIsMine(reviewId, userDetail.getUsername());
-		if(!isMine) {
-			return "redirect:/oups";
+		if(Boolean.FALSE.equals(isMine)) {
+			return CONSTANT1;
 		}
 		Review review = this.reviewService.findReviewById(reviewId);
-		modelMap.addAttribute("review", review);
+		modelMap.addAttribute(CONSTANT2, review);
 		modelMap.addAttribute("bookId", bookId);
 		return "reviews/reviewUpdateForm";
 	}
@@ -154,9 +160,9 @@ public class ReviewController {
 				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 				UserDetails userDetail = (UserDetails) auth.getPrincipal();
 				this.reviewService.editReview(updatedReview, userDetail.getUsername());
-				return "redirect:/reviews/"+reviewId;
+				return CONSTANT3+reviewId;
 			}catch (CantEditReviewException e) {
-				return "redirect:/oups";
+				return CONSTANT1;
 			}
 		}
 	}
@@ -168,7 +174,7 @@ public class ReviewController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			this.reviewService.deleteReviewById(reviewId, userDetail.getUsername());
 		}catch (CantDeleteReviewException e) {
-			return "redirect:/oups";
+			return CONSTANT1;
 		}
 		return "redirect:/books/" + bookId;
 	}

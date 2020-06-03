@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.MeetingDashboard;
 import org.springframework.samples.petclinic.repository.MeetingAssistantRepository;
 import org.springframework.samples.petclinic.repository.MeetingRepository;
@@ -27,7 +27,7 @@ public class MeetingDashboardService {
 
 
 	@Transactional(readOnly = true)
-	public MeetingDashboard getMeetingDashboard() throws DataAccessException {
+	public MeetingDashboard getMeetingDashboard()  {
 		Object[] meetingAssisByGenre = this.meetAssisRepository.assistantByGenre(LocalDateTime.now());
 		Calendar fecha = Calendar.getInstance();
 		fecha.add(Calendar.MONTH, -1);

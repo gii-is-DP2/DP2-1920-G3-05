@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
@@ -67,29 +67,29 @@ public class BookService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Genre> findGenre() throws DataAccessException {
+	public Collection<Genre> findGenre()  {
 		return this.bookRepository.findGenre();
 	}
 	
 	@Transactional(readOnly = true) 
-	public Genre findGenreByName(final String name) throws DataAccessException { 
+	public Genre findGenreByName(final String name)  { 
  
 		return this.bookRepository.findGenreByName(name); 
 	} 
 
 	@Transactional(readOnly = true)
-	public Collection<Book> findBookByTitleAuthorGenreISBN(final String title) throws DataAccessException {
+	public Collection<Book> findBookByTitleAuthorGenreISBN(final String title)  {
 		return this.bookRepository.findBookByTitleAuthorGenreISBN(title.toUpperCase());
 	}
 
 	@Transactional(readOnly = true)
-	public Book findBookById(final int id) throws DataAccessException {
+	public Book findBookById(final int id)  {
 		return this.bookRepository.findById(id);
 
 	}
 
 	@Transactional(rollbackFor = DuplicatedISBNException.class)
-	public void save(final Book book) throws DataAccessException, DuplicatedISBNException {
+	public void save(final Book book) throws DuplicatedISBNException {
 		Boolean imAdmin = false;
 
 
@@ -101,11 +101,7 @@ public class BookService {
 			}
 		}
 
-		if (imAdmin || reader.getVerified()) {
-			book.setVerified(true);
-		} else {
-			book.setVerified(false);
-		}
+		book.setVerified(imAdmin || reader.getVerified());
 
 		try{
 			String isbn = book.getISBN();
@@ -122,16 +118,48 @@ public class BookService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Boolean existsBookById(int bookId) throws DataAccessException {
+	public Boolean existsBookById(int bookId)  {
 		return this.bookRepository.existsById(bookId);
 	}
 
 	@Transactional
 	@Modifying
-	public void deleteById(final int id, String username) throws DataAccessException {
+	public void deleteById(final int id, String username)  {
 
-		// Vemos si el libro tiene asociadas reviews que haya que borrar previamente
-		List<Integer> reviewsId = this.reviewService.getReviewsIdFromBook(id);
+		deleteReviews(username, this.reviewService.getReviewsIdFromBook(id));
+		deleteMeetings(this.meetingService.getMeetingsIdFromBook(id));
+		deletePublications(this.publicationService.getPublicationsFromBook(id));
+		deleteNews(id, this.newService.getNewsFromBook(id));
+		this.readBookService.deleteReadBookByBookId(id);
+		this.wishedBookService.deleteByBookId(id);
+		this.bookRepository.deleteBookById(id);
+	}
+
+	private void deleteNews(final int id, List<Integer> newsId) {
+		if (newsId != null && !newsId.isEmpty()) {
+			for (Integer i : newsId) {
+				this.newService.deleteNew(i, id);
+			}
+		}
+	}
+
+	private void deletePublications(List<Integer> publicationsId) {
+		if (publicationsId != null && !publicationsId.isEmpty()) {
+			for (Integer i : publicationsId) {
+				this.publicationService.deletePublication(i);
+			}
+		}
+	}
+
+	private void deleteMeetings(List<Integer> meetingsId) {
+		if (meetingsId != null && !meetingsId.isEmpty()) {
+			for (Integer i : meetingsId) {
+				this.meetingService.deleteMeeting(i);
+			}
+		}
+	}
+
+	private void deleteReviews(String username, List<Integer> reviewsId) {
 		if (reviewsId != null && !reviewsId.isEmpty()) {
 			for (Integer i : reviewsId) {
 				try {
@@ -141,43 +169,10 @@ public class BookService {
 				}
 			}
 		}
-
-		// Vemos si hay reuniones asociadas que borrar previamente
-		List<Integer> meetingsId = this.meetingService.getMeetingsIdFromBook(id);
-		if (meetingsId != null && !meetingsId.isEmpty()) {
-			for (Integer i : meetingsId) {
-				this.meetingService.deleteMeeting(i);
-			}
-		}
-
-		// Vemos si hay publicaciones asociadas que borrar previamente
-		List<Integer> publicationsId = this.publicationService.getPublicationsFromBook(id);
-		if (publicationsId != null && !publicationsId.isEmpty()) {
-			for (Integer i : publicationsId) {
-				this.publicationService.deletePublication(i);
-			}
-		}
-
-		// Vemos si hay noticias asociadas y hay que ver si hay que borrarlas
-		List<Integer> newsId = this.newService.getNewsFromBook(id);
-		if (newsId != null && !newsId.isEmpty()) {
-			for (Integer i : newsId) {
-				this.newService.deleteNew(i, id);
-			}
-		}
-		
-		//Borramos si hay libros leidos 
-		this.readBookService.deleteReadBookByBookId(id);
-		
-		//Borramos si hay libros deseados
-		this.wishedBookService.deleteByBookId(id);
-		
-		
-		//Borramos el libro
-		this.bookRepository.deleteBookById(id);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional()
+	@Modifying
 	public void verifyBook(final int bookId) {
 		this.bookRepository.verifyBook(bookId);
 
@@ -199,14 +194,14 @@ public class BookService {
 				imAdmin = true;
 			}
 		}
-		if (username.equals(book.getUser().getUsername()) && !book.getVerified() || imAdmin) {
+		if (username.equals(book.getUser().getUsername()) && !book.getVerified() || Boolean.TRUE.equals(imAdmin)) {
 			res = true;
 		}
 
 		return res;
 	}
 	@Transactional(readOnly = true)
-	public List<Boolean> getVerifiedFromBooksByUsername(final String username) throws DataAccessException {
+	public List<Boolean> getVerifiedFromBooksByUsername(final String username)  {
 		return this.bookRepository.getVerifiedFromBooksByUsername(username);
 
 	}

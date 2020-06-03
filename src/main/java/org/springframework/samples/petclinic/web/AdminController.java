@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class AdminController {
 
-	@Autowired
 	private ReaderService			readerService;
 	
+	@Autowired
+	public AdminController(final ReaderService readerService) {
+		this.readerService = readerService;
+	}
 	@GetMapping("/admin/listUsers")
 	public String processFindForm(Reader reader, final BindingResult result, final Map<String, Object> model) {
 

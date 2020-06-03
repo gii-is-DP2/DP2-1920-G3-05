@@ -1,11 +1,14 @@
 package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import java.util.List;
-import org.assertj.core.api.Assertions;
-import org.openqa.selenium.*;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,7 +26,7 @@ public class DeleteBookStepDefinitions extends AbstractStep {
     @LocalServerPort
     private int port;
     
-    @Given("I am logged withh username {string} and password {string}")
+    @Given("I am logged with username {string} and password {string}")
     public void IdoLogginAsAdmin(String username, String paasword) throws Exception {
         loginAs(username, paasword, port);
     }
@@ -98,7 +101,7 @@ public class DeleteBookStepDefinitions extends AbstractStep {
     }
 
     private int countBooks() {
-        WebElement booksTable =getDriver().findElement(By.xpath("//table[1]"));
+        WebElement booksTable =getDriver().findElement(By.xpath("//table[@id='booksTable']"));
         List<WebElement> books = booksTable.findElements(By.tagName("tr"));
         return books.size();
 

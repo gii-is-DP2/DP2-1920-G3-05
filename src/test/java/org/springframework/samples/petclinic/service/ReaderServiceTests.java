@@ -1,16 +1,17 @@
 
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Reader;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedUsernameException;
@@ -39,7 +40,7 @@ class ReaderServiceTests {
 	@CsvSource({
 		"reader3,George","reader4,Betty"
 	})
-	public void shouldCreateReader(String username, String firstname) throws DataAccessException, DuplicatedUsernameException {
+	void shouldCreateReader(String username, String firstname) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
 		User user = new User();
 		user.setUsername(username);
@@ -61,9 +62,9 @@ class ReaderServiceTests {
 
 	@ParameterizedTest
 	@CsvSource({
-		"admin1","reader"
+		"admin1","reader1"
 	})
-	public void shouldNotCreateReader(String username) throws DataAccessException, DuplicatedUsernameException {
+	void shouldNotCreateReader(String username) throws DuplicatedUsernameException {
 		Reader reader = new Reader();
 		User user = new User();
 		user.setUsername(username);
@@ -76,19 +77,15 @@ class ReaderServiceTests {
 		reader.setFirstName("firstname");
 		reader.setLastName("last name");
 		reader.setTelephone("12356789");
-		try {
-			this.readerService.saveReader(reader);
-		} catch (DuplicatedUsernameException e) {
-			Assertions.assertThat(e.getCause());
-		}
-
+		
+		assertThrows(DuplicatedUsernameException.class, ()-> this.readerService.saveReader(reader));
 	}
 
 	@ParameterizedTest
 	@CsvSource({
 		"admin1,First name","reader1, First name 2"
 	})
-	public void shouldUpdateReader(String username, String firstname) throws DataAccessException, DuplicatedUsernameException {
+	void shouldUpdateReader(String username, String firstname) throws DuplicatedUsernameException {
 		Reader reader = this.readerService.findReaderByUsername(username);
 		reader.setAddress("address");
 		reader.setCity("city");
@@ -101,10 +98,16 @@ class ReaderServiceTests {
 		Assertions.assertThat(reader2.getFirstName()).isEqualTo(firstname);
 	}
 	
-	@Test
-	void shouldVerifyReader() {
-		this.readerService.verifyUser(2);
-		Reader reader = this.readerService.findReaderByUsername("owner1");
+	@ParameterizedTest
+	@CsvSource({
+		"2,owner1",
+		"3,vet1",
+		"4,reader1"
+		
+	})
+	void shouldVerifyReader(int id, String username) {
+		this.readerService.verifyUser(id);
+		Reader reader = this.readerService.findReaderByUsername(username);
 		Assertions.assertThat(reader.getVerified()).isTrue();
 		List<Boolean> verified= this.bookService.getVerifiedFromBooksByUsername(reader.getUser().getUsername());
 		Assertions.assertThat(verified).allMatch(i->i==true);

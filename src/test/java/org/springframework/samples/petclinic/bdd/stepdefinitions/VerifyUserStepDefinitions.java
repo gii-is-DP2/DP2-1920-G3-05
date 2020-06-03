@@ -1,14 +1,11 @@
 package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
-import org.openqa.selenium.By;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.java.Log;
@@ -17,13 +14,6 @@ import lombok.extern.java.Log;
 public class VerifyUserStepDefinitions extends AbstractStep {
 
     private boolean acceptNextAlert = true;
-
-    @LocalServerPort
-    private int port;
-    @Given("I am logged with username {string} and password {string}")
-    public void IdoLogginAsAdmin(String username, String paasword) throws Exception {
-        loginAs(username, paasword, port);
-    }
 
     @When("I try to verify an user")
     public void IverifyUser() throws Exception{

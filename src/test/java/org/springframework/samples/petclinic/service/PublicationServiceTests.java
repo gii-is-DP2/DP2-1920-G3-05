@@ -10,14 +10,14 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class PublicationServiceTests {
+ class PublicationServiceTests {
 	
 	@Autowired
 	private PublicationService sut;
@@ -57,7 +57,8 @@ public class PublicationServiceTests {
 		"1,admin1,7",
 		"2,owner1,8"
 	})
-	public void shouldInsertPublicationIntoDatabaseAndGenerateId(int bookId, String username, int futureId) throws DataAccessException {
+	void shouldInsertPublicationIntoDatabaseAndGenerateId(int bookId, String username, int futureId)  {
+
 		Collection<Publication> list = this.sut.findAllPublicationFromBook(bookId);
 		User user = this.userService.findUserByUsername(username);
 		Book book = this.sut2.findBookById(bookId);
@@ -84,7 +85,7 @@ public class PublicationServiceTests {
 		"1",
 		"2"
 	})
-	public void shouldUpdatePublicationTitle(int publicationId) throws Exception {
+	 void shouldUpdatePublicationTitle(int publicationId) throws Exception {
 		Publication publication = this.sut.findById(publicationId);
 		String oldTitle = publication.getTitle();
 

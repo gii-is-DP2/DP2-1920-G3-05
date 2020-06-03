@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
-public class AuthoritiesServiceTests {
+ class AuthoritiesServiceTests {
 
 	@Autowired
 	private AuthoritiesService sut;

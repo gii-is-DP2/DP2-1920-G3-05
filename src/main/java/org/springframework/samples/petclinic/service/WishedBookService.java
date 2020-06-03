@@ -3,8 +3,7 @@ package org.springframework.samples.petclinic.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Modifying;
+
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.WishedBook;
 import org.springframework.samples.petclinic.repository.BookRepository;
@@ -36,9 +35,9 @@ public class WishedBookService {
 	}
 
 	@Transactional
-	public void save(final WishedBook wishedBook) throws DataAccessException,ReadOrWishedBookException {
+	public void save(final WishedBook wishedBook) throws ReadOrWishedBookException {
 		Boolean isReadOrWished=this.findBooksIdByUser(wishedBook.getUser().getUsername()).contains(wishedBook.getBook().getId()) || readBookRepository.getBooksIdByUsername(wishedBook.getUser().getUsername()).contains(wishedBook.getBook().getId());
-		if (isReadOrWished) {
+		if (Boolean.TRUE.equals(isReadOrWished)) {
 			throw new ReadOrWishedBookException("This book is already read or in the wish list.");
 		} else {
 			this.wishedBookRepository.save(wishedBook);

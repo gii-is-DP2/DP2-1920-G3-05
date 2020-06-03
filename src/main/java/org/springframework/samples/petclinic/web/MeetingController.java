@@ -48,6 +48,11 @@ public class MeetingController {
     
     private QuoteService quoteService;
     
+    private static final String CONSTANT1= "meeting";
+    
+    private static final String CONSTANT2= "redirect:/oups";
+    
+    private static final String CONSTANT3= "mensaje";
 
 
     @Autowired
@@ -62,7 +67,7 @@ public class MeetingController {
 
     @GetMapping(value = "/meetings/find")
 	public String initFindForm(final Map<String, Object> model) {
-		model.put("meeting", new Meeting());
+		model.put(CONSTANT1, new Meeting());
 		Quote quote = this.quoteService.getRandomQuote();
 		model.put("quote",quote);
 		return "meetings/findMeetings";
@@ -81,6 +86,8 @@ public class MeetingController {
 		if (results.isEmpty()) {
 			// no meetings found
 			result.rejectValue("name", "notFound", "not found");
+			Quote quote = this.quoteService.getRandomQuote();
+			model.put("quote",quote);
 			return "meetings/findMeetings";
 		} else if (results.size() == 1) {
 			// 1 meeting found
@@ -98,28 +105,6 @@ public class MeetingController {
 		dataBinder.setValidator(new MeetingValidator());
 	}
 
-  /*  @GetMapping(value = "/meetings/{meetingId}")
-    public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId) {
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        Meeting meeting = this.meetingService.findMeetingById(meetingId);
-        ModelAndView mav = new ModelAndView("meetings/meetingDetails");
-        Boolean CanInscribe = this.meetingAssistantService.canInscribe(meetingId, userDetail.getUsername(), meeting.getBook().getId());
-        mav.addObject("canInscribe", CanInscribe);
-		mav.addObject("meeting", meeting);
-		Optional<Integer> meetingAssistantId = this.meetingAssistantService.findMeetingAssistantByUsernameAndMeetingId(meetingId, userdetails.getUsername());
-		if (meetingAssistantId.isPresent()) {
-			mav.addObject("suscribed", true);
-
-		}
-        return mav;
-    }*/
-
-//	@InitBinder
-//	public void setAllowedFields(final WebDataBinder dataBinder) {
-//		dataBinder.setDisallowedFields("book");
-//		dataBinder.setValidator(new MeetingValidator());
-//	}
     
 	@GetMapping(value = "/meetings/{meetingId}")
 	public ModelAndView showMeeting(@PathVariable("meetingId") final int meetingId, final ModelMap modelMap) {
@@ -132,7 +117,7 @@ public class MeetingController {
 		List<MeetingAssistant> assistants=this.meetingAssistantService.getAssistantsOfMeeting(meetingId);
 		Integer remainingSeats=meeting.getCapacity()-assistants.size();
         mav.addObject("canInscribe", CanInscribe);
-		mav.addObject("meeting", meeting);
+		mav.addObject(CONSTANT1, meeting);
 		if (meetingAssistantId.isPresent()) {
 			modelMap.put("suscribed", true);
 
@@ -147,12 +132,12 @@ public class MeetingController {
 		String view = "meetings/meetingAdd";
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
-		if (book.getVerified()) {
+		if (Boolean.TRUE.equals(book.getVerified())) {
 			meeting.setBook(book);
-			modelMap.addAttribute("meeting", meeting);
+			modelMap.addAttribute(CONSTANT1, meeting);
 			return view;
 		} else {
-			return "redirect:/oups";
+			return CONSTANT2;
 		}
 	}
 
@@ -168,7 +153,7 @@ public class MeetingController {
 				this.meetingService.addMeeting(meeting);
 				return "redirect:/meetings";
 			} catch (NotVerifiedBookMeetingException e) {
-				return "redirect:/oups";
+				return CONSTANT2;
 			}
 		}
 	}
@@ -185,7 +170,7 @@ public class MeetingController {
 		try {
 			this.meetingAssistantService.save(meetingAssistant);
 		} catch (CantInscribeMeetingException e) {
-			return "redirect:/oups";
+			return CONSTANT2;
 		}
 			return "redirect:/meetings";
 	}
@@ -201,12 +186,12 @@ public class MeetingController {
 		if (meetingAssistantId.isPresent()) {
 			if (!meeting.getEnd().isBefore(LocalDateTime.now())) {
 				this.meetingAssistantService.deleteAssistantById(meetingAssistantId.get());
-				modelMap.put("mensaje", "You are successfully unsubscribed");
+				modelMap.put(CONSTANT3, "You are successfully unsubscribed");
 			} else {
-				modelMap.put("mensaje", "The meeting has already been held!");
+				modelMap.put(CONSTANT3, "The meeting has already been held!");
 			}
 		} else {
-			modelMap.put("mensaje", "You are not suscribed!");
+			modelMap.put(CONSTANT3, "You are not suscribed!");
 
 		}
 

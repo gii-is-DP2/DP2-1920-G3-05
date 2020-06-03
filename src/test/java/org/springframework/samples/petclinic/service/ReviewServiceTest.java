@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class ReviewServiceTest {
+ class ReviewServiceTest {
 
 	@Autowired
 	private ReviewService sut;

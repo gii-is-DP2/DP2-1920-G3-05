@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest(
   webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class MeetingDashboardControllerE2ETest2 {
+ class MeetingDashboardControllerE2ETest2 {
 	
 
 

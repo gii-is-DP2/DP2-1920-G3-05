@@ -15,9 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.samples.petclinic.model.Genre;
-import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.service.BookService;
-import org.springframework.samples.petclinic.service.PetService;
 
 @ExtendWith(MockitoExtension.class)
 class GenreFormatterTests {

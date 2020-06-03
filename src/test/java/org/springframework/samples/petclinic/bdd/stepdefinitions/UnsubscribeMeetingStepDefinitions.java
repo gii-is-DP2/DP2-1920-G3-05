@@ -3,10 +3,8 @@ package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.java.Log;

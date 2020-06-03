@@ -2,8 +2,6 @@ package org.springframework.samples.petclinic.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -16,7 +14,7 @@ import org.springframework.samples.petclinic.service.exceptions.BadIsbnException
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class ItApiServiceTests {
+ class ItApiServiceTests {
 
     @Autowired
     private ItApiService        sut;

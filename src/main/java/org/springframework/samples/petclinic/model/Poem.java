@@ -28,7 +28,7 @@ public class Poem {
     @JsonProperty("poet")
     private Poet poet;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("title")
     public String getTitle() {

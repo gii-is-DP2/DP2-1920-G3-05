@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("mysql")
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class MeetingAssistantQueriesIntegrationTests {
+class MeetingAssistantQueriesIntegrationTests {
 
 	@Autowired
 	private MeetingAssistantRepository sut;
@@ -76,16 +76,14 @@ public class MeetingAssistantQueriesIntegrationTests {
 	}
 	@ParameterizedTest
 	@CsvSource({
-		"Romance,2", 
-		"Fiction, 4", 
-		"Historical, 1"
+		"Romance,2", "Fiction, 4", "Historical, 1"
 	})
-	public void GetAssitantsbyGenre(final String nameGenre, final Long numeroAsistentes) {
+	void GetAssitantsbyGenre(final String nameGenre, final Long numeroAsistentes) {
 		LocalDateTime time = LocalDateTime.of(2020, 04, 23, 19, 55);
 		Object[][] AssitantsByGenre = this.sut.assistantByGenre(time);
-		for(Object[] o: AssitantsByGenre) {
-			if(o[0].equals(nameGenre)){
-				Assertions.assertThat(o[1].equals(numeroAsistentes));
+		for (Object[] o : AssitantsByGenre) {
+			if (o[0].equals(nameGenre)) {
+				Assertions.assertThat(o[1]).isEqualTo(numeroAsistentes);
 			}
 		}
 	}
@@ -93,7 +91,7 @@ public class MeetingAssistantQueriesIntegrationTests {
 	@CsvSource({
 		"0, Reunion prueba aforo, 2", "2, Club de lectura, 2", "3, Club de lectura, 2"
 	})
-	public void GetAssitantsbyMeeting(final Integer numbObject, final String nameMeeting, final Long numeroAsistentes) {
+	void GetAssitantsbyMeeting(final Integer numbObject, final String nameMeeting, final Long numeroAsistentes) {
 		LocalDateTime time = LocalDateTime.of(2020, 04, 23, 19, 55);
 		Object[] AssitantsByGenre = this.sut.assistantByMeeting(time);
 		Object[] aux = (Object[]) AssitantsByGenre[numbObject];
@@ -106,7 +104,7 @@ public class MeetingAssistantQueriesIntegrationTests {
 	@CsvSource({
 		"2020-04-23T19:47:30.107,4", "2020-07-23T19:47:30.107,2"
 	})
-	public void GetUsersAssisteds(final LocalDateTime time, final Integer usersExpected) {
+	void GetUsersAssisteds(final LocalDateTime time, final Integer usersExpected) {
 
 		List<User> users = this.sut.usersAssisted(time);
 

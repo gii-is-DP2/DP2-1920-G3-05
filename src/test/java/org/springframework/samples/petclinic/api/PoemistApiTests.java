@@ -1,27 +1,20 @@
 package org.springframework.samples.petclinic.api;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
-import static org.hamcrest.Matchers.*;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static io.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.notNullValue;
 
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.web.server.LocalServerPort;
 
 import lombok.extern.java.Log;
 
 
 @Log
-public class PoemistApiTests {
+ class PoemistApiTests {
 	@LocalServerPort
 	private int port;
 	@Test
-	public void testgetPoemFromApi() {
+	 void testgetPoemFromApi() {
 		when()
 		.get("https://www.poemist.com/api/v1/randompoems")
 		.then().statusCode(200)

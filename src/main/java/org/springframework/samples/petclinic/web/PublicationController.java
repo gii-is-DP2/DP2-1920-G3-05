@@ -2,24 +2,19 @@ package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.Publication;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BookService;
 import org.springframework.samples.petclinic.service.PublicationService;
 import org.springframework.samples.petclinic.service.ReadBookService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -36,24 +31,24 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class PublicationController {
 	
-	@Autowired
 	private PublicationService publicationService;
 
 	private UserService			userService;
 
-	@Autowired
 	private BookService 		bookService;
 
-	@Autowired
 	private ReadBookService		readBookService;
 	
-	@Autowired
-	private AuthoritiesService	authoritiesService;
+	private static final String CONSTANT1= "redirect:/oups";
+	
+	private static final String CONSTANT2= "publication";
 	
 	@Autowired
-	public PublicationController(final PublicationService publicationService, final UserService userService) {
+	public PublicationController(final PublicationService publicationService, final UserService userService, final BookService bookService, ReadBookService	readBookService) {
 		this.publicationService = publicationService;
 		this.userService = userService;
+		this.bookService = bookService;
+		this.readBookService = readBookService;
 	}
 	
 	@InitBinder("publication")
@@ -91,13 +86,13 @@ public class PublicationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esLibroLeido = this.readBookService.esReadBook(bookId, userDetail.getUsername());
-		if(!esLibroLeido) {
-			return "redirect:/oups";
+		if(Boolean.FALSE.equals(esLibroLeido)) {
+			return CONSTANT1;
 		}
 		Publication publication = new Publication();
 		Book book = this.bookService.findBookById(bookId);
 		publication.setBook(book);
-		modelMap.put("publication", publication);
+		modelMap.put(CONSTANT2, publication);
 		return view;
 
 	}
@@ -107,18 +102,17 @@ public class PublicationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esLibroLeido = this.readBookService.esReadBook(bookId, userDetail.getUsername());
-		if(!esLibroLeido) {
-			return "redirect:/oups";
+		if(Boolean.FALSE.equals(esLibroLeido)) {
+			return CONSTANT1;
 		}
-		User u = new User();
-		u = this.userService.findUserByUsername(userDetail.getUsername());
+		User u = this.userService.findUserByUsername(userDetail.getUsername());
 		publication.setBook(this.bookService.findBookById(bookId));
 		publication.setUser(u);
 		publication.setPublicationDate(LocalDate.now());
 		
 
 		if (result.hasErrors()) {
-			modelMap.addAttribute("publication", publication);
+			modelMap.addAttribute(CONSTANT2, publication);
 			return "publications/publicationAdd";
 		}
 			this.publicationService.save(publication);
@@ -133,11 +127,11 @@ public class PublicationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esMio = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
-		if (!esMio) {
-			return "redirect:/oups";
+		if (Boolean.FALSE.equals(esMio)) {
+			return CONSTANT1;
 		}
 		Publication publication = this.publicationService.findById(publicationId);
-		modelMap.addAttribute("publication", publication);
+		modelMap.addAttribute(CONSTANT2, publication);
 		return "publications/UpdatePublicationForm";
 	}
 
@@ -148,13 +142,13 @@ public class PublicationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
 		Boolean esMio = this.publicationService.publicationMio(publicationId, userDetail.getUsername());
-		if (!esMio) {
-			return "redirect:/oups";
+		if (Boolean.FALSE.equals(esMio)) {
+			return CONSTANT1;
 		}
 
 		if (result.hasErrors()) {
 
-			modelMap.addAttribute("publication", updatedPublication);
+			modelMap.addAttribute(CONSTANT2, updatedPublication);
 
 			return "publications/UpdatePublicationForm";
 		}
@@ -172,9 +166,9 @@ public class PublicationController {
 	public String deleteBook(@PathVariable("publicationId") final int publicationId,@PathVariable("bookId") final int bookId ) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		Boolean esMioOAdmin = this.publicationService.publicationMioOAdmin(publicationId, userDetail.getUsername()); ;
+		boolean esMioOAdmin = this.publicationService.publicationMioOAdmin(publicationId, userDetail.getUsername());
 		if (!esMioOAdmin) {
-			return "redirect:/oups";
+			return CONSTANT1;
 		}
 		this.publicationService.deletePublication(publicationId);
 		return "redirect:/books/" + bookId;

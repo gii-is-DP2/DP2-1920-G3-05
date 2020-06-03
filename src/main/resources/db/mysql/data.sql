@@ -19,62 +19,6 @@ INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,user
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763',TRUE, 'vet1');
 INSERT INTO readers(id,first_name,last_name,address,city,telephone,verified,username) VALUES (4, 'George', 'Rodriquez', '2694 Commerce St.', 'McFarland', '6085558764',TRUE, 'reader1');
 
-INSERT INTO vets VALUES (1, 'James', 'Carter');
-INSERT INTO vets VALUES (2, 'Helen', 'Leary');
-INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
-INSERT INTO vets VALUES (4, 'Rafael', 'Ortega');
-INSERT INTO vets VALUES (5, 'Henry', 'Stevens');
-INSERT INTO vets VALUES (6, 'Sharon', 'Jenkins');
-
-
-INSERT INTO specialties VALUES (1, 'radiology');
-INSERT INTO specialties VALUES (2, 'surgery');
-INSERT INTO specialties VALUES (3, 'dentistry');
-
-INSERT INTO vet_specialties VALUES (2, 1);
-INSERT INTO vet_specialties VALUES (3, 2);
-INSERT INTO vet_specialties VALUES (3, 3);
-INSERT INTO vet_specialties VALUES (4, 2);
-INSERT INTO vet_specialties VALUES (5, 1);
-
-INSERT INTO types VALUES (1, 'cat');
-INSERT INTO types VALUES (2, 'dog');
-INSERT INTO types VALUES (3, 'lizard');
-INSERT INTO types VALUES (4, 'snake');
-INSERT INTO types VALUES (5, 'bird');
-INSERT INTO types VALUES (6, 'hamster');
-
-INSERT INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', 'owner1');
-INSERT INTO owners VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749', 'owner1');
-INSERT INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763', 'owner1');
-INSERT INTO owners VALUES (4, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198', 'owner1');
-INSERT INTO owners VALUES (5, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765', 'owner1');
-INSERT INTO owners VALUES (6, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654', 'owner1');
-INSERT INTO owners VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387', 'owner1');
-INSERT INTO owners VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683', 'owner1');
-INSERT INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435', 'owner1');
-INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', 'owner1');
-
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (3, 'Rosy', '2011-04-17', 2, 3);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (4, 'Jewel', '2010-03-07', 2, 3);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (5, 'Iggy', '2010-11-30', 3, 4);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (6, 'George', '2010-01-20', 4, 5);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (7, 'Samantha', '2012-09-04', 1, 6);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (8, 'Max', '2012-09-04', 1, 6);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (9, 'Lucky', '2011-08-06', 5, 7);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (10, 'Mulligan', '2007-02-24', 2, 8);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '2010-03-09', 5, 9);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
-
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
-INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
-
-
 INSERT INTO genres VALUES (1, 'Fantasy');
 INSERT INTO genres VALUES (2, 'Adventure');
 INSERT INTO genres VALUES (3, 'Romance');
@@ -114,7 +58,7 @@ INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publica
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (12, 'Reina Roja', 'Juan Gomez-Jurado', 4, 9788466664417 , 568, 'Antonia Scott es una mujer muy especial. Tiene un don que es al mismo tiempo una maldición: una extraordinaria inteligencia. Gracias a ella ha salvado decenas de vidas, pero también lo ha perdido todo.', 'S.A. EDICIONES B','2018-05-14',TRUE,'https://imagessl7.casadellibro.com/a/l/t5/17/9788466664417.jpg','reader1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (13, 'Loba negra', 'Juan Gomez-Jurado', 4, 9788466666497 , 552, 'Antonia Scott no tiene miedo a nada. Solo a sí misma.NUNCA FUE. Pero hay alguien más peligroso que ella. Alguien que podría vencerla. TAN DIFÍCIL', 'S.A. EDICIONES B','2018-05-14',TRUE,'https://imagessl7.casadellibro.com/a/l/t5/97/9788466666497.jpg','reader1');
 INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (14, 'La musica del silencio', 'Patrick Rothfuss', 1, 9788401343575 , 160, 'Auri es uno de los personajes más populares y rodeados de misterio que aparecen en El nombre del viento y El temor de un hombre sabio. Hasta ahora la conocíamos a través de Kvothe. La música del silencio nos permitirá ver el mundo a través de Auri y nos dará la oportunidad de aprender lo que hasta ahora únicamente sabía ella', 'Plaza y Janes','2014-01-11',TRUE,'https://images-na.ssl-images-amazon.com/images/I/51MVAYGJsqL._SX324_BO1,204,203,200_.jpg','reader1');
-INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (15, 'Libro sin ninguna relacion', 'Vacio', 1, 9788401376443 , 160, 'Vacio', 'Vacio','2014-01-11',TRUE,'https://www.example.com','reader1');
+INSERT INTO books(id,title,author,genre_id,ISBN,pages,synopsis,editorial,publication_date,verified,image,user_username) VALUES (15, 'Libro sin ninguna relacion', 'Vacio', 1, 9788401376443 , 160, 'Vacio', 'Vacio','2014-01-11',TRUE,'https://www.example.jpg','reader1');
 
 INSERT INTO read_book (id,book_id, user_username) VALUES(1,3, 'vet1');
 INSERT INTO read_book (id,book_id, user_username) VALUES(2,2, 'vet1');
@@ -159,6 +103,8 @@ INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (10,'Club 
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (11,'Club de lectura','A1.13', '2020-03-20 12:00', '2020-03-20 14:00', 50, 4);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (12,'Libro','Biblioteca', '2020-03-16 19:30', '2020-03-16 21:00', 20, 5);
 INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (13,'Hijo del taliano','Biblioteca', '2020-03-20 19:30', '2020-03-20 21:00', 20, 12);
+INSERT INTO meetings(id,name,place,start,end,capacity,book_id) VALUES (14,'Club de lectura','Biblioteca Tolkien', '2020-09-20 19:30', '2020-09-20 21:00', 4000, 1);
+
 
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (1, 1, 'admin1');
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (2, 1, 'owner1');
@@ -178,9 +124,9 @@ INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (16, 7, 'adm
 INSERT INTO meeting_assistants(id,meeting_id, user_username) VALUES (17, 7, 'reader1');
 
 
-INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
-INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (2, 'Noticia 2', 'Rafel Nadal publica un nuevo libro', '2015-03-03','Rafel Nadal, que no Rafael Nadal, nos vuelve a impresionar','Jhon Doe','#amazing#new','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
-INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (3, 'Noticia 3', 'IT resurge tras su llegada al cine', '2015-03-03','El final un poco defraudante','Jhon Doe','#cinema#fear','https://www.google.com/imgres?imgurl=http%3A%2F%2Fimg2.rtve.es%2Fi%2F%3Fw%3D1600%26i%3D1561638444155.jpg&imgrefurl=https%3A%2F%2Fwww.rtve.es%2Fnoticias' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (1, 'Noticia 1', 'Harry potter vuelve', '2013-01-01','increible pero cierto','Jhon Doe','#impresionant','https://imagessl4.casadellibro.com/a/l/t5/44/9788498387544.jpg' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (2, 'Noticia 2', 'Rafel Nadal publica un nuevo libro', '2015-03-03','Rafel Nadal, que no Rafael Nadal, nos vuelve a impresionar','Jhon Doe','#amazing#new','https://www.elnacional.cat/uploads/s1/13/75/37/7/Rafael%20Nadal%20periodista%20escriptor%20-Sergi%20Alc%C3%A0zar%20-%204_12_543x814.jpg' );
+INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (3, 'Noticia 3', 'IT resurge tras su llegada al cine', '2015-03-03','El final un poco defraudante','Jhon Doe','#cinema#fear','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/IT_%282017_film%29_logo.svg/1200px-IT_%282017_film%29_logo.svg.png' );
 INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (4, 'Noticia 4', 'La nueva novela de Julia Navarro, «Tú no matarás», saldrá a la venta en octubre', '2018-09-05','La nueva novela de Julia Navarro, «Tú no matarás» (Plaza & Janés y en catalán, en Rosa dels Vents), se publicará el próximo 25 de octubre.','Jhon Doe','#impresionant','https://static4.abc.es/media/cultura/2018/09/05/Portada-Tu-no-mataras-Julia-navarro-kjVH-U301327176608Z9B-220x330@abc.jpg' );
 INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (5, 'Noticia 5', 'El fin y otros inicios, la autora de Divergente regresa con algo que recuerda a Black Mirror', '2020-02-17','La escritora estadounidense Veronica Roth, conocida por su trilogía Divergente, ha publicado algo totalmente diferente a lo que hasta ahora habíamos visto en sus novelas.','Cristina BR','#amazing #new','https://infoliteraria.com/wp-content/uploads/2020/02/El-fin-y-otros-inicios.jpg' );
 INSERT INTO news(id, name, head, fecha, body, redactor, tags, img) VALUES (6, 'Noticia 6', 'La editorial Salamandra trae una nueva obra de J.K.Rowling', '2018-03-09','La editorial traerá próximamente la traducción del brillante discurso de la famosa escritora de la saga de Harry Potter, J.K. Rowling, que pronunció delante de los graduados del 2008 en la Universidad de Harvard.','Cristina DPL','#new','https://infoliteraria.com/wp-content/uploads/2018/03/vivir_j.k.rowling-768x768.jpg' );

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Book;
 import org.springframework.samples.petclinic.model.New;
@@ -30,13 +30,13 @@ public class NewService {
 
 
 	@Transactional(readOnly = true)
-	public List<Integer> getNewsFromBook(final int bookId) throws DataAccessException {
+	public List<Integer> getNewsFromBook(final int bookId)  {
 		return this.newRepo.getNewsFromBook(bookId);
 	}
 
 	@Transactional
 	@Modifying
-	public void deleteNew(final int newId, final int bookId) throws DataAccessException {
+	public void deleteNew(final int newId, final int bookId)  {
 		// Casuistica: (1)Si al borrar el libro no quedan más libros en la noticia se
 		// borra el bookInNew y la New
 		// (2) Si hay mas de un libro en la New solo se borra el bookInNew
@@ -55,19 +55,19 @@ public class NewService {
 	}
 
 	@Transactional(readOnly = true)
-	public Boolean existsNewById(final int newId) throws DataAccessException {
+	public Boolean existsNewById(final int newId)  {
 		return this.newRepo.existsById(newId);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<New> getAllNews() throws DataAccessException {
+	public Collection<New> getAllNews()  {
 		return this.newRepo.getAllNews();
 	}
 	
 	@Transactional(readOnly = true)
-	public Collection<New> getNewsBookReview(final String userId) throws DataAccessException, CantShowNewReviewException {
+	public Collection<New> getNewsBookReview(final String userId) throws CantShowNewReviewException {
 		Boolean CanShowNews = this.canShowNewsBookReview(userId); 
-		if(CanShowNews == true) {
+		if(Boolean.TRUE.equals(CanShowNews)) {
 			return this.newRepo.getNewsBookReview(userId);
 		}else {
 			throw new CantShowNewReviewException();
@@ -75,7 +75,7 @@ public class NewService {
 		
 	}
 	@Transactional(readOnly = true)
-	public Collection<New> getNewsBookReview2(final String userId) throws DataAccessException, CantShowNewReviewException {
+	public Collection<New> getNewsBookReview2(final String userId){
 		return this.newRepo.getNewsBookReview(userId);
 	}
 	
@@ -118,7 +118,7 @@ public class NewService {
 
 	@Transactional
 	@Modifying
-	public void deleteBookInNew(final int newId, final int bookId) throws DataAccessException, CantDeleteBookInNewException {
+	public void deleteBookInNew(final int newId, final int bookId) throws CantDeleteBookInNewException {
 		Collection<Book> booksIncludes = this.getBooksFromNews(newId);
 		if (booksIncludes.size() > 1) {
 			this.bookInNewService.deleteBookInNew(newId, bookId);
@@ -126,12 +126,9 @@ public class NewService {
 			throw new CantDeleteBookInNewException();
 		}
 	}
+
 	public Boolean canShowNewsBookReview (String username) {
 		Boolean canShow = this.newRepo.getNewsBookReview(username).isEmpty();
-		if(canShow) {
-			return false;
-		}else {
-			return true;
-		}
+		return !Boolean.TRUE.equals(canShow);
 	}
 }

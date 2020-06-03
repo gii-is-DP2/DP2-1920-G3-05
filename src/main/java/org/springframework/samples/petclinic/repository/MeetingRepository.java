@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Meeting;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,32 +13,32 @@ import org.springframework.transaction.annotation.Transactional;
 public interface MeetingRepository {
 
 	@Transactional(readOnly = true)
-	List<Integer> getMeetingsFromBook(int bookId) throws DataAccessException;
+	List<Integer> getMeetingsFromBook(int bookId) ;
 
 	@Transactional
 	@Modifying
-	void deleteMeetingById(int meetingId) throws DataAccessException;
+	void deleteMeetingById(int meetingId) ;
 
 	@Transactional(readOnly = true)
-	Boolean existsById(int meetingId) throws DataAccessException;
+	Boolean existsById(int meetingId) ;
 
 	@Transactional
 	@Modifying
-	Meeting save(Meeting meeting) throws DataAccessException;
+	Meeting save(Meeting meeting) ;
 
 	@Transactional(readOnly = true)
-	List<Meeting> findAll() throws DataAccessException;
+	List<Meeting> findAll() ;
 
 	@Transactional
-	Meeting findById(int id) throws DataAccessException;
+	Meeting findById(int id) ;
 
 	@Transactional
-	Collection<Meeting> findBookByNamePlaceBookTile(String name) throws DataAccessException;
+	Collection<Meeting> findBookByNamePlaceBookTile(String name) ;
 
 	@Transactional
-	Integer numberOfMeetings(LocalDateTime time) throws DataAccessException;
+	Integer numberOfMeetings(LocalDateTime time) ;
 
 	@Transactional
-	Object[][] meetingsByDay(LocalDateTime time) throws DataAccessException;
+	Object[][] meetingsByDay(LocalDateTime time) ;
 
 }

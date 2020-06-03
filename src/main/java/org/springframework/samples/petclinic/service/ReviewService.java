@@ -4,7 +4,7 @@ package org.springframework.samples.petclinic.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Review;
@@ -32,20 +32,20 @@ public class ReviewService {
 	}
 
 	@Transactional
-	public List<Integer> getReviewsIdFromBook(int bookId) throws DataAccessException {
+	public List<Integer> getReviewsIdFromBook(int bookId)  {
 		return this.reviewRepo.getReviewsIdFromBook(bookId);
 	}
 
 	@Transactional
-	public List<Review> getReviewsFromBook(int bookId) throws DataAccessException {
+	public List<Review> getReviewsFromBook(int bookId)  {
 		return this.reviewRepo.getReviewsFromBook(bookId);
 	}
 
 	@Transactional
 	@Modifying
-	public void deleteReviewById(int reviewId, String username) throws DataAccessException, CantDeleteReviewException {
+	public void deleteReviewById(int reviewId, String username) throws CantDeleteReviewException {
 		Boolean canDeleteReview = this.canDeleteReview(reviewId, username);
-		if(canDeleteReview) {
+		if(Boolean.TRUE.equals(canDeleteReview)) {
 			this.reviewRepo.deleteReviewById(reviewId);
 		}else {
 			throw new CantDeleteReviewException();
@@ -53,20 +53,20 @@ public class ReviewService {
 	}
 
 	@Transactional
-	public Review findReviewById(int reviewId) throws DataAccessException {
+	public Review findReviewById(int reviewId)  {
 		return this.reviewRepo.findById(reviewId);
 	}
 
 	@Transactional 
-	public Boolean existsReviewById(int reviewId) throws DataAccessException {
+	public Boolean existsReviewById(int reviewId)  {
 		return this.reviewRepo.existsById(reviewId);
 	}
 
 	@Transactional
 	@Modifying
-	public void writeReview(Review review, String username) throws DataAccessException, CantWriteReviewException {
+	public void writeReview(Review review, String username) throws CantWriteReviewException {
 		Boolean canWriteReview = this.canWriteReview(review.getBook().getId(), username);
-		if(canWriteReview) {
+		if(Boolean.TRUE.equals(canWriteReview)) {
 			this.reviewRepo.save(review);
 		}else {
 			throw new CantWriteReviewException();
@@ -75,9 +75,9 @@ public class ReviewService {
 
 	@Transactional
 	@Modifying
-	public void editReview(Review review, String username) throws DataAccessException, CantEditReviewException {
+	public void editReview(Review review, String username) throws CantEditReviewException {
 		Boolean isMine = this.reviewIsMine(review.getId(), username);
-		if(isMine) {
+		if(Boolean.TRUE.equals(isMine)) {
 			this.reviewRepo.save(review);
 		}else {
 			throw new CantEditReviewException();
@@ -85,33 +85,21 @@ public class ReviewService {
 	}
 
 	@Transactional
-	public Boolean alreadyReviewedBook(int bookId, String username) throws DataAccessException{
+	public Boolean alreadyReviewedBook(int bookId, String username) {
 		Review review = this.reviewRepo.getReviewByBookIdAndUsername(bookId, username);
-		if(review == null) {
-			return false;
-		}else {
-			return true;
-		}
+		return review != null;
 	}
 
 	@Transactional
-	public Boolean reviewIsMine(int reviewId, String username) throws DataAccessException {
+	public Boolean reviewIsMine(int reviewId, String username)  {
 		Review review = this.reviewRepo.findById(reviewId);
-		if(review.getUser().getUsername().equals(username)) {
-			return true;
-		}else{
-			return false;
-		}
+		return review.getUser().getUsername().equals(username);
 	}
 
-	public Boolean canWriteReview(int bookId, String username) throws DataAccessException {
+	public Boolean canWriteReview(int bookId, String username)  {
 		Boolean bookIsRead = this.readBookService.esReadBook(bookId, username);
 		Boolean alreadyReviewed = this.alreadyReviewedBook(bookId, username);
-		if(bookIsRead && !alreadyReviewed) {
-			return true;
-		}else {
-			return false;
-		}
+		return Boolean.TRUE.equals(bookIsRead) && !alreadyReviewed;
 	}
 
 	public Boolean canDeleteReview(int reviewId, String username) {
@@ -125,12 +113,7 @@ public class ReviewService {
 				imAdmin = true;
 			}
 		}
-		if(isMine || imAdmin) {
-			return true;
-		}else {
-			return false;
-		}
-
+		return isMine || imAdmin;
 	}
 	
 	@Transactional

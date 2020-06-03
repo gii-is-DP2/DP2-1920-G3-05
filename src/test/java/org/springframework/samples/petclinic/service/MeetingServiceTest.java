@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ import org.springframework.samples.petclinic.service.exceptions.NotVerifiedBookM
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class MeetingServiceTest {
+ class MeetingServiceTest {
 
 	@Autowired
 	private MeetingService sut;
@@ -32,7 +33,7 @@ public class MeetingServiceTest {
 	@ParameterizedTest
 	@CsvSource({
 		"1,1",
-		"7,1",
+		"7,2",
 		"3,0"
 	})
 	void shouldGetMeetingsIdsFromBookId(int bookId, int results) {
@@ -74,11 +75,11 @@ public class MeetingServiceTest {
 
 	@ParameterizedTest
 	@CsvSource({
-		"1,14",
-		"2,15",
-		"4,16"
+		"1",
+		"2",
+		"4"
 	})
-	void shouldAddMeeting(int bookId, int futureMeetingId) {
+	void shouldAddMeeting(int bookId) {
 		Meeting meeting = new Meeting();
 		Book book = this.bookService.findBookById(bookId);
 		LocalDateTime start = LocalDateTime.of(2100,10,10,16,00,00);
@@ -91,16 +92,9 @@ public class MeetingServiceTest {
 		meeting.setCapacity(20);
 		try{
 			this.sut.addMeeting(meeting);
-		}catch(NotVerifiedBookMeetingException e){
-
-		}
-		Meeting saved = this.sut.findMeetingById(futureMeetingId);
-		Assertions.assertThat(saved.getName()).isEqualTo(meeting.getName());
-		Assertions.assertThat(saved.getPlace()).isEqualTo(meeting.getPlace());
-		Assertions.assertThat(saved.getStart()).isEqualTo(meeting.getStart());
-		Assertions.assertThat(saved.getEnd()).isEqualTo(meeting.getEnd());
-		Assertions.assertThat(saved.getCapacity()).isEqualTo(meeting.getCapacity());
-		Assertions.assertThat(saved.getBook().getId()).isEqualTo(bookId);
+			Collection<Meeting> meetings = this.sut.findMeetingsByNamePlaceBookTile("name");
+			Assertions.assertThat(meetings).hasSize(1);
+		}catch(NotVerifiedBookMeetingException e){}	
 	}
 
 	@ParameterizedTest

@@ -1,14 +1,10 @@
 package org.springframework.samples.petclinic.bdd.stepdefinitions;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.java.Log;
